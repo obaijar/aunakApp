@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class Courses extends StatefulWidget {
   final String teacher;
-  Courses({required this.teacher});
+  final String subject;
+  Courses({required this.teacher, required this.subject});
 
   @override
   State<Courses> createState() => _CoursesState();
@@ -17,16 +19,13 @@ class _CoursesState extends State<Courses> {
     {'image': 'https://via.placeholder.com/150', 'name': 'الجلسات الإمتحانية'},
   ];
 
-  void _onCourseTap(String courseName) {
+  void _onCourseTap(String courseName, String teacher, String subject) {
     // Perform the desired action when a course is tapped
     // For example, you could navigate to a new page or show a dialog
     print('Tapped on course: $courseName');
     // Example: Navigate to a new page
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => CourseDetailPage(courseName: courseName)),
-    );
+    Get.to(() => CourseDetailPage(
+        courseName: courseName, teacher: teacher, subject: subject));
   }
 
   @override
@@ -51,7 +50,8 @@ class _CoursesState extends State<Courses> {
           itemBuilder: (context, index) {
             final course = courses[index];
             return GestureDetector(
-              onTap: () => _onCourseTap(course['name']!),
+              onTap: () =>
+                  _onCourseTap(course['name']!, widget.teacher, widget.subject),
               child: GridTile(
                 child: Column(
                   children: [
@@ -67,6 +67,7 @@ class _CoursesState extends State<Courses> {
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
+                    //  Text("teacher${widget.teacher}, subject${widget.subject}")
                   ],
                 ),
               ),
@@ -80,8 +81,11 @@ class _CoursesState extends State<Courses> {
 
 class CourseDetailPage extends StatelessWidget {
   final String courseName;
+  final String teacher;
+  final String subject;
 
-  const CourseDetailPage({required this.courseName});
+  const CourseDetailPage(
+      {required this.courseName, required this.teacher, required this.subject});
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +94,8 @@ class CourseDetailPage extends StatelessWidget {
         title: Text(courseName),
       ),
       body: Center(
-        child: Text('Details for $courseName'),
+        child: Text(
+            'Details for cource  $courseName /n teacher: $teacher , subject$subject'),
       ),
     );
   }

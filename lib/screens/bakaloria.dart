@@ -49,7 +49,9 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
             child: GestureDetector(
               onTap: () {
                 if (index == 0) {
-                  Get.to(() => Adabiteachers());
+                  Get.to(() => Adabiteachers(
+                        subject: gridItems[index].text,
+                      ));
                 }
                 // Handle click event here, for example, navigate to a new page
                 print('Image clicked: ${gridItems[index].text}');

@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Adabiteachers extends StatefulWidget {
-  const Adabiteachers({Key? key}) : super(key: key);
-
+  final String subject;
+  Adabiteachers({required this.subject});
   @override
   State<Adabiteachers> createState() => _AdabiteachersState();
 }
@@ -44,6 +44,7 @@ class _AdabiteachersState extends State<Adabiteachers> {
   void _onItemClicked(int index) {
     Get.to(() => Courses(
           teacher: jsonList[index]['name'],
+          subject: widget.subject,
         ));
     // Handle item click here, you can navigate to a new page, show a dialog, etc.
     print("Item clicked: ${jsonList[index]['name']}");
@@ -82,8 +83,7 @@ class _AdabiteachersState extends State<Adabiteachers> {
                             margin: const EdgeInsets.symmetric(vertical: 8.0),
                             child: ListTile(
                               title: Text(jsonList[index]['name']),
-                              subtitle:
-                                  Text("مادة: ${jsonList[index]['subject']}"),
+                              subtitle: Text("مادة: ${widget.subject}"),
                               trailing: const Icon(Icons.arrow_forward_ios),
                             ),
                           ),
