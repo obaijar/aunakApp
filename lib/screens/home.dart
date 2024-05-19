@@ -12,13 +12,12 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
-  String? _id; // Step 1: Declare a state variable to hold the ID
+  String? _id; // Declare a state variable to hold the ID
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +88,9 @@ class _HomeState extends State<Home> {
           });
         },
       ),
-      body: _buildBody(),
+      body: SingleChildScrollView(
+        child: _buildBody(),
+      ),
     );
   }
 
@@ -102,6 +103,9 @@ class _HomeState extends State<Home> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(
+                  height: 50.h,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [

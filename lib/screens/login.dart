@@ -42,142 +42,138 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget buildHomeWidget() {
     final double wScreen = MediaQuery.of(context).size.width;
     final double hScreen = MediaQuery.of(context).size.height;
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          flex: 6,
-          child: Container(
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
             width: wScreen,
-            height: hScreen,
+            height: hScreen * 0.3,
             decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("images/top1.png"), fit: BoxFit.contain)),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(16.h),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                controller: usernameController,
-                decoration: InputDecoration(
-                  labelText: 'البريد الإلكتروني',
-                  labelStyle: TextStyle(fontSize: 12.sp),
+          Padding(
+            padding: EdgeInsets.all(16.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: usernameController,
+                  decoration: InputDecoration(
+                    labelText: 'البريد الإلكتروني',
+                    labelStyle: TextStyle(fontSize: 12.sp),
+                  ),
                 ),
-              ),
-              TextField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  labelText: 'كلمة السر',
-                  labelStyle: TextStyle(fontSize: 12.sp),
+                TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'كلمة السر',
+                    labelStyle: TextStyle(fontSize: 12.sp),
+                  ),
+                  obscureText: true,
                 ),
-                obscureText: true,
-              ),
-              SizedBox(height: 20.h),
-              isLoading // Add this block
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: () async {
-                        setState(() {
-                          isLoading = true; // Set loading state
-                        });
-
-                        try {
-                          var url =
-                              Uri.parse('https://dummyjson.com/auth/login');
-                          var response = await http.post(
-                            url,
-                            body: jsonEncode({
-                              'username': usernameController.text,
-                              'password': passwordController.text,
-                            }),
-                            headers: {
-                              'Content-Type': 'application/json',
-                            },
-                          );
-
-                          if (response.statusCode == 200) {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            prefs.setString(
-                                'username', usernameController.text);
-
-                            Get.off(Home());
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          print('Error during login: $e');
-                        } finally {
+                SizedBox(height: 20.h),
+                isLoading // Add this block
+                    ? CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: () async {
                           setState(() {
-                            isLoading = false; // Reset loading state
+                            isLoading = true; // Set loading state
                           });
-                        }
-                      },
-                      child: Text(
-                        'تسجيل الدخول',
-                        style: TextStyle(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Roboto',
+
+                          try {
+                            var url =
+                                Uri.parse('https://dummyjson.com/auth/login');
+                            var response = await http.post(
+                              url,
+                              body: jsonEncode({
+                                'username': usernameController.text,
+                                'password': passwordController.text,
+                              }),
+                              headers: {
+                                'Content-Type': 'application/json',
+                              },
+                            );
+
+                            if (response.statusCode == 200) {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setString(
+                                  'username', usernameController.text);
+
+                              Get.off(Home());
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            print('Error during login: $e');
+                          } finally {
+                            setState(() {
+                              isLoading = false; // Reset loading state
+                            });
+                          }
+                        },
+                        child: Text(
+                          'تسجيل الدخول',
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Roboto',
+                          ),
                         ),
                       ),
-                    ),
-              SizedBox(height: 10.h),
-              ElevatedButton(
-                onPressed: () async {
-                  Get.to(RegisterScreen());
-                },
-                child: Text(
-                  'التسجيل',
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto',
-                  ),
-                ),
-              ),
-              SizedBox(height: 10.h),
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Get.to(Home());
+                SizedBox(height: 10.h),
+                ElevatedButton(
+                  onPressed: () async {
+                    Get.to(RegisterScreen());
                   },
                   child: Text(
-                    'زائر',
+                    'التسجيل',
                     style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 20.sp,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
+                      fontFamily: 'Roboto',
                     ),
                   ),
                 ),
-              )
-            ],
+                SizedBox(height: 10.h),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(Home());
+                    },
+                    child: Text(
+                      'زائر',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          flex: 4,
-          child: Container(
+          Container(
             width: wScreen,
-            height: hScreen,
+            height: hScreen * 0.3,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("images/bottom2.png"),
                     fit: BoxFit.contain)),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
