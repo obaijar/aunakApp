@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:testt/screens/teachers.dart';
 
 class GridItem {
   final String imageUrl;
@@ -46,6 +48,9 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
           return Center(
             child: GestureDetector(
               onTap: () {
+                if (index == 0) {
+                  Get.to(() => Adabiteachers());
+                }
                 // Handle click event here, for example, navigate to a new page
                 print('Image clicked: ${gridItems[index].text}');
               },
@@ -111,7 +116,6 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
             child: GestureDetector(
               onTap: () {
                 // Handle click event here, for example, navigate to a new page
-                print('Image clicked: ${gridItems[index].text}');
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
