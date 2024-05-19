@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  RegisterScreen({super.key});
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,47 +39,60 @@ class RegisterScreen extends StatelessWidget {
               obscureText: true,
             ),
             SizedBox(height: 20.h),
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  var url =
-                      Uri.parse('https://jsonplaceholder.typicode.com/posts');
-                  var response = await http.post(
-                    url,
-                    body: jsonEncode({
-                      'username': usernameController.text,
-                      'email': emailController.text,
-                      'password': passwordController.text,
-                    }),
-                    headers: {
-                      'Content-Type': 'application/json',
+            isLoading
+                ? CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      try {
+                        var dio = Dio();
+                        var url = 'https://jsonplaceholder.typicode.com/posts';
+                        var response = await dio.post(
+                          url,
+                          data: {
+                            'username': usernameController.text,
+                            'email': emailController.text,
+                            'password': passwordController.text,
+                          },
+                        );
+
+                        final jsonResponse = response.data;
+
+                        // Access the value of 'id'
+                        final int id = jsonResponse['id'];
+                        print("status code ${response.statusCode}");
+                        if (response.statusCode == 201) {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.setString('id', id.toString());
+
+                          Navigator.pop(context);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        print(e);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('حدث خطأ ما , يرجى اعادة المحاولة'),
+                          ),
+                        );
+                      } finally {
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
                     },
-                  );
-                  final jsonResponse = json.decode(response.body);
-
-                  // Access the value of 'id'
-                  final int id = jsonResponse['id'];
-                  print("status code ${response.statusCode}");
-                  if (response.statusCode == 201) {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.setString('id', id.toString());
-
-                    Navigator.pop(context);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  print(e.toString());
-                }
-              },
-              child: const Text('التسجيل'),
-            ),
+                    child: const Text('التسجيل'),
+                  ),
           ],
         ),
       ),

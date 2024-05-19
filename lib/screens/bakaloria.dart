@@ -7,7 +7,6 @@ class GridItem {
 
   GridItem({required this.imageUrl, required this.text});
 }
- 
 
 class bakaloriaAdabi extends StatefulWidget {
   const bakaloriaAdabi({super.key});

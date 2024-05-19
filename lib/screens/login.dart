@@ -16,6 +16,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false; // Add this line
 
   @override
   Widget build(BuildContext context) {
@@ -77,48 +78,60 @@ class _SignInScreenState extends State<SignInScreen> {
                 obscureText: true,
               ),
               SizedBox(height: 20.h),
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    var url = Uri.parse('https://dummyjson.com/auth/login');
-                    var response = await http.post(
-                      url,
-                      body: jsonEncode({
-                        'username': usernameController.text,
-                        'password': passwordController.text,
-                      }),
-                      headers: {
-                        'Content-Type': 'application/json',
+              isLoading // Add this block
+                  ? CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true; // Set loading state
+                        });
+
+                        try {
+                          var url =
+                              Uri.parse('https://dummyjson.com/auth/login');
+                          var response = await http.post(
+                            url,
+                            body: jsonEncode({
+                              'username': usernameController.text,
+                              'password': passwordController.text,
+                            }),
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                          );
+
+                          if (response.statusCode == 200) {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setString(
+                                'username', usernameController.text);
+
+                            Get.off(Home());
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          print('Error during login: $e');
+                        } finally {
+                          setState(() {
+                            isLoading = false; // Reset loading state
+                          });
+                        }
                       },
-                    );
-
-                    if (response.statusCode == 200) {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setString('username', usernameController.text);
-
-                      Get.off(Home());
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                              'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
+                      child: Text(
+                        'تسجيل الدخول',
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Roboto',
                         ),
-                      );
-                    }
-                  } catch (e) {
-                    print('Error during login: $e');
-                  }
-                },
-                child: Text(
-                  'تسجيل الدخول',
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto',
-                  ),
-                ),
-              ),
+                      ),
+                    ),
               SizedBox(height: 10.h),
               ElevatedButton(
                 onPressed: () async {
