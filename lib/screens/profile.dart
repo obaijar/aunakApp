@@ -6,10 +6,8 @@ class Profile extends StatelessWidget {
   Profile({this.id});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text(id != null ? 'Profile ID: $id' : 'No ID available'),
-      ),
+    return Center(
+      child: Text(id != null ? 'Profile ID: $id' : 'No ID available'),
     );
   }
 }

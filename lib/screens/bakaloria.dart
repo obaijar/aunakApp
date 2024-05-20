@@ -21,7 +21,7 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
   List<GridItem> gridItems = [
     GridItem(
       imageUrl: 'images/img8.png',
-      text: 'رياضيات',
+      text: 'فلسفة',
     ),
     GridItem(
       imageUrl: 'images/img8.png',
@@ -29,7 +29,7 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
     ),
     GridItem(
       imageUrl: 'images/img8.png',
-      text: 'فيزياء',
+      text: 'إجتماعيات',
     ),
     // Add more items as needed
   ];
@@ -48,11 +48,10 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
           return Center(
             child: GestureDetector(
               onTap: () {
-                if (index == 0) {
-                  Get.to(() => Adabiteachers(
-                        subject: gridItems[index].text,
-                      ));
-                }
+                Get.to(() => teachers(
+                      subject: gridItems[index].text,
+                      section: 3,
+                    ));
                 // Handle click event here, for example, navigate to a new page
                 print('Image clicked: ${gridItems[index].text}');
               },
@@ -117,6 +116,10 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
           return Center(
             child: GestureDetector(
               onTap: () {
+                Get.to(() => teachers(
+                      subject: gridItems[index].text,
+                      section: 2,
+                    ));
                 // Handle click event here, for example, navigate to a new page
               },
               child: Column(

@@ -4,14 +4,15 @@ import 'package:testt/screens/Courses.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Adabiteachers extends StatefulWidget {
+class teachers extends StatefulWidget {
   final String subject;
-  Adabiteachers({required this.subject});
+  final int section;
+  teachers({required this.subject, required this.section});
   @override
-  State<Adabiteachers> createState() => _AdabiteachersState();
+  State<teachers> createState() => _teachersState();
 }
 
-class _AdabiteachersState extends State<Adabiteachers> {
+class _teachersState extends State<teachers> {
   List jsonList = [];
   bool isLoading = false;
 
@@ -45,6 +46,7 @@ class _AdabiteachersState extends State<Adabiteachers> {
     Get.to(() => Courses(
           teacher: jsonList[index]['name'],
           subject: widget.subject,
+          section: widget.section,
         ));
     // Handle item click here, you can navigate to a new page, show a dialog, etc.
     print("Item clicked: ${jsonList[index]['name']}");

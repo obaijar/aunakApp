@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:testt/screens/CoursesDetail.dart';
 
 class Courses extends StatefulWidget {
   final String teacher;
   final String subject;
-  Courses({required this.teacher, required this.subject});
+  final int section;
+  Courses(
+      {required this.teacher, required this.subject, required this.section});
 
   @override
   State<Courses> createState() => _CoursesState();
@@ -25,7 +28,11 @@ class _CoursesState extends State<Courses> {
     print('Tapped on course: $courseName');
     // Example: Navigate to a new page
     Get.to(() => CourseDetailPage(
-        courseName: courseName, teacher: teacher, subject: subject));
+          courseName: courseName,
+          teacher: teacher,
+          subject: subject,
+          section: widget.section,
+        ));
   }
 
   @override
@@ -74,28 +81,6 @@ class _CoursesState extends State<Courses> {
             );
           },
         ),
-      ),
-    );
-  }
-}
-
-class CourseDetailPage extends StatelessWidget {
-  final String courseName;
-  final String teacher;
-  final String subject;
-
-  const CourseDetailPage(
-      {required this.courseName, required this.teacher, required this.subject});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(courseName),
-      ),
-      body: Center(
-        child: Text(
-            'Details for cource  $courseName /n teacher: $teacher , subject$subject'),
       ),
     );
   }

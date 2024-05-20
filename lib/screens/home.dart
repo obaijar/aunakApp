@@ -95,38 +95,49 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildBody() {
-    switch (_selectedIndex) {
-      case 0:
-        return Padding(
-          padding: EdgeInsets.all(8.w),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 50.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "الأقسام",
-                      style: TextStyle(fontSize: 25.sp),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                HorizontalList(),
-              ],
-            ),
+    if (_selectedIndex == 0) {
+      return Padding(
+        padding: EdgeInsets.all(8.w),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "الأقسام",
+                    style: TextStyle(fontSize: 25.sp),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              HorizontalList(),
+            ],
           ),
-        );
-      case 1:
-        return Profile(id: _id);
-      default:
-        return Container();
+        ),
+      );
+    } else if (_selectedIndex == 1) {
+      return FutureBuilder<String>(
+        future: getId(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            _id = snapshot.data; // Update the state variable
+            return Profile(id: _id);
+          }
+        },
+      );
+    } else {
+      return Container();
     }
   }
 
