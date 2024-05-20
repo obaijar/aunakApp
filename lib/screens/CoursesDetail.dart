@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CourseDetailPage extends StatefulWidget {
@@ -69,9 +68,13 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
                 'Details for cource  ${widget.courseName}  teacher: ${widget.teacher} , subject${widget.subject} , section $sectionName'),
+            SizedBox(
+              height: 50,
+            ),
             ElevatedButton(
               onPressed: _checkLoginStatus,
               child: Text(
