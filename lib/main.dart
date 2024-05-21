@@ -1,7 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:testt/screens/home.dart';
 import 'package:testt/screens/onboarding.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +15,7 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: true,
-      builder: (context) => MyApp(), // Wrap your app
+      builder: (context) => const MyApp(), // Wrap your app
     ),
   );
 }
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
               } else {
                 if (snapshot.data == true) {
                   // If user is logged in, navigate to Home screen
-                  return Home();
+                  return const Home();
                 } else {
                   // If user is not logged in, go to Onboarding screen
                   return Onbording();

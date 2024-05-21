@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -24,7 +26,7 @@ class _CourseVideoState extends State<CourseVideo> {
 
   Future<void> _fetchVideos() async {
     final dio = Dio();
-    final url =
+    const url =
         'https://gist.githubusercontent.com/poudyalanil/ca84582cbeb4fc123a13290a586da925/raw/14a27bd0bcd0cd323b35ad79cf3b493dddf6216b/videos.json';
 
     try {
@@ -80,11 +82,7 @@ class _CourseVideoState extends State<CourseVideo> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        child: const Icon(Icons.video_library, size: 100),
-                      ),
+                      const Icon(Icons.video_library, size: 100),
                       const SizedBox(width: 16), // Space between image and text
                       Expanded(
                         child: Column(
