@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testt/screens/CourseVideos.dart';
+import 'package:get/get.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final String courseName;
@@ -32,7 +34,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       _showNotLoggedInDialog();
     } else {
       // Proceed with the action for logged-in users
-      print('User is logged in');
+      Get.to(CourseVideo());
     }
   }
 

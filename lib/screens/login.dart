@@ -49,7 +49,7 @@ class _SignInScreenState extends State<SignInScreen> {
         children: [
           Container(
             width: wScreen,
-            height: hScreen * 0.3,
+            height: hScreen * 0.4,
             decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("images/top1.png"), fit: BoxFit.contain)),
@@ -166,7 +166,7 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           Container(
             width: wScreen,
-            height: hScreen * 0.3,
+            height: hScreen * 0.2,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("images/bottom2.png"),

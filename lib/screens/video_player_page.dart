@@ -3,6 +3,10 @@ import 'package:flick_video_player/flick_video_player.dart';
 import 'package:video_player/video_player.dart';
 
 class SamplePlayer extends StatefulWidget {
+  final String videoUrl;
+  const SamplePlayer({
+    required this.videoUrl,
+  });
   @override
   _SamplePlayerState createState() => _SamplePlayerState();
 }
@@ -14,8 +18,7 @@ class _SamplePlayerState extends State<SamplePlayer> {
     super.initState();
     flickManager = FlickManager(
         videoPlayerController: VideoPlayerController.networkUrl(
-      Uri.parse(
-          "https://mazwai.com/videvo_files/video/free/2016-04/small_watermarked/the_valley-graham_uheslki_preview.webm"),
+      Uri.parse(widget.videoUrl),
     ));
   }
 
