@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:testt/screens/video_player_page.dart'; // Import to use jsonDecode
+import 'package:testt/screens/video_player_page.dart'; // Add this if you're using Get package
 
 class CourseVideo extends StatefulWidget {
   const CourseVideo({super.key});
@@ -32,7 +32,7 @@ class _CourseVideoState extends State<CourseVideo> {
 
       if (response.statusCode == 200) {
         setState(() {
-          _videos = jsonDecode(response.data); // Parse the response as JSON
+          _videos = jsonDecode(response.data);
           _isLoading = false;
         });
       } else {
@@ -61,7 +61,7 @@ class _CourseVideoState extends State<CourseVideo> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Course Videos'),
+        title: const Text('الكورسات'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -69,37 +69,49 @@ class _CourseVideoState extends State<CourseVideo> {
           itemCount: _videos.length,
           itemBuilder: (context, index) {
             final video = _videos[index];
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 8.0),
-              elevation: 4,
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(8.0),
-                leading: video['thumbnailUrl'] != null
-                    ? Image.network(
-                        video['thumbnailUrl'],
+            return InkWell(
+              onTap: () {
+                Get.to(SamplePlayer(videoUrl: video['videoUrl']));
+              },
+              child: Card(
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Container(
                         width: 100,
                         height: 100,
-                        fit: BoxFit.cover,
-                      )
-                    : const Icon(Icons.video_library, size: 100),
-                title: Text(
-                  video['title'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                        child: const Icon(Icons.video_library, size: 100),
+                      ),
+                      const SizedBox(width: 16), // Space between image and text
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              video['title'],
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              video['description'],
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.arrow_forward),
+                    ],
                   ),
                 ),
-                subtitle: Text(
-                  video['description'],
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
-                ),
-                trailing: const Icon(Icons.arrow_forward),
-                onTap: () {
-                  Get.to(SamplePlayer(videoUrl: video['videoUrl']));
-                },
               ),
             );
           },
