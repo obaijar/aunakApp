@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
 
   Future<bool> isLoggedIn() async {
     String? username = prefs?.getString('username');
+    print("whaat??0$username");
     return username != null &&
         username.isNotEmpty; // Check if username is not null or empty
   }

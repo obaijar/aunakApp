@@ -69,7 +69,7 @@ class _HomeState extends State<Home> {
                 if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   // Check if username is not null or empty
                   return IconButton(
-                    icon: const Icon(Icons.logout),
+                    icon: Icon(Icons.logout, size: 20.h),
                     onPressed: () {
                       _logout(
                           context); // Call logout function when the button is pressed
