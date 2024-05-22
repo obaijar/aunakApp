@@ -5,10 +5,12 @@ import 'package:testt/main.dart';
 import 'package:testt/screens/bakaloria.dart';
 import 'package:testt/screens/profile.dart';
 import 'package:testt/screens/login.dart';
+import 'package:testt/screens/register.dart';
 import 'package:testt/screens/tase3.dart';
 import 'package:get/get.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // Import CurvedNavigationBar
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -101,31 +103,106 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Future<bool> isAdmin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String username = prefs.getString('username') ?? '';
+    return username == 'kminchelle';
+  }
+
   Widget _buildBody() {
     if (_selectedIndex == 0) {
-      return Padding(
-        padding: EdgeInsets.all(8.w),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 50.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "الأقسام",
-                    style: TextStyle(fontSize: 25.sp),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              HorizontalList(),
-            ],
+      return SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(8.w),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 50.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "الأقسام",
+                      style: TextStyle(fontSize: 25.sp),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                HorizontalList(),
+                Divider(),
+                FutureBuilder<bool>(
+                  future: isAdmin(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.data == true) {
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                " تسجيل الأساتذة والطلاب",
+                                style: TextStyle(fontSize: 25.sp),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              Get.to(RegisterScreen());
+                            },
+                            child: Text(
+                              'التسجيل',
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                          ),
+                          Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                "تحميل فيديو",
+                                style: TextStyle(fontSize: 25.sp),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {},
+                            child: Text(
+                              'التحميل',
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       );

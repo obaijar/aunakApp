@@ -147,20 +147,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                 SizedBox(height: 10.h),
-                ElevatedButton(
-                  onPressed: () async {
-                    Get.to(RegisterScreen());
-                  },
-                  child: Text(
-                    'التسجيل',
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto',
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10.h),
                 Center(
                   child: GestureDetector(
                     onTap: () {
