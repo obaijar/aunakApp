@@ -99,7 +99,7 @@ class _OnbordingState extends State<Onbording> {
               margin: EdgeInsets.all(20.h),
               width: double.infinity,
               child: IconButton(
-                icon: Icon(Icons.arrow_forward),
+                icon: const Icon(Icons.arrow_forward),
                 onPressed: () {
                   if (currentIndex == contents.length - 1) {
                     Navigator.pushReplacement(
@@ -110,7 +110,7 @@ class _OnbordingState extends State<Onbording> {
                     );
                   }
                   _controller.nextPage(
-                    duration: Duration(milliseconds: 100),
+                    duration: const Duration(milliseconds: 100),
                     curve: Curves.bounceIn,
                   );
                 },
@@ -124,7 +124,7 @@ class _OnbordingState extends State<Onbording> {
     return Container(
       height: 8.h,
       width: currentIndex == index ? 25 : 10,
-      margin: EdgeInsets.only(right: 5),
+      margin: const EdgeInsets.only(right: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Theme.of(context).primaryColor,

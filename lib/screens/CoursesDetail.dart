@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +12,7 @@ class CourseDetailPage extends StatefulWidget {
   final String subject;
   final int section;
   const CourseDetailPage({
+    super.key,
     required this.courseName,
     required this.teacher,
     required this.subject,
@@ -21,7 +24,7 @@ class CourseDetailPage extends StatefulWidget {
 }
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<String> getUsername() async {
     final SharedPreferences prefs = await _prefs;
@@ -34,7 +37,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       _showNotLoggedInDialog();
     } else {
       // Proceed with the action for logged-in users
-      Get.to(CourseVideo());
+      Get.to(const CourseVideo());
     }
   }
 
@@ -43,11 +46,11 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('تسجيل الدخول'),
-          content: Text('للمتابعة  يرجى تسجيل الدخول'),
+          title: const Text('تسجيل الدخول'),
+          content: const Text('للمتابعة  يرجى تسجيل الدخول'),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -65,6 +68,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     if (widget.section == 2) sectionName = "بكالوريا علمي";
     if (widget.section == 3) sectionName = "بكالوريا أدبي";
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.courseName),
       ),
@@ -74,7 +78,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           children: [
             Text(
                 'Details for cource  ${widget.courseName}  teacher: ${widget.teacher} , subject${widget.subject} , section $sectionName'),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             ElevatedButton(

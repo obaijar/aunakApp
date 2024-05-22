@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:testt/screens/Courses.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class teachers extends StatefulWidget {
   final String subject;
@@ -27,6 +28,17 @@ class _teachersState extends State<teachers> {
       isLoading = true;
     });
     try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected =
+          connectivityResult.any((result) => result != ConnectivityResult.none);
+      if (!isConnected) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('لا يوجد اتصال بالإنترنت. يرجى المحاولة مرة أخرى'),
+          ),
+        );
+        return; // Exit the button press function if no connection
+      }
       var response = await Dio()
           .get("https://protocoderspoint.com/jsondata/superheros.json");
       if (response.statusCode == 200) {
@@ -84,8 +96,18 @@ class _teachersState extends State<teachers> {
                             elevation: 3.0,
                             margin: const EdgeInsets.symmetric(vertical: 8.0),
                             child: ListTile(
-                              title: Text(jsonList[index]['name']),
-                              subtitle: Text("مادة: ${widget.subject}"),
+                              title: Text(
+                                jsonList[index]['name'],
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                              subtitle: Text(
+                                "مادة: ${widget.subject}",
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                ),
+                              ),
                               trailing: const Icon(Icons.arrow_forward_ios),
                             ),
                           ),

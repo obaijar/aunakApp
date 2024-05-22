@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:testt/screens/video_player_page.dart'; // Add this if you're using Get package
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class CourseVideo extends StatefulWidget {
   const CourseVideo({super.key});
@@ -30,6 +31,30 @@ class _CourseVideoState extends State<CourseVideo> {
         'https://gist.githubusercontent.com/poudyalanil/ca84582cbeb4fc123a13290a586da925/raw/14a27bd0bcd0cd323b35ad79cf3b493dddf6216b/videos.json';
 
     try {
+      var connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected =
+          connectivityResult.any((result) => result != ConnectivityResult.none);
+      if (!isConnected) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('إتصال الإنترنت'),
+              content: const Text('لا يوجد اتصال بالإنترنت'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
+
       final response = await dio.get(url);
 
       if (response.statusCode == 200) {
@@ -48,7 +73,10 @@ class _CourseVideoState extends State<CourseVideo> {
         _error = 'Error: $e';
         _isLoading = false;
       });
+    } finally {
+      // You can do any cleanup here (optional)
     }
+    return; // Or return a Future based on the outcome
   }
 
   @override
@@ -62,6 +90,7 @@ class _CourseVideoState extends State<CourseVideo> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('الكورسات'),
       ),

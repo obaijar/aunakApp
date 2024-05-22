@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:testt/main.dart';
 import 'package:testt/screens/bakaloria.dart';
@@ -29,7 +31,7 @@ class _HomeState extends State<Home> {
               'برنامج تعليمي',
               style: TextStyle(fontSize: 20.sp),
             ),
-            Spacer(), // Add spacer to push the username to the right
+            const Spacer(), // Add spacer to push the username to the right
             FutureBuilder<String>(
               future: getUsername(),
               builder: (context, snapshot) {
@@ -40,7 +42,12 @@ class _HomeState extends State<Home> {
                 } else {
                   String? username = snapshot.data;
                   if (username!.isNotEmpty) {
-                    return Text('أهلا, $username');
+                    return Text(
+                      'أهلا, $username',
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                      ),
+                    );
                   } else {
                     return Text(
                       'أهلا زائر',
@@ -167,7 +174,7 @@ class HorizontalList extends StatelessWidget {
     'images/image7.png', // Sample image URL 3
   ];
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 150.h, // Adjust height as needed
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -179,13 +186,13 @@ class HorizontalList extends StatelessWidget {
                 onTap: () {
                   // Handle tap here
                   if (index == 0) {
-                    Get.to(() => Tase3());
+                    Get.to(() => const Tase3());
                   }
                   if (index == 1) {
-                    Get.to(() => bakaloriaAdabi());
+                    Get.to(() => const bakaloriaAdabi());
                   }
                   if (index == 2) {
-                    Get.to(() => bakaloria3lmi());
+                    Get.to(() => const bakaloria3lmi());
                   }
                 },
                 child: Column(

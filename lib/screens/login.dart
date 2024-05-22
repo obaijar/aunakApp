@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +9,7 @@ import 'package:testt/screens/home.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testt/screens/register.dart'; // Add
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -80,6 +83,19 @@ class _SignInScreenState extends State<SignInScreen> {
                     ? CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: () async {
+                          var connectivityResult =
+                              await Connectivity().checkConnectivity();
+                          bool isConnected = connectivityResult.any(
+                              (result) => result != ConnectivityResult.none);
+                          if (!isConnected) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'لا يوجد اتصال بالإنترنت. يرجى المحاولة مرة أخرى'),
+                              ),
+                            );
+                            return; // Exit the button press function if no connection
+                          }
                           setState(() {
                             isLoading = true; // Set loading state
                           });
@@ -167,7 +183,7 @@ class _SignInScreenState extends State<SignInScreen> {
           Container(
             width: wScreen,
             height: hScreen * 0.2,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("images/bottom2.png"),
                     fit: BoxFit.contain)),
