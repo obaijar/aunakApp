@@ -8,8 +8,8 @@ import 'dart:convert';
 import 'package:testt/screens/home.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testt/screens/register.dart'; // Add
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -101,25 +101,38 @@ class _SignInScreenState extends State<SignInScreen> {
                           });
 
                           try {
-                            var url =
-                                Uri.parse('https://dummyjson.com/auth/login');
-                            var response = await http.post(
+                            var url = 'https://dummyjson.com/auth/login';
+                            var dio = Dio();
+
+                            var response = await dio.post(
                               url,
-                              body: jsonEncode({
+                              data: {
                                 'username': usernameController.text,
                                 'password': passwordController.text,
-                              }),
-                              headers: {
-                                'Content-Type': 'application/json',
                               },
+                              options: Options(
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                },
+                              ),
                             );
+
+                            final jsonResponse = response.data;
+                            final String username = jsonResponse['username'];
+                            final String email = jsonResponse['email'];
+                            final String firstName = jsonResponse['firstName'];
+                            final String lastName = jsonResponse['lastName'];
+                            final String gender = jsonResponse['gender'];
 
                             if (response.statusCode == 200) {
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
+                              prefs.setString('email', email.toString());
                               prefs.setString(
-                                  'username', usernameController.text);
-
+                                  'firstName', firstName.toString());
+                              prefs.setString('lastName', lastName.toString());
+                              prefs.setString('gender', gender.toString());
+                              prefs.setString('username', username.toString());
                               Get.off(Home());
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(

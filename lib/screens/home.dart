@@ -12,6 +12,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // Import Cur
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'videoPost.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -134,12 +136,12 @@ class _HomeState extends State<Home> {
                   height: 20.h,
                 ),
                 HorizontalList(),
-                Divider(),
+                const Divider(),
                 FutureBuilder<bool>(
                   future: isAdmin(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else if (snapshot.data == true) {
@@ -159,7 +161,7 @@ class _HomeState extends State<Home> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              Get.to(RegisterScreen());
+                              Get.to(const RegisterScreen());
                             },
                             child: Text(
                               'التسجيل',
@@ -170,12 +172,12 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "تحميل فيديو",
+                                "تحميل دروس",
                                 style: TextStyle(fontSize: 25.sp),
                               ),
                             ],
@@ -184,7 +186,9 @@ class _HomeState extends State<Home> {
                             height: 20.h,
                           ),
                           ElevatedButton(
-                            onPressed: () async {},
+                            onPressed: () {
+                              Get.to(VideoPost());
+                            },
                             child: Text(
                               'التحميل',
                               style: TextStyle(
@@ -207,26 +211,48 @@ class _HomeState extends State<Home> {
         ),
       );
     } else if (_selectedIndex == 1) {
-      return FutureBuilder<String>(
-        future: getId(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            _id = snapshot.data; // Update the state variable
-            return Profile(id: _id);
-          }
-        },
+      return Container(
+        height: 600.h,
+        child: FutureBuilder<UserInfo>(
+          future: getUserInfo(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final userInfo = snapshot.data;
+              final email, _firstName, _lastName, _gender;
+              email = userInfo?.email; // Update the state variable with email
+              _firstName = userInfo
+                  ?.firstName; // Update the state variable with firstName
+              _lastName =
+                  userInfo?.lastName; // Update the state variable with lastName
+              _gender =
+                  userInfo?.gender; // Update the state variable with gender
+              return Profile(
+                email: email,
+                firstName: _firstName,
+                lastName: _lastName,
+                gender: _gender,
+                username: '',
+              ); // Return your widget
+            }
+          },
+        ),
       );
     } else {
       return Container();
     }
   }
 
-  Future<String> getId() async {
-    return prefs?.getString('id') ?? '';
+  Future<UserInfo> getUserInfo() async {
+    final email = prefs?.getString('email') ?? '';
+    final firstName = prefs?.getString('firstName') ?? '';
+    final lastName = prefs?.getString('lastName') ?? '';
+    final gender = prefs?.getString('gender') ?? '';
+    return UserInfo(
+        email: email, firstName: firstName, lastName: lastName, gender: gender);
   }
 
   Future<String> getUsername() async {
@@ -237,6 +263,19 @@ class _HomeState extends State<Home> {
     await prefs?.clear();
     Get.off(SignInScreen());
   }
+}
+
+class UserInfo {
+  final String email;
+  final String firstName;
+  final String lastName;
+  final String gender;
+
+  UserInfo(
+      {required this.email,
+      required this.firstName,
+      required this.lastName,
+      required this.gender});
 }
 
 class HorizontalList extends StatelessWidget {
@@ -250,6 +289,9 @@ class HorizontalList extends StatelessWidget {
     'images/image6.png', // Sample image URL 2
     'images/image7.png', // Sample image URL 3
   ];
+
+  HorizontalList({super.key});
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 150.h, // Adjust height as needed

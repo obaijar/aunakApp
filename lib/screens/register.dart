@@ -62,12 +62,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         final jsonResponse = response.data;
 
                         // Access the value of 'id'
-                        final int id = jsonResponse['id'];
+                        final String email = jsonResponse['email'];
+                        final String firstName = jsonResponse['firstName'];
+                        final String lastName = jsonResponse['lastName'];
+                        final String gender = jsonResponse['gender'];
+
                         print("status code ${response.statusCode}");
                         if (response.statusCode == 201) {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
-                          prefs.setString('id', id.toString());
+                          prefs.setString('email', email.toString());
+                          prefs.setString('firstName', firstName.toString());
+                          prefs.setString('lastName', lastName.toString());
+                          prefs.setString('gender', gender.toString());
 
                           Navigator.pop(context);
                         } else {
