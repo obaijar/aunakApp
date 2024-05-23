@@ -6,16 +6,17 @@ import 'package:testt/screens/onboarding.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences? prefs;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
   runApp(
     DevicePreview(
       enabled: true,
-      builder: (context) => const MyApp(), // Wrap your app
+      builder: (context) => const MyApp(),
     ),
   );
 }
@@ -36,14 +37,17 @@ class MyApp extends StatelessWidget {
             future: isLoggedIn(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(); // Show loading indicator while checking login status
+                return const Center(
+                    child:
+                        CircularProgressIndicator()); // Show loading indicator
+              } else if (snapshot.hasError) {
+                // Handle potential errors
+                return const Center(child: Text('Something went wrong!'));
               } else {
                 if (snapshot.data == true) {
-                  // If user is logged in, navigate to Home screen
                   return const Home();
                 } else {
-                  // If user is not logged in, go to Onboarding screen
-                  return Onbording();
+                  return Onbording(); // Correct the class name to Onboarding
                 }
               }
             },
@@ -55,7 +59,6 @@ class MyApp extends StatelessWidget {
 
   Future<bool> isLoggedIn() async {
     String? username = prefs?.getString('username');
-    return username != null &&
-        username.isNotEmpty; // Check if username is not null or empty
+    return username != null && username.isNotEmpty;
   }
 }
