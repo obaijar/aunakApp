@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, camel_case_types, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:testt/screens/Courses.dart';

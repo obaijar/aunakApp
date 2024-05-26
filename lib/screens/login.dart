@@ -1,10 +1,7 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_key_in_widget_constructors, library_private_types_in_public_api, avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:testt/screens/home.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,7 +77,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 SizedBox(height: 20.h),
                 isLoading // Add this block
-                    ? CircularProgressIndicator()
+                    ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: () async {
                           var connectivityResult =
@@ -133,7 +130,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               prefs.setString('lastName', lastName.toString());
                               prefs.setString('gender', gender.toString());
                               prefs.setString('username', username.toString());
-                              Get.off(Home());
+                              Get.off(const Home());
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -163,7 +160,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Center(
                   child: GestureDetector(
                     onTap: () {
-                      Get.to(Home());
+                      Get.to(const Home());
                     },
                     child: Text(
                       'زائر',

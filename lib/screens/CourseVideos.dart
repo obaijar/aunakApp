@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, file_names
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';

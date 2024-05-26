@@ -1,7 +1,8 @@
+// ignore_for_file: depend_on_referenced_packages, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -60,6 +61,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         );
 
                         if (response.statusCode == 201) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('تم التسجيل بنجاح'),
+                            ),
+                          );
                           Navigator.pop(context);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -70,7 +76,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           );
                         }
                       } catch (e) {
-                        print(e);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('حدث خطأ ما , يرجى اعادة المحاولة'),

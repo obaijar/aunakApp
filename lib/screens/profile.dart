@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,9 +28,22 @@ class Profile extends StatelessWidget {
         children: [
           const SizedBox(height: 20),
           ListTile(
-            leading: Icon(Icons.email, size: 25.w),
+            leading: Icon(Icons.account_circle, size: 35.w),
+            title: Text('الإسم',
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                )),
+            subtitle: Text(firstName,
+                style: TextStyle(
+                  fontSize: 12.sp,
+                )),
+          ),
+          ListTile(
+            leading: Icon(Icons.email, size: 35.w),
             title: Text(
-              'Email',
+              'الإيميل',
               style: TextStyle(
                 fontSize: 15.sp,
                 fontWeight: FontWeight.bold,
@@ -41,46 +56,6 @@ class Profile extends StatelessWidget {
                 fontSize: 12.sp,
               ),
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.account_circle, size: 25.w),
-            title: Text('First Name',
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto',
-                )),
-            subtitle: Text(firstName,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                )),
-          ),
-          ListTile(
-            leading: Icon(Icons.account_circle, size: 25.w),
-            title: Text('Last Name',
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto',
-                )),
-            subtitle: Text(lastName,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                )),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.person_outline, size: 25.w, // Adjust the size as needed
-            ),
-            title: Text('Gender',
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                )),
-            subtitle: Text(gender,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                )),
           ),
         ],
       ),

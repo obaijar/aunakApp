@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, use_super_parameters, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -58,7 +60,7 @@ class _Tase3State extends State<Tase3> {
                     height: 100.h,
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(height: 10), // Spacer between image and text
+                  const SizedBox(height: 10), // Spacer between image and text
                   Text(
                     gridItems[index].text,
                     style: TextStyle(fontSize: 20.sp),

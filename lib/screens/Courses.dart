@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, use_key_in_widget_constructors, prefer_const_constructors_in_immutables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -25,7 +27,7 @@ class _CoursesState extends State<Courses> {
   void _onCourseTap(String courseName, String teacher, String subject) {
     // Perform the desired action when a course is tapped
     // For example, you could navigate to a new page or show a dialog
-    print('Tapped on course: $courseName');
+
     // Example: Navigate to a new page
     Get.to(() => CourseDetailPage(
           courseName: courseName,

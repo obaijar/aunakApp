@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, use_key_in_widget_constructors, library_private_types_in_public_api, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:testt/content_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

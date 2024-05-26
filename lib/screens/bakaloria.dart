@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, camel_case_types, duplicate_ignore
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +12,7 @@ class GridItem {
   GridItem({required this.imageUrl, required this.text});
 }
 
+// ignore: camel_case_types
 class bakaloriaAdabi extends StatefulWidget {
   const bakaloriaAdabi({super.key});
 
@@ -19,6 +20,7 @@ class bakaloriaAdabi extends StatefulWidget {
   State<bakaloriaAdabi> createState() => _bakaloriaAdabiState();
 }
 
+// ignore: camel_case_types
 class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
   List<GridItem> gridItems = [
     GridItem(
@@ -55,7 +57,6 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
                       section: 3,
                     ));
                 // Handle click event here, for example, navigate to a new page
-                print('Image clicked: ${gridItems[index].text}');
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +66,7 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
                     height: 100.h,
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(height: 10), // Spacer between image and text
+                  const SizedBox(height: 10), // Spacer between image and text
                   Text(
                     gridItems[index].text,
                     style: TextStyle(fontSize: 20.sp),
@@ -132,7 +133,7 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
                     height: 100.h,
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(height: 10), // Spacer between image and text
+                  const SizedBox(height: 10), // Spacer between image and text
                   Text(
                     gridItems[index].text,
                     style: TextStyle(fontSize: 20.sp),

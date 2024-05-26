@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, use_key_in_widget_constructors, library_private_types_in_public_api, avoid_init_to_null, avoid_print
+
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -64,7 +66,7 @@ class _VideoPostState extends State<VideoPost> {
                 'Selected File: ${_videoFile!.path}',
                 style: TextStyle(fontSize: 15.sp),
               ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 if (_videoFile != null) {
