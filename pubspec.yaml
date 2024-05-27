@@ -61,6 +61,7 @@ dev_dependencies:
   internet_connection_checker: ^1.0.0+1
   file_picker: ^8.0.3
   image_picker: ^1.1.1
+  fancy_button_flutter: ^1.0.3+1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

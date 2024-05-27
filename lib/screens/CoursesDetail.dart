@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testt/screens/CourseVideos.dart';
 import 'package:get/get.dart';
+import 'package:fancy_button_flutter/fancy_button_flutter.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final String courseName;
@@ -76,22 +77,54 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  ": عن هذا الكورس",
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
             Text(
-                'Details for cource  ${widget.courseName}  teacher: ${widget.teacher} , subject${widget.subject} , section $sectionName'),
+              'التفاصيل عن',
+              style:
+                  TextStyle(fontSize: 16.sp), // Adjust the font size as needed
+            ),
+            Text(
+              '${widget.courseName}',
+              style: TextStyle(fontSize: 16.sp),
+            ),
+            Text(
+              'الإستاذ: ${widget.teacher}',
+              style: TextStyle(fontSize: 16.sp),
+            ),
+            Text(
+              'المادة: ${widget.subject}',
+              style: TextStyle(fontSize: 16.sp),
+            ),
+            Text(
+              'الصف: $sectionName',
+              style: TextStyle(fontSize: 16.sp),
+            ),
             const SizedBox(
               height: 50,
             ),
-            ElevatedButton(
-              onPressed: _checkLoginStatus,
-              child: Text(
-                'مشاهدة الكورس',
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto',
-                ),
-              ),
-            ),
+            FancyButton(
+                button_text: "مشاهدة الكورس",
+                button_height: 40,
+                button_width: 150,
+                button_color: const Color.fromARGB(255, 26, 114, 186),
+                button_outline_color: Colors.white,
+                button_outline_width: 1,
+                button_text_color: Colors.white,
+                button_icon_color: Colors.white,
+                icon_size: 22,
+                button_text_size: 15,
+                onClick: _checkLoginStatus),
           ],
         ),
       ),

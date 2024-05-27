@@ -69,12 +69,7 @@ class _teachersState extends State<teachers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "الأساتذة",
-          style: TextStyle(fontSize: 20.sp),
-        ),
-      ),
+      appBar: AppBar(),
       body: Stack(
         children: [
           Row(
