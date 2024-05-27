@@ -17,7 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
-  String selectedRole = 'طالب'; // Default value
+  String selectedRole = 'طالب تاسع'; // Default value
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +68,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onChanged: (String? newValue) {
                 setState(() {
                   selectedRole = newValue!;
+                  print(selectedRole);
                 });
               },
-              items: <String>['طالب', 'أستاذ', 'أدمن']
-                  .map<DropdownMenuItem<String>>((String value) {
+              items: <String>[
+                'طالب بكالوريا أدبي',
+                'طالب بكالوريا علمي',
+                'طالب تاسع',
+                'أستاذ',
+                'أدمن'
+              ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),

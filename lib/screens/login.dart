@@ -44,21 +44,19 @@ class _SignInScreenState extends State<SignInScreen> {
     final double hScreen = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
             width: wScreen,
             height: hScreen * 0.4,
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("images/top1.png"), fit: BoxFit.contain)),
+                    image: AssetImage("images/Vector 1.jpg"),
+                    fit: BoxFit.contain)),
           ),
           Padding(
-            padding: EdgeInsets.all(16.h),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextField(
                   controller: usernameController,
@@ -183,13 +181,18 @@ class _SignInScreenState extends State<SignInScreen> {
               ],
             ),
           ),
-          Container(
-            width: wScreen,
-            height: hScreen * 0.2,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("images/bottom2.png"),
-                    fit: BoxFit.contain)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                width: 100.w,
+                height: 200.w,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("images/Vector 2.jpg"),
+                        fit: BoxFit.contain)),
+              ),
+            ],
           ),
         ],
       ),

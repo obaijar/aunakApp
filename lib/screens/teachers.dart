@@ -77,6 +77,15 @@ class _teachersState extends State<teachers> {
       ),
       body: Stack(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "اختر إستاذك",
+                style: TextStyle(fontSize: 20.sp),
+              ),
+            ],
+          ),
           Container(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -98,6 +107,11 @@ class _teachersState extends State<teachers> {
                             elevation: 3.0,
                             margin: const EdgeInsets.symmetric(vertical: 8.0),
                             child: ListTile(
+                              leading: const CircleAvatar(
+                                backgroundImage: AssetImage(
+                                    "images/111.png"), // Use AssetImage('path/to/image.png') for local images
+                                radius: 20.0, // Adjust the radius as needed
+                              ),
                               title: Text(
                                 jsonList[index]['name'],
                                 style: TextStyle(
