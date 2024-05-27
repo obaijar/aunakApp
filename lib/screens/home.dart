@@ -135,7 +135,6 @@ class _HomeState extends State<Home> {
                   height: 20.h,
                 ),
                 HorizontalList(),
-                const Divider(),
                 FutureBuilder<bool>(
                   future: isAdmin(),
                   builder: (context, snapshot) {
@@ -146,6 +145,7 @@ class _HomeState extends State<Home> {
                     } else if (snapshot.data == true) {
                       return Column(
                         children: [
+                          const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [

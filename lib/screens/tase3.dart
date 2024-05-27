@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:testt/screens/teachers.dart';
+import 'package:get/get.dart';
 
 class GridItem {
   final String imageUrl;
@@ -49,6 +51,10 @@ class _Tase3State extends State<Tase3> {
           return Center(
             child: GestureDetector(
               onTap: () {
+                Get.to(() => teachers(
+                      subject: gridItems[index].text,
+                      section: 1,
+                    ));
                 // Handle click event here, for example, navigate to a new page
                 print('Image clicked: ${gridItems[index].text}');
               },

@@ -131,7 +131,9 @@ class _SignInScreenState extends State<SignInScreen> {
                               prefs.setString('gender', gender.toString());
                               prefs.setString('username', username.toString());
                               Get.off(const Home());
-                            } else {
+                            }
+                            if (response.statusCode == 400) {
+                              print("why then");
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
@@ -140,7 +142,12 @@ class _SignInScreenState extends State<SignInScreen> {
                               );
                             }
                           } catch (e) {
-                            print('Error during login: $e');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
+                              ),
+                            );
                           } finally {
                             setState(() {
                               isLoading = false; // Reset loading state

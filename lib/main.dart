@@ -32,6 +32,11 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (BuildContext context, child) {
         return GetMaterialApp(
+          theme: ThemeData(
+            appBarTheme: AppBarTheme(
+              color: Colors.blue[300], // Set the global AppBar color
+            ),
+          ),
           debugShowCheckedModeBanner: false,
           home: FutureBuilder<bool>(
             future: isLoggedIn(),

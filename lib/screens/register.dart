@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, library_private_types_in_public_api
+// ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +8,7 @@ class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
@@ -16,6 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
+  String selectedRole = 'طالب'; // Default value
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
               decoration: const InputDecoration(labelText: 'كلمة المرور'),
               obscureText: true,
             ),
+            SizedBox(
+              height: 20.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "نوع الحساب",
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            DropdownButtonFormField<String>(
+              value: selectedRole,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedRole = newValue!;
+                });
+              },
+              items: <String>['طالب', 'أستاذ', 'أدمن']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
             SizedBox(height: 20.h),
             isLoading
                 ? const CircularProgressIndicator()
@@ -57,6 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             'username': usernameController.text,
                             'email': emailController.text,
                             'password': passwordController.text,
+                            'role': selectedRole, // Include the selected role
                           },
                         );
 
@@ -87,7 +127,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         });
                       }
                     },
-                    child: const Text('التسجيل'),
+                    child: Text(
+                      'التسجيل',
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                      ),
+                    ),
                   ),
           ],
         ),
