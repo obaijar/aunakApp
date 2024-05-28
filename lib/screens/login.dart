@@ -14,7 +14,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false; // Add this line
 
@@ -47,7 +47,7 @@ class _SignInScreenState extends State<SignInScreen> {
         children: [
           Container(
             width: wScreen,
-            height: hScreen * 0.4,
+            height: hScreen * 0.25,
             decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("images/Vector 1.jpg"),
@@ -58,20 +58,41 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextField(
-                  controller: usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'البريد الإلكتروني',
-                    labelStyle: TextStyle(fontSize: 12.sp),
+                Material(
+                  elevation: 4.0, // Adjust the elevation value as needed
+                  borderRadius: BorderRadius.circular(
+                      10.0), // Match border radius for consistency
+                  child: TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      labelText: 'البريد الإلكتروني',
+                      labelStyle: TextStyle(fontSize: 12.sp),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      prefixIcon: Icon(Icons.person),
+                    ),
                   ),
                 ),
-                TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'كلمة السر',
-                    labelStyle: TextStyle(fontSize: 12.sp),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Material(
+                  elevation: 4.0, // Adjust the elevation value as needed
+                  borderRadius: BorderRadius.circular(
+                      10.0), // Match border radius for consistency
+                  child: TextField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'كلمة السر',
+                      labelStyle: TextStyle(fontSize: 12.sp),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      prefixIcon: Icon(Icons.lock),
+                    ),
+                    obscureText: true,
                   ),
-                  obscureText: true,
                 ),
                 SizedBox(height: 20.h),
                 isLoading // Add this block
@@ -102,7 +123,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             var response = await dio.post(
                               url,
                               data: {
-                                'username': usernameController.text,
+                                'username': emailController.text,
                                 'password': passwordController.text,
                               },
                               options: Options(
@@ -142,8 +163,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text(
-                                    'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
+                                content:
+                                    Text('هناك خطأ ما , يرجى اعادة المحاولة'),
                               ),
                             );
                           } finally {
@@ -177,7 +198,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

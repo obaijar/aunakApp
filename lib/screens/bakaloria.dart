@@ -49,31 +49,61 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
       body: GridView.count(
         crossAxisCount: 2, // Number of columns in the grid
         children: List.generate(gridItems.length, (index) {
-          return Center(
-            child: GestureDetector(
-              onTap: () {
-                Get.to(() => teachers(
-                      subject: gridItems[index].text,
-                      section: 3,
-                    ));
-                // Handle click event here, for example, navigate to a new page
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    gridItems[index].imageUrl,
-                    height: 100.h,
-                    fit: BoxFit.cover,
+          return Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.w), // Add padding here
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(
+                      color: Colors.black45,
+                      width: 2.0,
+                    ),
                   ),
-                  const SizedBox(height: 10), // Spacer between image and text
-                  Text(
-                    gridItems[index].text,
-                    style: TextStyle(fontSize: 20.sp),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(() => teachers(
+                              subject: gridItems[index].text,
+                              section: 3,
+                            ));
+                        // Handle click event here, for example, navigate to a new page
+                        print('Image clicked: ${gridItems[index].text}');
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            gridItems[index].imageUrl,
+                            height: 80.h,
+                            fit: BoxFit.cover,
+                          ), // Spacer between image and text
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 40.w,
+                              ),
+                              Text(
+                                gridItems[index].text,
+                                style: TextStyle(fontSize: 20.sp),
+                              ),
+                              Image.asset(
+                                width: 40.w,
+                                height: 40.h,
+                                "images/111.png",
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           );
         }),
       ),
@@ -116,31 +146,59 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
       body: GridView.count(
         crossAxisCount: 2, // Number of columns in the grid
         children: List.generate(gridItems.length, (index) {
-          return Center(
-            child: GestureDetector(
-              onTap: () {
-                Get.to(() => teachers(
-                      subject: gridItems[index].text,
-                      section: 2,
-                    ));
-                // Handle click event here, for example, navigate to a new page
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    gridItems[index].imageUrl,
-                    height: 100.h,
-                    fit: BoxFit.cover,
+          return Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.w), // Add padding here
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(
+                      color: Colors.black45,
+                      width: 2.0,
+                    ),
                   ),
-                  const SizedBox(height: 10), // Spacer between image and text
-                  Text(
-                    gridItems[index].text,
-                    style: TextStyle(fontSize: 20.sp),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(() => teachers(
+                              subject: gridItems[index].text,
+                              section: 2,
+                            ));
+                        // Handle click event here, for example, navigate to a new page
+                        print('Image clicked: ${gridItems[index].text}');
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            gridItems[index].imageUrl,
+                            height: 80.h,
+                            fit: BoxFit.cover,
+                          ), // Spacer between image and text
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 40.w,
+                              ),
+                              Text(
+                                gridItems[index].text,
+                                style: TextStyle(fontSize: 20.sp),
+                              ),
+                              Image.asset(
+                                "images/111.png",
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           );
         }),
       ),

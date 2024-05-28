@@ -95,7 +95,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                   TextStyle(fontSize: 16.sp), // Adjust the font size as needed
             ),
             Text(
-              '${widget.courseName}',
+              widget.courseName,
               style: TextStyle(fontSize: 16.sp),
             ),
             Text(
