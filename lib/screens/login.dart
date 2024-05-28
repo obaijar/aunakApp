@@ -132,7 +132,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                 },
                               ),
                             );
-
                             final jsonResponse = response.data;
                             final String username = jsonResponse['username'];
                             final String email = jsonResponse['email'];
@@ -151,8 +150,8 @@ class _SignInScreenState extends State<SignInScreen> {
                               prefs.setString('username', username.toString());
                               Get.off(const Home());
                             }
+
                             if (response.statusCode == 400) {
-                              print("why then");
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(

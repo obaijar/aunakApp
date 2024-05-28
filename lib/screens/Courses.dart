@@ -51,9 +51,6 @@ class _CoursesState extends State<Courses> {
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 0.75, // Adjusts the aspect ratio of the items
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
           ),
           itemCount: courses.length,
           itemBuilder: (context, index) {
@@ -73,8 +70,8 @@ class _CoursesState extends State<Courses> {
                     const SizedBox(height: 8),
                     Text(
                       course['name']!,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 16.sp, fontWeight: FontWeight.bold),
                     ),
                     //  Text("teacher${widget.teacher}, subject${widget.subject}")
                   ],

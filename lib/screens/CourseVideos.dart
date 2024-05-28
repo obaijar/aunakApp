@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:testt/screens/video_player_page.dart'; // Add this if you're using Get package
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CourseVideo extends StatefulWidget {
   const CourseVideo({super.key});
@@ -92,7 +93,10 @@ class _CourseVideoState extends State<CourseVideo> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('الكورسات'),
+        title: Text(
+          'الكورسات',
+          style: TextStyle(fontSize: 20.sp),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -119,17 +123,17 @@ class _CourseVideoState extends State<CourseVideo> {
                           children: [
                             Text(
                               video['title'],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 16.sp,
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               video['description'],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.grey,
-                                fontSize: 14,
+                                fontSize: 14.sp,
                               ),
                             ),
                           ],
