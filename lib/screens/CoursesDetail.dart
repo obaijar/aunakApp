@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testt/screens/CourseRegister.dart';
 import 'package:testt/screens/CourseVideos.dart';
 import 'package:get/get.dart';
 import 'package:fancy_button_flutter/fancy_button_flutter.dart';
@@ -38,7 +39,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       _showNotLoggedInDialog();
     } else {
       // Proceed with the action for logged-in users
-      Get.to(const CourseVideo());
+      Get.to(const CourseRegister());
     }
   }
 
@@ -73,59 +74,90 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       appBar: AppBar(
         title: Text(widget.courseName),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  ": عن هذا الكورس",
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("images/121.png"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    " عن هذا الكورس",
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Text(
-              'التفاصيل عن',
-              style:
-                  TextStyle(fontSize: 16.sp), // Adjust the font size as needed
-            ),
-            Text(
-              widget.courseName,
-              style: TextStyle(fontSize: 16.sp),
-            ),
-            Text(
-              'الإستاذ: ${widget.teacher}',
-              style: TextStyle(fontSize: 16.sp),
-            ),
-            Text(
-              'المادة: ${widget.subject}',
-              style: TextStyle(fontSize: 16.sp),
-            ),
-            Text(
-              'الصف: $sectionName',
-              style: TextStyle(fontSize: 16.sp),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            FancyButton(
-                button_text: "مشاهدة الكورس",
-                button_height: 40.h,
-                button_width: 150.w,
-                button_color: const Color.fromARGB(255, 26, 114, 186),
-                button_outline_color: Colors.white,
-                button_outline_width: 1,
-                button_text_color: Colors.white,
-                button_icon_color: Colors.white,
-                icon_size: 22,
-                button_text_size: 15.sp,
-                onClick: _checkLoginStatus),
-          ],
+                ],
+              ),
+              Text(
+                'التفاصيل عن',
+                style: TextStyle(
+                    fontSize: 16.sp), // Adjust the font size as needed
+              ),
+              Text(
+                widget.courseName,
+                style: TextStyle(fontSize: 16.sp),
+              ),
+              Text(
+                'الإستاذ: ${widget.teacher}',
+                style: TextStyle(fontSize: 16.sp),
+              ),
+              Text(
+                'المادة: ${widget.subject}',
+                style: TextStyle(fontSize: 16.sp),
+              ),
+              Text(
+                'الصف: $sectionName',
+                style: TextStyle(fontSize: 16.sp),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                      child: Card(
+                    elevation: 2.0, // Small elevation
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Container(
+                      width: 100.w, // Width of the card
+                      height: 35.h, // Height of the card
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'السعر',
+                            style:
+                                TextStyle(fontSize: 16.sp, color: Colors.blue),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  FancyButton(
+                      button_text: "التسجيل في الكورس",
+                      button_height: 40.h,
+                      button_width: 150.w,
+                      button_color: const Color.fromARGB(255, 26, 114, 186),
+                      button_outline_color: Colors.white,
+                      button_text_color: Colors.white,
+                      button_text_size: 15.sp,
+                      onClick: _checkLoginStatus),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

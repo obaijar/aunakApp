@@ -115,7 +115,11 @@ class _CourseVideoState extends State<CourseVideo> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      const Icon(Icons.video_library, size: 100),
+                      Icon(
+                        Icons.slow_motion_video,
+                        size: 35.w,
+                        color: Colors.blue,
+                      ),
                       const SizedBox(width: 16), // Space between image and text
                       Expanded(
                         child: Column(
@@ -139,7 +143,7 @@ class _CourseVideoState extends State<CourseVideo> {
                           ],
                         ),
                       ),
-                      const Icon(Icons.arrow_forward),
+                      Icon(Icons.arrow_forward, size: 25.w),
                     ],
                   ),
                 ),
