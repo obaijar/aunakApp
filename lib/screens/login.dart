@@ -106,8 +106,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           if (!isConnected) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text(
-                                    'لا يوجد اتصال بالإنترنت. يرجى المحاولة مرة أخرى'),
+                                content: Text('لا يوجد اتصال بالإنترنت'),
                               ),
                             );
                             return; // Exit the button press function if no connection

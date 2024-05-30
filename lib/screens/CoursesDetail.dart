@@ -142,7 +142,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                     ),
                   )),
                   SizedBox(
-                    width: 20.w,
+                    width: 10.w,
                   ),
                   FancyButton(
                       button_text: "التسجيل في الكورس",

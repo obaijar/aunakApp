@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
 import 'package:testt/screens/CourseVideos.dart';
 import 'package:get/get.dart';
+import 'package:testt/screens/RegisterConformation.dart';
 
 class CourseRegister extends StatefulWidget {
   const CourseRegister({super.key});
@@ -25,6 +26,7 @@ class _CourseRegisterState extends State<CourseRegister> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
           title: Text(
         'الدفع',
@@ -117,13 +119,7 @@ class _CourseRegisterState extends State<CourseRegister> {
                           );
 
                           if (response.statusCode == 201) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('تمت عملية الدفع بنجاح'),
-                              ),
-                            );
-
-                            Get.to(const CourseVideo());
+                            Get.to(const RegisterConformation());
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
