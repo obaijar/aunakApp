@@ -70,7 +70,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      prefixIcon: Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.person),
                     ),
                   ),
                 ),
@@ -89,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                     ),
                     obscureText: true,
                   ),
@@ -112,6 +112,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             );
                             return; // Exit the button press function if no connection
                           }
+
                           setState(() {
                             isLoading = true; // Set loading state
                           });
@@ -132,14 +133,16 @@ class _SignInScreenState extends State<SignInScreen> {
                                 },
                               ),
                             );
-                            final jsonResponse = response.data;
-                            final String username = jsonResponse['username'];
-                            final String email = jsonResponse['email'];
-                            final String firstName = jsonResponse['firstName'];
-                            final String lastName = jsonResponse['lastName'];
-                            final String gender = jsonResponse['gender'];
 
                             if (response.statusCode == 200) {
+                              final jsonResponse = response.data;
+                              final String username = jsonResponse['username'];
+                              final String email = jsonResponse['email'];
+                              final String firstName =
+                                  jsonResponse['firstName'];
+                              final String lastName = jsonResponse['lastName'];
+                              final String gender = jsonResponse['gender'];
+
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setString('email', email.toString());
@@ -150,12 +153,19 @@ class _SignInScreenState extends State<SignInScreen> {
                               prefs.setString('username', username.toString());
                               Get.off(const Home());
                             }
-
-                            if (response.statusCode == 400) {
+                          } on DioException catch (e) {
+                            if (e.response?.statusCode == 400) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
                                       'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text('هناك خطأ ما , يرجى اعادة المحاولة'),
                                 ),
                               );
                             }
@@ -172,14 +182,12 @@ class _SignInScreenState extends State<SignInScreen> {
                             });
                           }
                         },
-                        child: Text(
-                          'تسجيل الدخول',
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Roboto',
-                          ),
-                        ),
+                        child: Text('تسجيل الدخول',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                            )),
                       ),
                 SizedBox(height: 10.h),
                 Center(

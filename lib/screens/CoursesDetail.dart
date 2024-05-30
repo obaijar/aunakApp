@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testt/screens/CourseRegister.dart';
-import 'package:testt/screens/CourseVideos.dart';
 import 'package:get/get.dart';
 import 'package:fancy_button_flutter/fancy_button_flutter.dart';
 

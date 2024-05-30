@@ -25,12 +25,17 @@ class _CourseRegisterState extends State<CourseRegister> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('الدفع')),
+      appBar: AppBar(
+          title: Text(
+        'الدفع',
+        style: TextStyle(
+          fontSize: 18.sp, // Set the font size you want here
+        ),
+      )),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "سيرياتيل كاش",
