@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
                 )); // Show loading indicator
               } else if (snapshot.hasError) {
                 // Handle potential errors
-                return const Center(child: Text('Something went wrong!'));
+                return const Center(child: Text('حدث خطأ ما ! '));
               } else {
                 if (snapshot.data == true) {
                   return const Home();
