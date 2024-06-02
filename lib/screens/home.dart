@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
               future: getUsername(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const CircularProgressIndicator(color: Colors.blue);
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
@@ -107,7 +107,7 @@ class _HomeState extends State<Home> {
   Future<bool> isAdmin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String username = prefs.getString('username') ?? '';
-    return username == 'kminchelle';
+    return username == 'emilys';
   }
 
   Widget _buildBody() {
@@ -139,7 +139,8 @@ class _HomeState extends State<Home> {
                   future: isAdmin(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
+                      return const CircularProgressIndicator(
+                          color: Colors.blue);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else if (snapshot.data == true) {
@@ -216,7 +217,7 @@ class _HomeState extends State<Home> {
           future: getUserInfo(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const CircularProgressIndicator(color: Colors.blue);
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {

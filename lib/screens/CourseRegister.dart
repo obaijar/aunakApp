@@ -98,7 +98,7 @@ class _CourseRegisterState extends State<CourseRegister> {
               ),
               SizedBox(height: 20.h),
               isLoading
-                  ? const CircularProgressIndicator()
+                  ? const CircularProgressIndicator(color: Colors.blue)
                   : ElevatedButton(
                       onPressed: () async {
                         setState(() {

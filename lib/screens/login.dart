@@ -96,7 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 SizedBox(height: 20.h),
                 isLoading // Add this block
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator(color: Colors.blue)
                     : ElevatedButton(
                         onPressed: () async {
                           var connectivityResult =

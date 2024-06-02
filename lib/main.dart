@@ -38,8 +38,9 @@ class MyApp extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
-                    child:
-                        CircularProgressIndicator()); // Show loading indicator
+                    child: CircularProgressIndicator(
+                  color: Colors.blue,
+                )); // Show loading indicator
               } else if (snapshot.hasError) {
                 // Handle potential errors
                 return const Center(child: Text('Something went wrong!'));

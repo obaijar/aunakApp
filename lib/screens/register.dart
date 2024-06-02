@@ -123,7 +123,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedRole = newValue!;
-                      print(selectedRole);
                     });
                   },
                   items: <String>[
@@ -142,7 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               SizedBox(height: 20.h),
               isLoading
-                  ? const CircularProgressIndicator()
+                  ? const CircularProgressIndicator(color: Colors.blue)
                   : ElevatedButton(
                       onPressed: () async {
                         setState(() {

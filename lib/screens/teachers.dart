@@ -89,7 +89,7 @@ class _teachersState extends State<teachers> {
                 const SizedBox(height: 20.0),
                 if (isLoading)
                   const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: Colors.blue),
                   ),
                 if (!isLoading && jsonList.isNotEmpty)
                   Expanded(
