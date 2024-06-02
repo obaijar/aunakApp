@@ -141,9 +141,7 @@ class _CourseRegisterState extends State<CourseRegister> {
                       },
                       child: Text(
                         'الدفع',
-                        style: TextStyle(
-                          fontSize: 15.sp,
-                        ),
+                        style: TextStyle(fontSize: 15.sp, color: Colors.blue),
                       ),
                     ),
             ],

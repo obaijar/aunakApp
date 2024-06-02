@@ -209,9 +209,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                           child: Text(
                             'التسجيل',
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                            ),
+                            style:
+                                TextStyle(fontSize: 15.sp, color: Colors.blue),
                           ),
                         ),
                 ],

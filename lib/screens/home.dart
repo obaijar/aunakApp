@@ -166,10 +166,10 @@ class _HomeState extends State<Home> {
                             child: Text(
                               'التسجيل',
                               style: TextStyle(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Roboto',
-                              ),
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Roboto',
+                                  color: Colors.blue),
                             ),
                           ),
                           const Divider(),
@@ -192,10 +192,10 @@ class _HomeState extends State<Home> {
                             child: Text(
                               'التحميل',
                               style: TextStyle(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Roboto',
-                              ),
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Roboto',
+                                  color: Colors.blue),
                             ),
                           ),
                         ],

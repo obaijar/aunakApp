@@ -58,7 +58,7 @@ class _VideoPostState extends State<VideoPost> {
               onPressed: pickVideo,
               child: Text(
                 'إختيار درس',
-                style: TextStyle(fontSize: 15.sp),
+                style: TextStyle(fontSize: 15.sp, color: Colors.blue),
               ),
             ),
             if (_videoFile != null)
@@ -78,7 +78,7 @@ class _VideoPostState extends State<VideoPost> {
               },
               child: Text(
                 'رفع الدرس',
-                style: TextStyle(fontSize: 15.sp),
+                style: TextStyle(fontSize: 15.sp, color: Colors.blue),
               ),
             ),
           ],
