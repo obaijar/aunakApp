@@ -127,7 +127,7 @@ class _HomeState extends State<Home> {
                   children: [
                     Text(
                       "الأقسام",
-                      style: TextStyle(fontSize: 25.sp),
+                      style: TextStyle(fontSize: 20.sp),
                     ),
                   ],
                 ),
@@ -152,7 +152,7 @@ class _HomeState extends State<Home> {
                             children: [
                               Text(
                                 " تسجيل الأساتذة والطلاب",
-                                style: TextStyle(fontSize: 25.sp),
+                                style: TextStyle(fontSize: 20.sp),
                               ),
                             ],
                           ),
@@ -178,7 +178,7 @@ class _HomeState extends State<Home> {
                             children: [
                               Text(
                                 "تحميل دروس",
-                                style: TextStyle(fontSize: 25.sp),
+                                style: TextStyle(fontSize: 20.sp),
                               ),
                             ],
                           ),

@@ -63,7 +63,7 @@ class _VideoPostState extends State<VideoPost> {
             ),
             if (_videoFile != null)
               Text(
-                'Selected File: ${_videoFile!.path}',
+                '   :الملف المختار ${_videoFile!.path}',
                 style: TextStyle(fontSize: 15.sp),
               ),
             const SizedBox(height: 20),

@@ -32,6 +32,10 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (BuildContext context, child) {
         return GetMaterialApp(
+          theme: ThemeData(
+            // Change the scaffold background color here
+            scaffoldBackgroundColor: Colors.white,
+          ),
           debugShowCheckedModeBanner: false,
           home: FutureBuilder<bool>(
             future: isLoggedIn(),
@@ -43,7 +47,7 @@ class MyApp extends StatelessWidget {
                 )); // Show loading indicator
               } else if (snapshot.hasError) {
                 // Handle potential errors
-                return const Center(child: Text('حدث خطأ ما ! '));
+                return const Center(child: Text('حدث خطأ ما '));
               } else {
                 if (snapshot.data == true) {
                   return const Home();
