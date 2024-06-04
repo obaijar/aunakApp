@@ -13,7 +13,7 @@ class VideoPost extends StatefulWidget {
 }
 
 class _VideoPostState extends State<VideoPost> {
-  File? _videoFile = null;
+  File? _videoFile;
 
   Future<void> pickVideo() async {
     final pickedFile =
@@ -26,18 +26,22 @@ class _VideoPostState extends State<VideoPost> {
   }
 
   Future<void> uploadVideo(File videoFile) async {
-    final url = Uri.parse('YOUR_UPLOAD_URL_HERE');
+    final url = Uri.parse('YOUR_UPLOAD_URL_HERE'); // Update this URL
     final request = http.MultipartRequest('POST', url);
     request.files
         .add(await http.MultipartFile.fromPath('video', videoFile.path));
 
-    final response = await request.send();
-    if (response.statusCode == 200) {
-      // Upload successful
-      print('Video uploaded successfully');
-    } else {
-      // Upload failed
-      print('Failed to upload video');
+    try {
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        // Upload successful
+        print('Video uploaded successfully');
+      } else {
+        // Upload failed
+        print('Failed to upload video');
+      }
+    } catch (e) {
+      print('Error during upload: $e');
     }
   }
 

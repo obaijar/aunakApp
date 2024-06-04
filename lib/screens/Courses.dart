@@ -19,9 +19,9 @@ class Courses extends StatefulWidget {
 class _CoursesState extends State<Courses> {
   // Sample data for courses
   final List<Map<String, String>> courses = [
-    {'image': 'https://via.placeholder.com/150', 'name': 'مكثفة'},
-    {'image': 'https://via.placeholder.com/150', 'name': 'تأسيس'},
-    {'image': 'https://via.placeholder.com/150', 'name': 'الجلسات الإمتحانية'},
+    {'image': 'images/161.png', 'name': 'مكثفة'},
+    {'image': 'images/151.png', 'name': 'تأسيس'},
+    {'image': 'images/151.png', 'name': 'الجلسات الإمتحانية'},
   ];
 
   void _onCourseTap(String courseName, String teacher, String subject) {
@@ -62,7 +62,7 @@ class _CoursesState extends State<Courses> {
                 child: Column(
                   children: [
                     Expanded(
-                      child: Image.network(
+                      child: Image.asset(
                         course['image']!,
                         fit: BoxFit.cover,
                       ),
