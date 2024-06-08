@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:async';
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -50,7 +52,7 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Video uploaded successfully!'),
           ),
         );
@@ -74,7 +76,7 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Video Upload'),
+        title: const Text('Video Upload'),
       ),
       body: Center(
         child: Column(
@@ -82,14 +84,14 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
           children: [
             ElevatedButton(
               onPressed: _pickVideo,
-              child: Text('Pick Video'),
+              child: const Text('Pick Video'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (_videoFile != null) Text('Selected video: ${_videoFile!.path}'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _uploadVideo,
-              child: Text('Upload Video'),
+              child: const Text('Upload Video'),
             ),
           ],
         ),
