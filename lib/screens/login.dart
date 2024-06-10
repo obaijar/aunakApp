@@ -42,12 +42,14 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget buildHomeWidget() {
     final double wScreen = MediaQuery.of(context).size.width;
     final double hScreen = MediaQuery.of(context).size.height;
+    final bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return SingleChildScrollView(
       child: Column(
         children: [
           Container(
             width: wScreen,
-            height: hScreen * 0.25,
+            height: isLandscape ? hScreen : hScreen * 0.25,
             decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("images/Vector 1.jpg"),
