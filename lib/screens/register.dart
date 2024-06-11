@@ -19,7 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController phonenumberController = TextEditingController();
 
   bool isLoading = false;
-  String selectedRole = 'طالب تاسع'; // Default value
+  String selectedRole = '..'; // Default value
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         });
                       },
                       items: <String>[
+                        '..',
                         'طالب بكالوريا أدبي',
                         'طالب بكالوريا علمي',
                         'طالب تاسع',
