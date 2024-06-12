@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -196,6 +197,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ? const CircularProgressIndicator(color: Colors.blue)
                         : ElevatedButton(
                             onPressed: () async {
+                              var connectivityResult =
+                                  await Connectivity().checkConnectivity();
+                              bool isConnected = connectivityResult.any(
+                                  (result) =>
+                                      result != ConnectivityResult.none);
+                              if (!isConnected) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('لا يوجد اتصال بالإنترنت'),
+                                  ),
+                                );
+                                return; // Exit the button press function if no connection
+                              }
                               if (_formKey.currentState!.validate()) {
                                 setState(() {
                                   isLoading = true;
