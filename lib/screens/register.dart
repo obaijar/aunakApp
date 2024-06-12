@@ -17,6 +17,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordConformationController =
+      TextEditingController();
   final TextEditingController phonenumberController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -111,6 +113,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'يرجى إدخال كلمة المرور';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Material(
+                      elevation: 4.0, // Adjust the elevation value as needed
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: TextFormField(
+                        controller: passwordConformationController,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(fontSize: 12.sp),
+                          labelText: 'تأكيد كلمة المرور',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'يرجى إدخال كلمة المرور';
+                          }
+                          if (value != passwordController.text) {
+                            return 'كلمة المرور غير متطابقة';
                           }
                           return null;
                         },
