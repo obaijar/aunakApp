@@ -90,6 +90,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value == null || value.isEmpty) {
                             return 'يرجى إدخال الإيميل';
                           }
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                            return 'يرجى إدخال بريد إلكتروني صحيح';
+                          }
                           return null;
                         },
                       ),

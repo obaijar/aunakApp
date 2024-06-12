@@ -19,6 +19,7 @@ class _CourseRegisterState extends State<CourseRegister> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phonenumberController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isLoading = false;
 
@@ -36,115 +37,142 @@ class _CourseRegisterState extends State<CourseRegister> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Text(
-                "سيرياتيل كاش",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                ),
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              Material(
-                elevation: 4.0, // Adjust the elevation value as needed
-                borderRadius: BorderRadius.circular(10.0),
-                child: TextField(
-                  controller: usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'إسم المستخدم',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Text(
+                  "سيرياتيل كاش",
+                  style: TextStyle(
+                    fontSize: 14.sp,
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Material(
-                elevation: 4.0, // Adjust the elevation value as needed
-                borderRadius: BorderRadius.circular(10.0),
-                child: TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: 'الإيميل',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
+                SizedBox(
+                  height: 30.h,
                 ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Material(
-                elevation: 4.0, // Adjust the elevation value as needed
-                borderRadius: BorderRadius.circular(10.0),
-                child: TextField(
-                  controller: phonenumberController,
-                  decoration: InputDecoration(
-                    labelText: 'رقم الهاتف',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              SizedBox(height: 20.h),
-              isLoading
-                  ? const CircularProgressIndicator(color: Colors.blue)
-                  : ElevatedButton(
-                      onPressed: () async {
-                        setState(() {
-                          isLoading = true;
-                        });
-
-                        try {
-                          var dio = Dio();
-                          var url =
-                              'https://jsonplaceholder.typicode.com/posts';
-                          var response = await dio.post(
-                            url,
-                            data: {
-                              'username': usernameController.text,
-                              'email': emailController.text,
-                              'password': passwordController.text,
-                            },
-                          );
-
-                          if (response.statusCode == 201) {
-                            Get.to(const RegisterConformation());
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'معلومات الدفع خاطئة , يرجى إعادة المحاولة'),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('حدث خطأ ما , يرجى اعادة المحاولة'),
-                            ),
-                          );
-                        } finally {
-                          setState(() {
-                            isLoading = false;
-                          });
-                        }
-                      },
-                      child: Text(
-                        'الدفع',
-                        style: TextStyle(fontSize: 15.sp, color: Colors.blue),
+                Material(
+                  elevation: 4.0, // Adjust the elevation value as needed
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: TextFormField(
+                    controller: usernameController,
+                    decoration: InputDecoration(
+                      labelText: 'إسم المستخدم',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-            ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'يرجى إدخال اسم المستخدم';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Material(
+                  elevation: 4.0, // Adjust the elevation value as needed
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: TextFormField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      labelText: 'الإيميل',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'يرجى إدخال الإيميل';
+                      }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return 'يرجى إدخال بريد إلكتروني صحيح';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Material(
+                  elevation: 4.0, // Adjust the elevation value as needed
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: TextFormField(
+                    controller: phonenumberController,
+                    decoration: InputDecoration(
+                      labelText: 'رقم الهاتف',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'يرجى إدخال رقم الهاتف';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                SizedBox(height: 20.h),
+                isLoading
+                    ? const CircularProgressIndicator(color: Colors.blue)
+                    : ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            setState(() {
+                              isLoading = true;
+                            });
+
+                            try {
+                              var dio = Dio();
+                              var url =
+                                  'https://jsonplaceholder.typicode.com/posts';
+                              var response = await dio.post(
+                                url,
+                                data: {
+                                  'username': usernameController.text,
+                                  'email': emailController.text,
+                                  'password': passwordController.text,
+                                },
+                              );
+
+                              if (response.statusCode == 201) {
+                                Get.to(const RegisterConformation());
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'معلومات الدفع خاطئة , يرجى إعادة المحاولة'),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text('حدث خطأ ما , يرجى اعادة المحاولة'),
+                                ),
+                              );
+                            } finally {
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          }
+                        },
+                        child: Text(
+                          'الدفع',
+                          style: TextStyle(fontSize: 15.sp, color: Colors.blue),
+                        ),
+                      ),
+              ],
+            ),
           ),
         ),
       ),
