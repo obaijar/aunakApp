@@ -6,6 +6,7 @@ import 'package:testt/screens/Courses.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class teachers extends StatefulWidget {
   final String subject;
@@ -31,39 +32,70 @@ class _teachersState extends State<teachers> {
     });
     try {
       var connectivityResult = await Connectivity().checkConnectivity();
-      bool isConnected =
-          connectivityResult.any((result) => result != ConnectivityResult.none);
+      bool isConnected = connectivityResult != ConnectivityResult.none;
       if (!isConnected) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('لا يوجد اتصال بالإنترنت. يرجى المحاولة مرة أخرى'),
           ),
         );
+        setState(() {
+          isLoading = false;
+        });
         return; // Exit the button press function if no connection
       }
-      var response = await Dio()
-          .get("https://protocoderspoint.com/jsondata/superheros.json");
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      if (token == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('يرجى تسجيل الدخول'),
+          ),
+        );
+        setState(() {
+          isLoading = false;
+        });
+        return; // Exit if no token is found
+      }
+
+      var response = await Dio().get(
+        "https://obai.aunakit-hosting.com/api/teachers/",
+        options: Options(
+          headers: {
+            'Authorization': 'Token $token',
+          },
+        ),
+      );
+
       if (response.statusCode == 200) {
         setState(() {
-          jsonList = response.data["superheros"] as List;
+          jsonList = response.data as List;
           isLoading = false;
         });
       } else {
         print(response.statusCode);
+        setState(() {
+          isLoading = false;
+        });
       }
     } catch (e) {
       print(e);
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   void _onItemClicked(int index) {
     Get.to(() => Courses(
-          teacher: jsonList[index]['name'],
+          teacher: jsonList[index]['id'],
           subject: widget.subject,
           section: widget.section,
         ));
     // Handle item click here, you can navigate to a new page, show a dialog, etc.
-    print("Item clicked: ${jsonList[index]['name']}");
+    print("Item clicked: ${jsonList[index]['id']}");
   }
 
   @override

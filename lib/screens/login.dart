@@ -119,7 +119,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           });
 
                           try {
-                            var url = 'https://dummyjson.com/auth/login';
+                            var url =
+                                'https://obai.aunakit-hosting.com/api/login/';
                             var dio = Dio();
 
                             var response = await dio.post(
@@ -134,28 +135,29 @@ class _SignInScreenState extends State<SignInScreen> {
                                 },
                               ),
                             );
-
                             if (response.statusCode == 200) {
                               final jsonResponse = response.data;
+                              print("token");
+                              final String token = jsonResponse['token'];
+                              final String username = jsonResponse['user'];
+                              final bool isadmin = jsonResponse['isadmin'];
+                              /*final jsonResponse = response.data;
                               final String username = jsonResponse['username'];
                               final String email = jsonResponse['email'];
                               final String firstName =
                                   jsonResponse['firstName'];
                               final String lastName = jsonResponse['lastName'];
-                              final String gender = jsonResponse['gender'];
+                              final String gender = jsonResponse['gender'];*/
 
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
-                              prefs.setString('email', email.toString());
-                              prefs.setString(
-                                  'firstName', firstName.toString());
-                              prefs.setString('lastName', lastName.toString());
-                              prefs.setString('gender', gender.toString());
+                              prefs.setString('token', token.toString());
                               prefs.setString('username', username.toString());
+                              prefs.setString('isadmin', isadmin.toString());
                               Get.off(const Home());
                             }
                           } on DioException catch (e) {
-                            if (e.response?.statusCode == 400) {
+                            if (e.response?.statusCode == 401) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
@@ -163,6 +165,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ),
                               );
                             } else {
+                              print("hi ? ");
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content:

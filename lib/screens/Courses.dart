@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:testt/screens/CoursesDetail.dart';
 
 class Courses extends StatefulWidget {
-  final String teacher;
+  final int teacher;
   final String subject;
   final int section;
   Courses(
@@ -18,18 +18,20 @@ class Courses extends StatefulWidget {
 
 class _CoursesState extends State<Courses> {
   // Sample data for courses
-  final List<Map<String, String>> courses = [
-    {'image': 'images/161.png', 'name': 'مكثفة'},
-    {'image': 'images/151.png', 'name': 'تأسيس'},
-    {'image': 'images/151.png', 'name': 'الجلسات الإمتحانية'},
+  final List<Map<String, dynamic>> courses = [
+    {'id': 1, 'image': 'images/161.png', 'name': 'مكثفة'},
+    {'id': 2, 'image': 'images/151.png', 'name': 'تأسيس'},
+    {'id': 3, 'image': 'images/151.png', 'name': 'الجلسات الإمتحانية'},
   ];
 
-  void _onCourseTap(String courseName, String teacher, String subject) {
+  void _onCourseTap(
+      String courseName, int courseID, int teacher, String subject) {
     // Perform the desired action when a course is tapped
     // For example, you could navigate to a new page or show a dialog
 
     // Example: Navigate to a new page
     Get.to(() => CourseDetailPage(
+          courseID: courseID,
           courseName: courseName,
           teacher: teacher,
           subject: subject,
@@ -56,8 +58,8 @@ class _CoursesState extends State<Courses> {
           itemBuilder: (context, index) {
             final course = courses[index];
             return GestureDetector(
-              onTap: () =>
-                  _onCourseTap(course['name']!, widget.teacher, widget.subject),
+              onTap: () => _onCourseTap(course['name']!, course['id'],
+                  widget.teacher, widget.subject),
               child: GridTile(
                 child: Column(
                   children: [

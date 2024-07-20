@@ -9,12 +9,14 @@ import 'package:fancy_button_flutter/fancy_button_flutter.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final String courseName;
-  final String teacher;
+  final int courseID;
+  final int teacher;
   final String subject;
   final int section;
   const CourseDetailPage({
     super.key,
     required this.courseName,
+    required this.courseID,
     required this.teacher,
     required this.subject,
     required this.section,
@@ -38,6 +40,12 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       _showNotLoggedInDialog();
     } else {
       // Proceed with the action for logged-in users
+      print('courseName: ${widget.courseName}');
+      print('courseID: ${widget.courseID}');
+
+      print('teacher: ${widget.teacher}');
+      print('subject: ${widget.subject}');
+      print('section: ${widget.section}');
       Get.to(const CourseRegister());
     }
   }
@@ -64,10 +72,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    String sectionName = '';
-    if (widget.section == 1) sectionName = "تاسع";
-    if (widget.section == 2) sectionName = "بكالوريا علمي";
-    if (widget.section == 3) sectionName = "بكالوريا أدبي";
+    int sectionid = 0;
+    if (widget.section == 1) sectionid = 9;
+    if (widget.section == 2) sectionid = 12;
+    if (widget.section == 3) sectionid = 13;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -110,7 +118,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                 style: TextStyle(fontSize: 16.sp),
               ),
               Text(
-                'الصف: $sectionName',
+                'الصف: $sectionid',
                 style: TextStyle(fontSize: 16.sp),
               ),
               const SizedBox(

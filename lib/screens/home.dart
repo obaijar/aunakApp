@@ -106,8 +106,9 @@ class _HomeState extends State<Home> {
 
   Future<bool> isAdmin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String username = prefs.getString('username') ?? '';
-    return username == 'emilys';
+    String isAdminString = prefs.getString('isadmin') ?? '';
+    bool isAdmin = isAdminString.toLowerCase() == 'true';
+    return isAdmin == true;
   }
 
   Widget _buildBody() {
