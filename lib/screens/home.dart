@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // Import CurvedNavigationBar
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testt/screens/teachersReg.dart';
 
 import 'videoPost.dart';
 
@@ -152,7 +153,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                " تسجيل الأساتذة والطلاب",
+                                " تسجيل الأدمن والطلاب",
                                 style: TextStyle(fontSize: 20.sp),
                               ),
                             ],
@@ -163,6 +164,29 @@ class _HomeState extends State<Home> {
                           ElevatedButton(
                             onPressed: () async {
                               Get.to(const RegisterScreen());
+                            },
+                            child: Text(
+                              'التسجيل',
+                              style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Roboto',
+                                  color: Colors.blue),
+                            ),
+                          ),
+                          const Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                "تسجيل أستاذ",
+                                style: TextStyle(fontSize: 20.sp),
+                              ),
+                            ],
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Get.to(TeacherReg());
                             },
                             child: Text(
                               'التسجيل',
@@ -199,6 +223,7 @@ class _HomeState extends State<Home> {
                                   color: Colors.blue),
                             ),
                           ),
+                          const Divider(),
                         ],
                       );
                     } else {

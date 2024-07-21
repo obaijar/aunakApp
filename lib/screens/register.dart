@@ -24,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   String selectedRole = '..'; // Default value
-
+  bool isadmin = false;
   @override
   Widget build(BuildContext context) {
     final double wScreen = MediaQuery.of(context).size.width;
@@ -203,14 +203,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             selectedRole = newValue!;
                           });
                         },
-                        items: <String>[
-                          '..',
-                          'طالب بكالوريا أدبي',
-                          'طالب بكالوريا علمي',
-                          'طالب تاسع',
-                          'أستاذ',
-                          'أدمن'
-                        ].map<DropdownMenuItem<String>>((String value) {
+                        items: <String>['..', 'طالب', 'أدمن']
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -248,26 +242,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 });
 
                                 try {
+                                  if (selectedRole == 'أدمن') isadmin = true;
                                   var dio = Dio();
                                   var url =
-                                      'https://jsonplaceholder.typicode.com/posts';
+                                      'https://obai.aunakit-hosting.com/api/register/';
                                   var response = await dio.post(
                                     url,
                                     data: {
                                       'username': usernameController.text,
-                                      'email': emailController.text,
                                       'password': passwordController.text,
-                                      'role':
-                                          selectedRole, // Include the selected role
+                                      'is_admin':
+                                          isadmin, // Include the selected role
                                     },
+                                    options: Options(
+                                      headers: {
+                                        'Content-Type': 'application/json',
+                                      },
+                                    ),
                                   );
-                                  if (response.statusCode == 201) {
+
+                                  if (response.statusCode == 200) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('تم التسجيل بنجاح'),
                                       ),
                                     );
                                     Navigator.pop(context);
+                                  }
+                                  if (response.statusCode == 400) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('يوجد مستخدم بهذا الاسم'),
+                                      ),
+                                    );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -279,8 +286,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text(
-                                          'حدث خطأ ما , يرجى اعادة المحاولة'),
+                                      content: Text("يوجد مستخدم بهذا الاسم"),
                                     ),
                                   );
                                 } finally {
