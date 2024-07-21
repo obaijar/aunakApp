@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
 class TeacherReg extends StatefulWidget {
   @override
@@ -6,8 +11,15 @@ class TeacherReg extends StatefulWidget {
 }
 
 class _TeacherRegState extends State<TeacherReg> {
-  List<bool> isSelected = [false, false, false];
-  List<Color> colors = [Colors.white, Colors.white, Colors.white];
+  List<bool> isSelectedSubjects = [];
+  List<Color> colorsSubjects = [];
+  List<bool> isSelectedGrades = [];
+  List<Color> colorsGrades = [];
+  bool isLoadingGrades = true;
+  bool isLoadingSubjects = true;
+
+  List<String> selectedSubjects = [];
+  List<String> selectedGrades = [];
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
@@ -16,11 +28,189 @@ class _TeacherRegState extends State<TeacherReg> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
+  List<Map<String, dynamic>> grades = [];
+  List<Map<String, dynamic>> subjects = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchGrades();
+    fetchSubjects();
+  }
+
+  Future<void> fetchGrades() async {
+    setState(() {
+      isLoadingGrades = true;
+    });
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      if (token == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('يرجى تسجيل الدخول'),
+          ),
+        );
+        return; // Exit if no token is found
+      }
+      final response = await http.get(
+        Uri.parse('https://obai.aunakit-hosting.com/api/Grade/'),
+        headers: {
+          'Authorization': 'Token $token', // Add your token here
+        },
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          grades = List<Map<String, dynamic>>.from(json.decode(response.body));
+          isSelectedGrades = List<bool>.filled(grades.length, false);
+          colorsGrades = List<Color>.filled(grades.length, Colors.white);
+        });
+      } else {
+        throw Exception('Failed to load grades');
+      }
+    } catch (e) {
+      print('Error fetching grades: $e');
+      // Optionally, show a message to the user or handle the error state
+    } finally {
+      setState(() {
+        isLoadingGrades = false;
+      });
+    }
+  }
+
+  Future<void> fetchSubjects() async {
+    setState(() {
+      isLoadingSubjects = true;
+    });
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      if (token == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('يرجى تسجيل الدخول'),
+          ),
+        );
+        return; // Exit if no token is found
+      }
+      final response = await http.get(
+        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/'),
+        headers: {
+          'Authorization': 'Token $token', // Add your token here
+        },
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          subjects =
+              List<Map<String, dynamic>>.from(json.decode(response.body));
+          isSelectedSubjects = List<bool>.filled(subjects.length, false);
+          colorsSubjects = List<Color>.filled(subjects.length, Colors.white);
+        });
+      } else {
+        throw Exception('Failed to load subjects');
+      }
+    } catch (e) {
+      print('Error fetching subjects: $e');
+      // Optionally, show a message to the user or handle the error state
+    } finally {
+      setState(() {
+        isLoadingSubjects = false;
+      });
+    }
+  }
+
+  void toggleSelection(int index, bool isSubject) {
+    setState(() {
+      if (isSubject) {
+        if (isSelectedSubjects[index]) {
+          colorsSubjects[index] = Colors.white;
+          isSelectedSubjects[index] = false;
+          selectedSubjects.remove(subjects[index]['name']);
+        } else {
+          colorsSubjects[index] = Colors.grey[300]!;
+          isSelectedSubjects[index] = true;
+          selectedSubjects.add(subjects[index]['name']);
+        }
+      } else {
+        if (isSelectedGrades[index]) {
+          colorsGrades[index] = Colors.white;
+          isSelectedGrades[index] = false;
+          selectedGrades.remove(grades[index]['level']);
+        } else {
+          colorsGrades[index] = Colors.grey[300]!;
+          isSelectedGrades[index] = true;
+          selectedGrades.add(grades[index]['level']);
+        }
+      }
+    });
+  }
+
+  Future<void> submitForm() async {
+    // Validate form fields
+    if (_formKey.currentState!.validate()) {
+      try {
+        // Retrieve token from SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        final token = prefs.getString('token');
+
+        // Handle missing token
+        if (token == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('يرجى تسجيل الدخول'),
+            ),
+          );
+          return;
+        }
+
+        // Send HTTP POST request
+        final response = await http.post(
+          Uri.parse('https://obai.aunakit-hosting.com/api/add-teacher/'),
+          headers: {
+            'Authorization': 'Token $token',
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({
+            'name': _nameController.text,
+            'age': "22",
+            'subjects': selectedSubjects,
+            'grades': selectedGrades,
+          }),
+        );
+        print(response.statusCode);
+        // Handle successful response
+        if (response.statusCode == 201) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('تم التسجيل بنجاح'),
+            ),
+          );
+        } else {
+          // Handle non-200 status codes gracefully
+          print('Error adding teacher: ${response.statusCode}');
+          throw Exception(
+            'Failed to register teacher (status code: ${response.statusCode})',
+          );
+        }
+      } catch (e) {
+        // Handle unexpected errors
+        print('Unexpected error: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('فشل في التسجيل'),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('تسجيل أستاذ'),
+        title: const Text('تسجيل أستاذ'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -28,9 +218,10 @@ class _TeacherRegState extends State<TeacherReg> {
           key: _formKey,
           child: ListView(
             children: <Widget>[
+              // Form fields
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'الإسم',
                 ),
                 validator: (value) {
@@ -42,7 +233,7 @@ class _TeacherRegState extends State<TeacherReg> {
               ),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'الإيميل',
                 ),
                 validator: (value) {
@@ -57,7 +248,7 @@ class _TeacherRegState extends State<TeacherReg> {
               ),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'كلمة السر',
                 ),
                 obscureText: true,
@@ -70,7 +261,7 @@ class _TeacherRegState extends State<TeacherReg> {
               ),
               TextFormField(
                 controller: _confirmPasswordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'تأكيد كلمة السر',
                 ),
                 obscureText: true,
@@ -84,21 +275,46 @@ class _TeacherRegState extends State<TeacherReg> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
-              buildCard(0, "Physics", "Physics Description", "3"),
-              buildCard(1, "Math", "Math Description", "2"),
-              buildCard(2, "Philosophy", "Philosophy Description", "5"),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'تحديد المواد التي يدرسها الإستاذ',
+                    style: TextStyle(fontSize: 20.sp, color: Colors.blue),
+                  ),
+                ],
+              ),
+              if (isLoadingSubjects)
+                Center(child: const CircularProgressIndicator())
+              else
+                ...subjects.map((subject) {
+                  int index = subjects.indexOf(subject);
+                  return buildCard(
+                      index, subject['name'], "", subject['name'], true);
+                }).toList(),
+              const SizedBox(height: 20),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'تحديد الصفوف التي يدرسها الإستاذ',
+                    style: TextStyle(fontSize: 20.sp, color: Colors.blue),
+                  ),
+                ],
+              ),
+              if (isLoadingGrades)
+                Center(child: const CircularProgressIndicator())
+              else
+                ...grades.map((grade) {
+                  int index = grades.indexOf(grade);
+                  return buildCard(index, "Grade ${grade['level']}", "",
+                      grade['level'], false);
+                }).toList(),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Handle form submission
-                    print('Name: ${_nameController.text}');
-                    print('Email: ${_emailController.text}');
-                    print('Password: ${_passwordController.text}');
-                  }
-                },
-                child: Text('تسجيل'),
+                onPressed: submitForm,
+                child: const Text('تسجيل'),
               ),
             ],
           ),
@@ -107,34 +323,27 @@ class _TeacherRegState extends State<TeacherReg> {
     );
   }
 
-  Widget buildCard(int index, String title, String subtitle, String trailing) {
+  Widget buildCard(int index, String title, String subtitle, String trailing,
+      bool isSubject) {
+    final bool isSelected =
+        isSubject ? isSelectedSubjects[index] : isSelectedGrades[index];
+    final Color color = isSubject ? colorsSubjects[index] : colorsGrades[index];
+
     return Card(
-      color: colors[index],
+      color: color,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            selected: isSelected[index],
+            selected: isSelected,
             leading: const Icon(Icons.info),
             title: Text(title),
             subtitle: Text(subtitle),
             trailing: Text(trailing),
-            onLongPress: () => toggleSelection(index),
+            onLongPress: () => toggleSelection(index, isSubject),
           ),
         ],
       ),
     );
-  }
-
-  void toggleSelection(int index) {
-    setState(() {
-      if (isSelected[index]) {
-        colors[index] = Colors.white;
-        isSelected[index] = false;
-      } else {
-        colors[index] = Colors.grey[300]!;
-        isSelected[index] = true;
-      }
-    });
   }
 }
