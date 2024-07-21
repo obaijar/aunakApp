@@ -179,7 +179,6 @@ class _TeacherRegState extends State<TeacherReg> {
             'grades': selectedGrades,
           }),
         );
-        print(response.statusCode);
         // Handle successful response
         if (response.statusCode == 201) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -187,6 +186,7 @@ class _TeacherRegState extends State<TeacherReg> {
               content: Text('تم التسجيل بنجاح'),
             ),
           );
+          Navigator.pop(context);
         } else {
           // Handle non-200 status codes gracefully
           print('Error adding teacher: ${response.statusCode}');
