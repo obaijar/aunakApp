@@ -10,8 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class teachers extends StatefulWidget {
   final String subject;
-  final int section;
-  teachers({required this.subject, required this.section});
+  final int grade;
+  teachers({required this.subject, required this.grade});
   @override
   State<teachers> createState() => _teachersState();
 }
@@ -19,10 +19,15 @@ class teachers extends StatefulWidget {
 class _teachersState extends State<teachers> {
   List jsonList = [];
   bool isLoading = false;
-
+  String subject2 = " ";
   @override
   void initState() {
     super.initState();
+    if (widget.subject == "عربي") subject2 = "arabic";
+    if (widget.subject == "إجتماعيات") subject2 = "Social Studies";
+    if (widget.subject == "فلسفة") subject2 = "Philosophy";
+    if (widget.subject == "رياضيات") subject2 = "math";
+    if (widget.subject == "فيزياء") subject2 = "physics";
     getData();
   }
 
@@ -59,9 +64,10 @@ class _teachersState extends State<teachers> {
         });
         return; // Exit if no token is found
       }
-
+      print("9f${widget.grade}");
+      print("widget.subject${subject2}");
       var response = await Dio().get(
-        "https://obai.aunakit-hosting.com/api/teachers/",
+        "https://obai.aunakit-hosting.com/api/teachers/${widget.grade}/$subject2",
         options: Options(
           headers: {
             'Authorization': 'Token $token',
@@ -92,7 +98,7 @@ class _teachersState extends State<teachers> {
     Get.to(() => Courses(
           teacher: jsonList[index]['id'],
           subject: widget.subject,
-          section: widget.section,
+          section: widget.grade,
         ));
     // Handle item click here, you can navigate to a new page, show a dialog, etc.
     print("Item clicked: ${jsonList[index]['id']}");

@@ -67,7 +67,7 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
                       onTap: () {
                         Get.to(() => teachers(
                               subject: gridItems[index].text,
-                              section: 3,
+                              grade: 13,
                             ));
                         // Handle click event here, for example, navigate to a new page
                         print('Image clicked: ${gridItems[index].text}');
@@ -164,7 +164,7 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
                       onTap: () {
                         Get.to(() => teachers(
                               subject: gridItems[index].text,
-                              section: 2,
+                              grade: 12,
                             ));
                         // Handle click event here, for example, navigate to a new page
                         print('Image clicked: ${gridItems[index].text}');

@@ -66,7 +66,7 @@ class _Tase3State extends State<Tase3> {
                       onTap: () {
                         Get.to(() => teachers(
                               subject: gridItems[index].text,
-                              section: 1,
+                              grade: 9,
                             ));
                         // Handle click event here, for example, navigate to a new page
                         print('Image clicked: ${gridItems[index].text}');
