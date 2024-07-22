@@ -19,7 +19,7 @@ class _VideoPostState extends State<VideoPost> {
   String? _selectedGrade;
   String? _selectedSubject;
   String? _selectedSubjectType;
-  String? _selectedTeacher;
+  String? _selectedTeacherId; // Store the selected teacher's ID
 
   final Map<String, String> _grades = {
     'تاسع': '9',
@@ -39,7 +39,7 @@ class _VideoPostState extends State<VideoPost> {
     'Lab': '3'
   };
 
-  List<String> _teachers = [];
+  List<Map<String, String>> _teachers = []; // Store both ID and name
 
   @override
   void initState() {
@@ -62,13 +62,16 @@ class _VideoPostState extends State<VideoPost> {
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         setState(() {
-          _teachers = data
-              .map((teacher) => teacher['name'].toString())
-              .toSet()
-              .toList(); // Ensure unique names
-          if (_teachers.isNotEmpty && _selectedTeacher == null) {
-            _selectedTeacher = _teachers
-                .first; // Set the first teacher as default if none is selected
+          _teachers = data.map((teacher) {
+            return {
+              'id': teacher['id'].toString(),
+              'name': teacher['name'].toString(),
+            };
+          }).toList(); // Store both ID and name
+
+          if (_teachers.isNotEmpty && _selectedTeacherId == null) {
+            _selectedTeacherId =
+                _teachers.first['id']; // Set the first teacher's ID as default
           }
         });
       } else {
@@ -95,18 +98,20 @@ class _VideoPostState extends State<VideoPost> {
     final url =
         Uri.parse('https://obai.aunakit-hosting.com/api/videos_upload/');
     final request = http.MultipartRequest('POST', url);
-    request.headers[HttpHeaders.authorizationHeader] = 'Bearer $token';
+    request.headers[HttpHeaders.authorizationHeader] = 'Token $token';
     request.files
-        .add(await http.MultipartFile.fromPath('video', videoFile.path));
+        .add(await http.MultipartFile.fromPath('video_file', videoFile.path));
     request.fields['title'] = _titleController.text;
     request.fields['grade'] = _grades[_selectedGrade]!;
     request.fields['subject'] = _subjects[_selectedSubject]!;
     request.fields['subject_type'] = _subjectTypes[_selectedSubjectType]!;
-    request.fields['teacher'] = _selectedTeacher!;
+    request.fields['teacher'] = _selectedTeacherId!; // Send teacher ID
 
     try {
+      print("ok");
       final response = await request.send();
-      if (response.statusCode == 200) {
+      print(response.statusCode);
+      if (response.statusCode == 201) {
         print('Video uploaded successfully');
       } else {
         print('Failed to upload video');
@@ -228,16 +233,17 @@ class _VideoPostState extends State<VideoPost> {
                 ),
                 SizedBox(height: 10),
                 DropdownButtonFormField<String>(
-                  value: _selectedTeacher,
+                  value: _selectedTeacherId,
                   items: _teachers.map((teacher) {
-                    return DropdownMenuItem(
-                      value: teacher,
-                      child: Text(teacher),
+                    return DropdownMenuItem<String>(
+                      value: teacher['id'],
+                      child: Text(teacher['name']!),
                     );
                   }).toList(),
                   onChanged: (newValue) {
                     setState(() {
-                      _selectedTeacher = newValue;
+                      _selectedTeacherId = newValue;
+                      print('Selected teacher ID: $_selectedTeacherId');
                     });
                   },
                   decoration: InputDecoration(

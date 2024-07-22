@@ -6,6 +6,7 @@ import 'package:testt/screens/bakaloria.dart';
 import 'package:testt/screens/profile.dart';
 import 'package:testt/screens/login.dart';
 import 'package:testt/screens/register.dart';
+import 'package:testt/screens/subject.dart';
 import 'package:testt/screens/tase3.dart';
 import 'package:get/get.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // Import CurvedNavigationBar
@@ -224,6 +225,57 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           const Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                "إضافة مادة",
+                                style: TextStyle(fontSize: 20.sp),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Get.to(AddSubject());
+                            },
+                            child: Text(
+                              'إضافة',
+                              style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Roboto',
+                                  color: Colors.blue),
+                            ),
+                          ),
+                          const Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                "إضافة صف",
+                                style: TextStyle(fontSize: 20.sp),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Get.to(AddSubject());
+                            },
+                            child: Text(
+                              'إضافة',
+                              style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Roboto',
+                                  color: Colors.blue),
+                            ),
+                          ),
                         ],
                       );
                     } else {
