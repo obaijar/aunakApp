@@ -20,6 +20,7 @@ class _teachersState extends State<teachers> {
   List jsonList = [];
   bool isLoading = false;
   String subject2 = " ";
+  int gradeIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -29,6 +30,9 @@ class _teachersState extends State<teachers> {
     if (widget.subject == "رياضيات") subject2 = "math";
     if (widget.subject == "فيزياء") subject2 = "physics";
     getData();
+    if (widget.grade == 9) gradeIndex = 1;
+    if (widget.grade == 12) gradeIndex = 2;
+    if (widget.grade == 13) gradeIndex = 3;
   }
 
   Future getData() async {

@@ -1,9 +1,10 @@
-// ignore_for_file: depend_on_referenced_packages, use_super_parameters, avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:testt/screens/teachers.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GridItem {
   final String imageUrl;
@@ -20,21 +21,42 @@ class Tase3 extends StatefulWidget {
 }
 
 class _Tase3State extends State<Tase3> {
-  List<GridItem> gridItems = [
-    GridItem(
-      imageUrl: 'images/img8.png',
-      text: 'رياضيات',
-    ),
-    GridItem(
-      imageUrl: 'images/img8.png',
-      text: 'عربي',
-    ),
-    GridItem(
-      imageUrl: 'images/img8.png',
-      text: 'فيزياء',
-    ),
-    // Add more items as needed
-  ];
+  List<GridItem> gridItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSubjects();
+  }
+
+  Future<void> fetchSubjects() async {
+    const grade = 1; // Use the correct grade as needed
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    final url =
+        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Token $token', // Replace with your token
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List subjects = json.decode(response.body);
+      setState(() {
+        gridItems = subjects
+            .map((subject) => GridItem(
+                  imageUrl: 'images/img8.png', // Use appropriate image URL
+                  text: subject[
+                      'name'], // Adjust according to your API response structure
+                ))
+            .toList();
+      });
+    } else {
+      print('Failed to load subjects');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +108,7 @@ class _Tase3State extends State<Tase3> {
                               ),
                               Text(
                                 gridItems[index].text,
-                                style: TextStyle(fontSize: 20.sp),
+                                style: TextStyle(fontSize: 18.sp),
                               ),
                               Image.asset(
                                 "images/111.png",
@@ -107,81 +129,3 @@ class _Tase3State extends State<Tase3> {
     );
   }
 }
-
-
-// ------------------------------------------------------
-/*
-import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-
-class Tase3 extends StatefulWidget {
-  const Tase3({super.key});
-
-  @override
-  State<Tase3> createState() => _Tase3State();
-}
-
-class _Tase3State extends State<Tase3> {
-  List jsonList = [];
-  bool isLoading = false; // Track loading state
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
-  Future getData() async {
-    setState(() {
-      isLoading = true; // Start loading indicator
-    });
-    try {
-      var response = await Dio()
-          .get("https://protocoderspoint.com/jsondata/superheros.json");
-      if (response.statusCode == 200) {
-        setState(() {
-          jsonList = response.data["superheros"] as List;
-          isLoading = false;
-        });
-      } else {
-        print(response.statusCode);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("تاسع"),
-      ),
-      body: Stack(
-        children: [
-          ListView.builder(
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  Card(
-                    child: ListTile(
-                      title: Text(jsonList[index]['name']),
-                      subtitle: (const Text("test")),
-                    ),
-                  ),
-                ],
-              );
-            },
-            // ignore: unnecessary_null_comparison
-            itemCount: jsonList == null ? 0 : jsonList.length,
-          ),
-          if (isLoading)
-            const Center(
-              child: CircularProgressIndicator(), // Loading indicator
-            ),
-        ],
-      ),
-    );
-  }
-}
-*/
