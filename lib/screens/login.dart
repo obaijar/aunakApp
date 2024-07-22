@@ -138,6 +138,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             if (response.statusCode == 200) {
                               final jsonResponse = response.data;
                               print("token");
+                              final int id = jsonResponse['user_id'];
                               final String token = jsonResponse['token'];
                               final String username = jsonResponse['user'];
                               final bool isadmin = jsonResponse['isadmin'];
@@ -152,6 +153,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setString('token', token.toString());
+                              prefs.setString('id', id.toString());
                               prefs.setString('username', username.toString());
                               prefs.setString('isadmin', isadmin.toString());
                               Get.off(const Home());

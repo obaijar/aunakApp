@@ -19,7 +19,7 @@ class _VideoPostState extends State<VideoPost> {
   String? _selectedGrade;
   String? _selectedSubject;
   String? _selectedSubjectType;
-  String? _selectedTeacherId; // Store the selected teacher's ID
+  String? _selectedTeacherId;
 
   final Map<String, String> _grades = {
     'تاسع': '9',
@@ -27,24 +27,20 @@ class _VideoPostState extends State<VideoPost> {
     'بكالوريا أدبي': '11'
   };
 
-  final Map<String, String> _subjects = {
-    'رياضيات': 'math',
-    'علوم': 'science',
-    'تاريخ': 'history'
-  };
-
+  Map<String, String> _subjects = {}; // Empty initially
   final Map<String, String> _subjectTypes = {
     'Lecture': '1',
     'Tutorial': '2',
     'Lab': '3'
   };
 
-  List<Map<String, String>> _teachers = []; // Store both ID and name
+  List<Map<String, String>> _teachers = [];
 
   @override
   void initState() {
     super.initState();
     fetchTeachers();
+    fetchSubjects(); // Fetch subjects when the widget is initialized
   }
 
   Future<void> fetchTeachers() async {
@@ -67,11 +63,10 @@ class _VideoPostState extends State<VideoPost> {
               'id': teacher['id'].toString(),
               'name': teacher['name'].toString(),
             };
-          }).toList(); // Store both ID and name
+          }).toList();
 
           if (_teachers.isNotEmpty && _selectedTeacherId == null) {
-            _selectedTeacherId =
-                _teachers.first['id']; // Set the first teacher's ID as default
+            _selectedTeacherId = _teachers.first['id'];
           }
         });
       } else {
@@ -79,6 +74,40 @@ class _VideoPostState extends State<VideoPost> {
       }
     } catch (e) {
       print('Error during fetching teachers: $e');
+    }
+  }
+
+  Future<void> fetchSubjects() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    final url = Uri.parse(
+        'https://obai.aunakit-hosting.com/api/Subject/'); // Replace with your API URL
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          HttpHeaders.authorizationHeader: 'Token $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          _subjects = {
+            for (var subject in data)
+              subject['name']: subject['id']
+                  .toString(), // Adjust according to your API response
+          };
+
+          if (_subjects.isNotEmpty && _selectedSubject == null) {
+            _selectedSubject = _subjects.keys.first;
+          }
+        });
+      } else {
+        print('Failed to fetch subjects');
+      }
+    } catch (e) {
+      print('Error during fetching subjects: $e');
     }
   }
 
@@ -105,12 +134,10 @@ class _VideoPostState extends State<VideoPost> {
     request.fields['grade'] = _grades[_selectedGrade]!;
     request.fields['subject'] = _subjects[_selectedSubject]!;
     request.fields['subject_type'] = _subjectTypes[_selectedSubjectType]!;
-    request.fields['teacher'] = _selectedTeacherId!; // Send teacher ID
+    request.fields['teacher'] = _selectedTeacherId!;
 
     try {
-      print("ok");
       final response = await request.send();
-      print(response.statusCode);
       if (response.statusCode == 201) {
         print('Video uploaded successfully');
       } else {

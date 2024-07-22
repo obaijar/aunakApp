@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:testt/main.dart';
+import 'package:testt/screens/PaidCourses.dart';
 import 'package:testt/screens/bakaloria.dart';
 import 'package:testt/screens/profile.dart';
 import 'package:testt/screens/login.dart';
@@ -138,6 +139,29 @@ class _HomeState extends State<Home> {
                   height: 20.h,
                 ),
                 HorizontalList(),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "الكورسات المدفوعة",
+                      style: TextStyle(fontSize: 20.sp),
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    Get.to(const PaidCourses());
+                  },
+                  child: Text(
+                    'المدفوعة',
+                    style: TextStyle(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Roboto',
+                        color: Colors.blue),
+                  ),
+                ),
                 FutureBuilder<bool>(
                   future: isAdmin(),
                   builder: (context, snapshot) {
@@ -230,32 +254,6 @@ class _HomeState extends State<Home> {
                             children: [
                               Text(
                                 "إضافة مادة",
-                                style: TextStyle(fontSize: 20.sp),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Get.to(AddSubject());
-                            },
-                            child: Text(
-                              'إضافة',
-                              style: TextStyle(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Roboto',
-                                  color: Colors.blue),
-                            ),
-                          ),
-                          const Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "إضافة صف",
                                 style: TextStyle(fontSize: 20.sp),
                               ),
                             ],
