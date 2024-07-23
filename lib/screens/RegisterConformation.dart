@@ -5,7 +5,19 @@ import 'package:get/get.dart';
 
 //
 class RegisterConformation extends StatefulWidget {
-  const RegisterConformation({super.key});
+  final String courseName;
+  final int courseID;
+  final int teacher;
+  final String subject;
+  final int section;
+  const RegisterConformation({
+    super.key,
+    required this.courseName,
+    required this.courseID,
+    required this.teacher,
+    required this.subject,
+    required this.section,
+  });
 
   @override
   State<RegisterConformation> createState() => _RegisterConformationState();

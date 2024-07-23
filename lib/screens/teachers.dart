@@ -71,7 +71,7 @@ class _teachersState extends State<teachers> {
       print("9f${widget.grade}");
       print("widget.subject${subject2}");
       var response = await Dio().get(
-        "https://obai.aunakit-hosting.com/api/teachers/${widget.grade}/$subject2",
+        "https://obai.aunakit-hosting.com/api/teachers/${widget.grade}/${widget.subject}",
         options: Options(
           headers: {
             'Authorization': 'Token $token',

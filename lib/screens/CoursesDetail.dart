@@ -46,7 +46,13 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       print('teacher: ${widget.teacher}');
       print('subject: ${widget.subject}');
       print('section: ${widget.section}');
-      Get.to(const CourseRegister());
+      Get.to(CourseRegister(
+        courseID: widget.courseID,
+        courseName: widget.courseName,
+        teacher: widget.teacher,
+        subject: widget.subject,
+        section: widget.section,
+      ));
     }
   }
 

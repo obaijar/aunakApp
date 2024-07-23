@@ -22,6 +22,7 @@ class Tase3 extends StatefulWidget {
 
 class _Tase3State extends State<Tase3> {
   List<GridItem> gridItems = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -52,9 +53,13 @@ class _Tase3State extends State<Tase3> {
                       'name'], // Adjust according to your API response structure
                 ))
             .toList();
+        isLoading = false;
       });
     } else {
       print('Failed to load subjects');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -67,65 +72,67 @@ class _Tase3State extends State<Tase3> {
           style: TextStyle(fontSize: 20.sp),
         ),
       ),
-      body: GridView.count(
-        crossAxisCount: 2, // Number of columns in the grid
-        children: List.generate(gridItems.length, (index) {
-          return Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.w), // Add padding here
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                      color: Colors.black45,
-                      width: 2.0,
-                    ),
-                  ),
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.to(() => teachers(
-                              subject: gridItems[index].text,
-                              grade: 9,
-                            ));
-                        // Handle click event here, for example, navigate to a new page
-                        print('Image clicked: ${gridItems[index].text}');
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            gridItems[index].imageUrl,
-                            height: 80.h,
-                            fit: BoxFit.cover,
-                          ), // Spacer between image and text
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 40.w,
-                              ),
-                              Text(
-                                gridItems[index].text,
-                                style: TextStyle(fontSize: 18.sp),
-                              ),
-                              Image.asset(
-                                "images/111.png",
-                                fit: BoxFit.cover,
-                              ),
-                            ],
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : GridView.count(
+              crossAxisCount: 2, // Number of columns in the grid
+              children: List.generate(gridItems.length, (index) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.w), // Add padding here
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+                          border: Border.all(
+                            color: Colors.black45,
+                            width: 2.0,
                           ),
-                        ],
+                        ),
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(() => teachers(
+                                    subject: gridItems[index].text,
+                                    grade: 9,
+                                  ));
+                              // Handle click event here, for example, navigate to a new page
+                              print('Image clicked: ${gridItems[index].text}');
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  gridItems[index].imageUrl,
+                                  height: 80.h,
+                                  fit: BoxFit.cover,
+                                ), // Spacer between image and text
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 40.w,
+                                    ),
+                                    Text(
+                                      gridItems[index].text,
+                                      style: TextStyle(fontSize: 18.sp),
+                                    ),
+                                    Image.asset(
+                                      "images/111.png",
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        }),
-      ),
+                  ],
+                );
+              }),
+            ),
     );
   }
 }

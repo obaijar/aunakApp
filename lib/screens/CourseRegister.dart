@@ -1,27 +1,114 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testt/screens/RegisterConformation.dart';
 
 class CourseRegister extends StatefulWidget {
-  const CourseRegister({super.key});
+  final String courseName;
+  final int courseID;
+  final int teacher;
+  final String subject;
+  final int section;
+
+  const CourseRegister({
+    super.key,
+    required this.courseName,
+    required this.courseID,
+    required this.teacher,
+    required this.subject,
+    required this.section,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
   _CourseRegisterState createState() => _CourseRegisterState();
 }
 
 class _CourseRegisterState extends State<CourseRegister> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   final TextEditingController phonenumberController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isLoading = false;
+
+  Future<void> performRegistration() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      // Get token and user ID from SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      String? userId = prefs.getString('id');
+
+      if (userId == null) {
+        print('User ID not found in SharedPreferences');
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
+
+      // Define the GET request URL
+      final String getUrl =
+          'https://obai.aunakit-hosting.com/api/courses/search/1/${widget.subject}/1/1/';
+
+      // Perform the GET request to get the course ID
+      dio.Response getResponse = await dio.Dio().get(
+        getUrl,
+        options: dio.Options(
+          headers: {
+            'Authorization': 'Token $token',
+          },
+        ),
+      );
+      print(getResponse.data);
+      if (getResponse.statusCode == 200 && getResponse.data.isNotEmpty) {
+        int courseId = getResponse.data[0]
+            ['id']; // Assuming the first course is the relevant one
+
+        // Define the POST request URL
+        const String postUrl =
+            'https://obai.aunakit-hosting.com/api/purchases/';
+
+        // Perform the POST request to register the purchase
+        dio.Response postResponse = await dio.Dio().post(
+          postUrl,
+          data: {
+            'user': userId,
+            'course': courseId,
+          },
+          options: dio.Options(
+            headers: {
+              'Authorization': 'Token $token',
+            },
+          ),
+        );
+
+        if (postResponse.statusCode == 201) {
+          // Navigate to the confirmation page
+          print("ook doneeeeeeeeeeeee");
+          //Get.to(() => RegisterConformation());
+        } else {
+          // Handle POST request failure
+          print('Failed to register purchase');
+        }
+      } else {
+        // Handle GET request failure or empty response
+        print('Failed to retrieve course');
+      }
+    } catch (e) {
+      // Handle any exceptions
+      print('Error: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,45 +212,7 @@ class _CourseRegisterState extends State<CourseRegister> {
                     : ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState?.validate() ?? false) {
-                            setState(() {
-                              isLoading = true;
-                            });
-
-                            try {
-                              var dio = Dio();
-                              var url =
-                                  'https://jsonplaceholder.typicode.com/posts';
-                              var response = await dio.post(
-                                url,
-                                data: {
-                                  'username': usernameController.text,
-                                  'email': emailController.text,
-                                  'password': passwordController.text,
-                                },
-                              );
-
-                              if (response.statusCode == 201) {
-                                Get.to(const RegisterConformation());
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'معلومات الدفع خاطئة , يرجى إعادة المحاولة'),
-                                  ),
-                                );
-                              }
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('حدث خطأ ما , يرجى اعادة المحاولة'),
-                                ),
-                              );
-                            } finally {
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
+                            await performRegistration();
                           }
                         },
                         child: Text(
