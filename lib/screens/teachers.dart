@@ -54,29 +54,10 @@ class _teachersState extends State<teachers> {
         return; // Exit the button press function if no connection
       }
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('token');
-
-      if (token == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('يرجى تسجيل الدخول'),
-          ),
-        );
-        setState(() {
-          isLoading = false;
-        });
-        return; // Exit if no token is found
-      }
       print("9f${widget.grade}");
       print("widget.subject${subject2}");
       var response = await Dio().get(
         "https://obai.aunakit-hosting.com/api/teachers/${widget.grade}/${widget.subject}",
-        options: Options(
-          headers: {
-            'Authorization': 'Token $token',
-          },
-        ),
       );
 
       if (response.statusCode == 200) {

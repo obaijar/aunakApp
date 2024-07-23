@@ -32,15 +32,10 @@ class _Tase3State extends State<Tase3> {
 
   Future<void> fetchSubjects() async {
     const grade = 1; // Use the correct grade as needed
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
     final url =
         Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
     final response = await http.get(
       url,
-      headers: {
-        'Authorization': 'Token $token', // Replace with your token
-      },
     );
 
     if (response.statusCode == 200) {

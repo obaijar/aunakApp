@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:testt/screens/video_player_page.dart'; // Make sure this path is correct
 import 'package:get/get.dart';
+import 'package:testt/screens/video_player_page.dart'; // Ensure this path is correct
 
 class watchCourse extends StatefulWidget {
   final List<dynamic> videoList;
-
   const watchCourse({
     super.key,
     required this.videoList,
@@ -52,7 +51,10 @@ class _watchCourseState extends State<watchCourse> {
                   ),
                 ),
                 onTap: () {
-                  Get.to(SamplePlayer(videoUrl: video['video_file']));
+                  Get.to(SamplePlayer(
+                    videoUrl: video['video_file'],
+                    videoID: video['id'],
+                  ));
                   print('Playing video: ${video['title']}');
                 },
               ),

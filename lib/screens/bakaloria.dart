@@ -36,15 +36,10 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
 
   Future<void> fetchSubjects() async {
     const grade = 3; // Use the correct grade as needed
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
     final url =
         Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
     final response = await http.get(
       url,
-      headers: {
-        'Authorization': 'Token $token', // Replace with your token
-      },
     );
 
     if (response.statusCode == 200) {
@@ -164,15 +159,10 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
 
   Future<void> fetchSubjects() async {
     const grade = 2; // Use the correct grade as needed
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
     final url =
         Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
     final response = await http.get(
       url,
-      headers: {
-        'Authorization': 'Token $token', // Replace with your token
-      },
     );
 
     if (response.statusCode == 200) {

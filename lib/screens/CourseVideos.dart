@@ -106,7 +106,7 @@ class _CourseVideoState extends State<CourseVideo> {
             final video = _videos[index];
             return InkWell(
               onTap: () {
-                Get.to(SamplePlayer(videoUrl: video['videoUrl']));
+                //Get.to(SamplePlayer(videoUrl: video['videoUrl']));
               },
               child: Card(
                 margin: const EdgeInsets.symmetric(vertical: 8.0),

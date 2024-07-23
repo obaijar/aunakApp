@@ -4,11 +4,16 @@ import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SamplePlayer extends StatefulWidget {
   final String videoUrl;
+  final int videoID;
+
   const SamplePlayer({
+    super.key,
     required this.videoUrl,
+    required this.videoID,
   });
 
   @override
@@ -27,8 +32,10 @@ class _SamplePlayerState extends State<SamplePlayer> {
   }
 
   Future<void> _checkVideoAccess() async {
-    const String apiUrl =
-        'https://obai.aunakit-hosting.com/videos/1/track-view/';
+    print("ok dooone");
+    print(widget.videoID);
+    String apiUrl =
+        'https://obai.aunakit-hosting.com/videos/${widget.videoID}/track-view/';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
     final response = await http.get(
@@ -49,10 +56,9 @@ class _SamplePlayerState extends State<SamplePlayer> {
         );
       });
     } else if (response.statusCode == 403) {
-      final data = json.decode(response.body);
       setState(() {
         canViewVideo = false;
-        message = data['detail'];
+        message = ("لقد تجاوزت الحد المسموح لمشاهدة الفيديو");
       });
     } else {
       setState(() {
@@ -92,7 +98,7 @@ class _SamplePlayerState extends State<SamplePlayer> {
                   children: [
                     Text(
                       message,
-                      style: TextStyle(fontSize: 18, color: Colors.red),
+                      style: TextStyle(fontSize: 18.sp, color: Colors.red),
                       textAlign: TextAlign.center,
                     ),
                   ],
