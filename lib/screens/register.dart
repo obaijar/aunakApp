@@ -260,6 +260,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       },
                                     ),
                                   );
+                                  print("say wahhhhhht ");
 
                                   if (response.statusCode == 200) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -269,12 +270,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     );
                                     Navigator.pop(context);
                                   }
-                                  if (response.statusCode == 400) {
+                                  print(response.statusCode);
+                                  if (response.statusCode == 403) {
+                                    print("hiiiiii");
+                                    var responseBody = response.data;
+
+                                    //if (responseBody['username'] != null &&
+                                    //   responseBody['username'].contains(
+                                    //      'A user with that username already exists.')) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('يوجد مستخدم بهذا الاسم'),
                                       ),
                                     );
+                                    //}
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -286,7 +295,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("يوجد مستخدم بهذا الاسم"),
+                                      content: Text("هناك خطأ ما"),
                                     ),
                                   );
                                 } finally {
