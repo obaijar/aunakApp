@@ -32,7 +32,7 @@ class _CourseRegisterState extends State<CourseRegister> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isLoading = false;
-
+  int grade = 0;
   Future<void> performRegistration() async {
     setState(() {
       isLoading = true;
@@ -51,10 +51,18 @@ class _CourseRegisterState extends State<CourseRegister> {
         });
         return;
       }
+      print('courseName: ${widget.courseName}');
+      print('courseID: ${widget.courseID}');
 
+      print('teacher: ${widget.teacher}');
+      print('subject: ${widget.subject}');
+      print('section: ${widget.section}');
+      if (widget.section == 9) grade = 1;
+      if (widget.section == 12) grade = 2;
+      if (widget.section == 13) grade = 3;
       // Define the GET request URL
       final String getUrl =
-          'https://obai.aunakit-hosting.com/api/courses/search/1/${widget.subject}/1/1/';
+          'https://obai.aunakit-hosting.com/api/courses/search/$grade/${widget.subject}/${widget.courseID}/${widget.teacher}/';
 
       // Perform the GET request to get the course ID
       dio.Response getResponse = await dio.Dio().get(
@@ -65,7 +73,6 @@ class _CourseRegisterState extends State<CourseRegister> {
           },
         ),
       );
-      print(getResponse.data);
       if (getResponse.statusCode == 200 && getResponse.data.isNotEmpty) {
         int courseId = getResponse.data[0]
             ['id']; // Assuming the first course is the relevant one
@@ -91,14 +98,20 @@ class _CourseRegisterState extends State<CourseRegister> {
         if (postResponse.statusCode == 201) {
           // Navigate to the confirmation page
           print("ook doneeeeeeeeeeeee");
-          //Get.to(() => RegisterConformation());
+          Get.to(() => RegisterConformation());
         } else {
           // Handle POST request failure
           print('Failed to register purchase');
         }
       } else {
         // Handle GET request failure or empty response
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('لا يوجد كورس بهذه البيانات'),
+          ),
+        );
         print('Failed to retrieve course');
+        return; // Exit if no token is found
       }
     } catch (e) {
       // Handle any exceptions

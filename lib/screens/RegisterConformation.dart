@@ -1,22 +1,22 @@
 import "package:flutter/material.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:testt/screens/CourseVideos.dart';
 import 'package:get/get.dart';
+import 'package:testt/screens/home.dart';
 
 //
 class RegisterConformation extends StatefulWidget {
-  final String courseName;
+  /*final String courseName;
   final int courseID;
   final int teacher;
   final String subject;
-  final int section;
+  final int section;*/
   const RegisterConformation({
     super.key,
-    required this.courseName,
+    /*required this.courseName,
     required this.courseID,
     required this.teacher,
     required this.subject,
-    required this.section,
+    required this.section,*/
   });
 
   @override
@@ -65,7 +65,8 @@ class _RegisterConformationState extends State<RegisterConformation> {
               height: 100.h,
               child: InkWell(
                 onTap: () {
-                  Get.to(const CourseVideo());
+                  //Get.to(const CourseVideo());
+                  Get.to(const Home());
                 },
                 child: Ink.image(image: const AssetImage("images/141.png")),
               ),
