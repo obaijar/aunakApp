@@ -6,7 +6,6 @@ import 'package:testt/screens/Courses.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class teachers extends StatefulWidget {
   final String subject;

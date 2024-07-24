@@ -7,7 +7,7 @@ import 'package:testt/screens/bakaloria.dart';
 import 'package:testt/screens/profile.dart';
 import 'package:testt/screens/login.dart';
 import 'package:testt/screens/register.dart';
-import 'package:testt/screens/subject.dart';
+import 'package:testt/screens/%D9%90AddSubject.dart';
 import 'package:testt/screens/tase3.dart';
 import 'package:get/get.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // Import CurvedNavigationBar

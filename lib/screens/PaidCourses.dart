@@ -48,6 +48,7 @@ class _PaidCoursesState extends State<PaidCourses> {
         setState(() {
           _courses = jsonResponse.map((item) {
             return {
+              'id': item['id'], // Include the id of the purchase
               'title': item['course']['title'],
               'description': item['course']['description'],
               'videos': item['course']['videos'],
@@ -66,6 +67,58 @@ class _PaidCoursesState extends State<PaidCourses> {
     }
   }
 
+  Future<void> _deleteCourse(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? authToken = prefs.getString('token');
+    if (authToken == null) {
+      print('No authentication token found');
+      return;
+    }
+
+    final url =
+        Uri.parse('https://obai.aunakit-hosting.com/api/purchase/delete/$id/');
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Authorization': 'Token $authToken',
+        },
+      );
+      if (response.statusCode == 204) {
+        setState(() {
+          _courses.removeWhere((course) => course['id'] == id);
+        });
+      } else {
+        throw Exception('Failed to delete course');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<bool> _confirmDelete(BuildContext context) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('تأكيد الحذف'),
+              content: Text('هل أنت متاكد من حذف هذا الكورس'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('لا'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text('نعم'),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -80,32 +133,48 @@ class _PaidCoursesState extends State<PaidCourses> {
         itemCount: _courses.length,
         itemBuilder: (context, index) {
           final course = _courses[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            elevation: 5,
-            child: InkWell(
-              onTap: () {
-                // Navigate to watchCourse and pass the video list
-                Get.to(() => watchCourse(
-                      videoList: course['videos'], // Pass the video list here
-                    ));
-                print('Tapped on course: ${course['title']}');
-              },
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(16),
-                leading: Icon(Icons.book, color: Colors.blueGrey[700]),
-                title: Text(
-                  course['title'] ?? 'No title',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+          return Dismissible(
+            key: Key(course['id'].toString()), // Unique key for each item
+            direction: DismissDirection.endToStart,
+            confirmDismiss: (direction) async {
+              return await _confirmDelete(context);
+            },
+            onDismissed: (direction) {
+              _deleteCourse(course['id']);
+            },
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            child: Card(
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              elevation: 5,
+              child: InkWell(
+                onTap: () {
+                  // Navigate to watchCourse and pass the video list
+                  Get.to(() => watchCourse(
+                        videoList: course['videos'], // Pass the video list here
+                      ));
+                  print('Tapped on course: ${course['title']}');
+                },
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16),
+                  leading: Icon(Icons.book, color: Colors.blueGrey[700]),
+                  title: Text(
+                    course['title'] ?? 'No title',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    course['description'] ?? 'No description',
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: Icon(Icons.arrow_forward),
+                  isThreeLine: true,
+                  dense: false,
                 ),
-                subtitle: Text(
-                  course['description'] ?? 'No description',
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: Icon(Icons.arrow_forward),
-                isThreeLine: true,
-                dense: false,
               ),
             ),
           );

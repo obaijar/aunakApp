@@ -2,9 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'dart:convert';
-import 'package:get/get.dart';
-import 'package:testt/screens/video_player_page.dart'; // Add this if you're using Get package
+import 'dart:convert'; // Add this if you're using Get package
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
