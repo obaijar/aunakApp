@@ -157,162 +157,165 @@ class _VideoPostState extends State<VideoPost> {
           style: TextStyle(fontSize: 20.sp),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                TextFormField(
-                  controller: _titleController,
-                  decoration: InputDecoration(
-                    labelText: 'العنوان',
-                    border: OutlineInputBorder(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextFormField(
+                    controller: _titleController,
+                    decoration: InputDecoration(
+                      labelText: 'العنوان',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال العنوان';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'الرجاء إدخال العنوان';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  value: _selectedGrade,
-                  items: _grades.keys.map((grade) {
-                    return DropdownMenuItem(
-                      value: grade,
-                      child: Text(grade),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedGrade = newValue;
-                      print('Selected grade value: ${_grades[_selectedGrade]}');
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'الصف',
-                    border: OutlineInputBorder(),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: _selectedGrade,
+                    items: _grades.keys.map((grade) {
+                      return DropdownMenuItem(
+                        value: grade,
+                        child: Text(grade),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedGrade = newValue;
+                        print(
+                            'Selected grade value: ${_grades[_selectedGrade]}');
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'الصف',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'الرجاء اختيار الصف';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'الرجاء اختيار الصف';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  value: _selectedSubject,
-                  items: _subjects.keys.map((subject) {
-                    return DropdownMenuItem(
-                      value: subject,
-                      child: Text(subject),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedSubject = newValue;
-                      print(
-                          'Selected subject value: ${_subjects[_selectedSubject]}');
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'المادة',
-                    border: OutlineInputBorder(),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: _selectedSubject,
+                    items: _subjects.keys.map((subject) {
+                      return DropdownMenuItem(
+                        value: subject,
+                        child: Text(subject),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedSubject = newValue;
+                        print(
+                            'Selected subject value: ${_subjects[_selectedSubject]}');
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'المادة',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'الرجاء اختيار المادة';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'الرجاء اختيار المادة';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  value: _selectedSubjectType,
-                  items: _subjectTypes.keys.map((subjectType) {
-                    return DropdownMenuItem(
-                      value: subjectType,
-                      child: Text(subjectType),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedSubjectType = newValue;
-                      print(
-                          'Selected subject type value: ${_subjectTypes[_selectedSubjectType]}');
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'نوع الدروس',
-                    border: OutlineInputBorder(),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: _selectedSubjectType,
+                    items: _subjectTypes.keys.map((subjectType) {
+                      return DropdownMenuItem(
+                        value: subjectType,
+                        child: Text(subjectType),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedSubjectType = newValue;
+                        print(
+                            'Selected subject type value: ${_subjectTypes[_selectedSubjectType]}');
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'نوع الدروس',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'الرجاء الاختيار';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'الرجاء الاختيار';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  value: _selectedTeacherId,
-                  items: _teachers.map((teacher) {
-                    return DropdownMenuItem<String>(
-                      value: teacher['id'],
-                      child: Text(teacher['name']!),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedTeacherId = newValue;
-                      print('Selected teacher ID: $_selectedTeacherId');
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'المدرس',
-                    border: OutlineInputBorder(),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: _selectedTeacherId,
+                    items: _teachers.map((teacher) {
+                      return DropdownMenuItem<String>(
+                        value: teacher['id'],
+                        child: Text(teacher['name']!),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedTeacherId = newValue;
+                        print('Selected teacher ID: $_selectedTeacherId');
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'المدرس',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'الرجاء اختيار المدرس';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'الرجاء اختيار المدرس';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: pickVideo,
-                  child: Text(
-                    'إختيار درس',
-                    style: TextStyle(fontSize: 15.sp, color: Colors.blue),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: pickVideo,
+                    child: Text(
+                      'إختيار درس',
+                      style: TextStyle(fontSize: 15.sp, color: Colors.blue),
+                    ),
                   ),
-                ),
-                if (_videoFile != null)
-                  Text(
-                    '   :الملف المختار ${_videoFile!.path}',
-                    style: TextStyle(fontSize: 15.sp),
+                  if (_videoFile != null)
+                    Text(
+                      '   :الملف المختار ${_videoFile!.path}',
+                      style: TextStyle(fontSize: 15.sp),
+                    ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate() &&
+                          _videoFile != null) {
+                        uploadVideo(_videoFile!);
+                      } else {
+                        print('Please complete all fields and select a video');
+                      }
+                    },
+                    child: Text(
+                      'رفع الدرس',
+                      style: TextStyle(fontSize: 15.sp, color: Colors.blue),
+                    ),
                   ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate() &&
-                        _videoFile != null) {
-                      uploadVideo(_videoFile!);
-                    } else {
-                      print('Please complete all fields and select a video');
-                    }
-                  },
-                  child: Text(
-                    'رفع الدرس',
-                    style: TextStyle(fontSize: 15.sp, color: Colors.blue),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

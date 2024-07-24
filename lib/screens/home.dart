@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:testt/main.dart';
 import 'package:testt/screens/AddCourse.dart';
+import 'package:testt/screens/CourseSettings.dart';
 import 'package:testt/screens/DeleteVideo.dart';
 import 'package:testt/screens/PaidCourses.dart';
 import 'package:testt/screens/bakaloria.dart';
@@ -281,7 +282,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "إضافة كورس",
+                                "كورسات",
                                 style: TextStyle(fontSize: 20.sp),
                               ),
                             ],
@@ -291,10 +292,10 @@ class _HomeState extends State<Home> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Get.to(AddCourse());
+                              Get.to(CourseSettings());
                             },
                             child: Text(
-                              'إضافة',
+                              'دخول',
                               style: TextStyle(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.bold,
