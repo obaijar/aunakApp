@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:testt/screens/video_player_page.dart';
 
 class DeleteVideo extends StatefulWidget {
   const DeleteVideo({super.key});
@@ -50,6 +51,8 @@ class _DeleteVideoState extends State<DeleteVideo> {
               'id': item['id'],
               'title': item['title'],
               'video_file': item['video_file'],
+              'grade': item['grade'],
+              'subject': item['subject'],
             };
           }).toList();
           _isLoading = false;
@@ -102,8 +105,8 @@ class _DeleteVideoState extends State<DeleteVideo> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('تاكيد الحذف'),
-          content: Text('هل انت متأكد انك تريد حذف هذا الفيديو'),
+          title: Text('تأكيد الحذف'),
+          content: Text('هل انت متاكد تريد حذف هذا الفيديو'),
           actions: [
             TextButton(
               onPressed: () {
@@ -178,24 +181,44 @@ class _DeleteVideoState extends State<DeleteVideo> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
-                  child: Card(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    elevation: 5,
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(16),
-                      title: Text(
-                        video['title'] ?? 'No title',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SamplePlayer(
+                            videoUrl: video['video_file'],
+                            videoID: video['id'],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      elevation: 5,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(16),
+                        title: Text(
+                          video['title'] ?? 'No title',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Grade: ${video['grade'] ?? 'No grade'}',
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                            Text(
+                              'Subject: ${video['subject'] ?? 'No subject'}',
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                          ],
+                        ),
+                        trailing: Icon(Icons.arrow_forward),
+                        isThreeLine: true,
+                        dense: false,
                       ),
-                      subtitle: Text(
-                        video['video_file'] ?? 'No video file',
-                        maxLines: 4,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      trailing: Icon(Icons.arrow_forward),
-                      isThreeLine: true,
-                      dense: false,
                     ),
                   ),
                 );

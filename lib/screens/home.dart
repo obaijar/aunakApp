@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:testt/main.dart';
+import 'package:testt/screens/AddCourse.dart';
 import 'package:testt/screens/DeleteVideo.dart';
 import 'package:testt/screens/PaidCourses.dart';
 import 'package:testt/screens/bakaloria.dart';
@@ -265,6 +266,32 @@ class _HomeState extends State<Home> {
                           ElevatedButton(
                             onPressed: () {
                               Get.to(AddSubject());
+                            },
+                            child: Text(
+                              'إضافة',
+                              style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Roboto',
+                                  color: Colors.blue),
+                            ),
+                          ),
+                          const Divider(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                "إضافة كورس",
+                                style: TextStyle(fontSize: 20.sp),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Get.to(AddCourse());
                             },
                             child: Text(
                               'إضافة',
