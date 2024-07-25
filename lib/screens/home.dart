@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:testt/main.dart';
-import 'package:testt/screens/AddCourse.dart';
 import 'package:testt/screens/CourseSettings.dart';
 import 'package:testt/screens/DeleteVideo.dart';
 import 'package:testt/screens/PaidCourses.dart';

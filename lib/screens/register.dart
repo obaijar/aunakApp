@@ -260,7 +260,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       },
                                     ),
                                   );
-                                  print("say wahhhhhht ");
 
                                   if (response.statusCode == 200) {
                                     ScaffoldMessenger.of(context).showSnackBar(

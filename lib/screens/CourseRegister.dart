@@ -53,7 +53,6 @@ class _CourseRegisterState extends State<CourseRegister> {
       }
       print('courseName: ${widget.courseName}');
       print('courseID: ${widget.courseID}');
-
       print('teacher: ${widget.teacher}');
       print('subject: ${widget.subject}');
       print('section: ${widget.section}');

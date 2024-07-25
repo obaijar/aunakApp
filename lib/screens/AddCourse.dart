@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddCourse extends StatefulWidget {
   const AddCourse({super.key});
@@ -17,25 +19,33 @@ class _AddCourseState extends State<AddCourse> {
 
   // Variables to hold dropdown data
   List<String> _subjects = [];
+  List<String> _subjects_id = [];
   List<String> _teachers = [];
+  List<String> _teachers_id = [];
   List<String> _grades = [];
   List<String> _subjectTypes = [];
+  List<String> _subjectTypes_id = [];
 
-  String? _selectedSubjectType;
-  String? _selectedTeacher;
-  String? _selectedSubject;
-  String? _selectedGrade;
+  // Variables to hold video data
+  List<dynamic> _videos = [];
+  Set<String> _selectedVideos = Set<String>();
+
+  int? _selectedSubjectTypeIndex;
+  int? _selectedTeacherIndex;
+  int? _selectedSubjectIndex;
+  int? _selectedGradeIndex;
 
   @override
   void initState() {
     super.initState();
     _fetchDropdownData();
+    _fetchVideos();
   }
 
   Future<void> _fetchDropdownData() async {
     // URLs for APIs
     const subjectUrl = 'https://obai.aunakit-hosting.com/api/Subject/';
-    const subjectTypeUrl = 'http://obai.aunakit-hosting.com/api/Subject_type/';
+    const subjectTypeUrl = 'https://obai.aunakit-hosting.com/api/Subject_type/';
     const teacherUrl = 'https://obai.aunakit-hosting.com/api/teachers/';
     const gradeUrl = 'https://obai.aunakit-hosting.com/api/Grade/';
 
@@ -58,11 +68,18 @@ class _AddCourseState extends State<AddCourse> {
         setState(() {
           _subjects =
               subjectData.map((item) => item['name'] as String).toList();
+          _subjects_id =
+              subjectData.map((item) => item['id'].toString()).toList();
           _subjectTypes =
               subjectTypeData.map((item) => item['name'] as String).toList();
+          _subjectTypes_id =
+              subjectTypeData.map((item) => item['id'].toString()).toList();
           _teachers =
               teacherData.map((item) => item['name'] as String).toList();
-          _grades = gradeData.map((item) => item['name'] as String).toList();
+          _teachers_id =
+              teacherData.map((item) => item['id'].toString()).toList();
+
+          _grades = gradeData.map((item) => item['level'] as String).toList();
         });
       } else {
         throw Exception('Failed to load data');
@@ -73,17 +90,50 @@ class _AddCourseState extends State<AddCourse> {
     }
   }
 
+  Future<void> _fetchVideos() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    if (token == null) {
+      print('No token found');
+      return;
+    }
+
+    const videoUrl = 'https://obai.aunakit-hosting.com/api/videos/';
+
+    try {
+      final response = await http.get(
+        Uri.parse(videoUrl),
+        headers: {
+          'Authorization': 'token $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final videoData = json.decode(response.body) as List;
+        setState(() {
+          _videos = videoData;
+        });
+      } else {
+        throw Exception('Failed to load videos');
+      }
+    } catch (e) {
+      print('Error fetching videos: $e');
+      // Handle errors
+    }
+  }
+
   Future<bool> _checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
-    bool isConnected =
-        connectivityResult.any((result) => result != ConnectivityResult.none);
+    bool isConnected = connectivityResult != ConnectivityResult.none;
     if (!isConnected) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('إتصال الإنترنت'),
-            content: const Text('لا يوجد اتصال بالإنترنت'),
+            title: const Text('No Internet Connection'),
+            content: const Text(
+                'Please check your internet connection and try again.'),
             actions: <Widget>[
               TextButton(
                 child: const Text('OK'),
@@ -100,27 +150,6 @@ class _AddCourseState extends State<AddCourse> {
     return true;
   }
 
-  void _showNoConnectionDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('No Internet Connection'),
-          content: const Text(
-              'Please check your internet connection and try again.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _submitForm() async {
     bool isConnected = await _checkConnectivity();
     if (isConnected) {
@@ -129,10 +158,19 @@ class _AddCourseState extends State<AddCourse> {
         final courseData = {
           "title": _titleController.text,
           "description": _descriptionController.text,
-          "subject_type": _selectedSubjectType,
-          "teacher": _selectedTeacher,
-          "subject": _selectedSubject,
-          "grade": _selectedGrade,
+          "subject_type": _selectedSubjectTypeIndex != null
+              ? _subjectTypes_id[_selectedSubjectTypeIndex!]
+              : null,
+          "teacher": _selectedTeacherIndex != null
+              ? _teachers_id[_selectedTeacherIndex!]
+              : null,
+          "subject": _selectedSubjectIndex != null
+              ? _subjects_id[_selectedSubjectIndex!]
+              : null,
+          "grade": _selectedGradeIndex != null
+              ? (_selectedGradeIndex! + 1).toString()
+              : null,
+          "videos": _selectedVideos.toList(),
         };
         print(courseData);
         // Handle the courseData as needed
@@ -180,20 +218,20 @@ class _AddCourseState extends State<AddCourse> {
                   },
                 ),
                 const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  value: _selectedSubjectType,
+                DropdownButtonFormField<int>(
+                  value: _selectedSubjectTypeIndex,
                   decoration: const InputDecoration(
                     labelText: 'نوع المادة',
                   ),
-                  items: _subjectTypes.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+                  items: List.generate(_subjectTypes.length, (index) {
+                    return DropdownMenuItem<int>(
+                      value: index,
+                      child: Text(_subjectTypes[index]),
                     );
-                  }).toList(),
-                  onChanged: (String? newValue) {
+                  }),
+                  onChanged: (int? newValue) {
                     setState(() {
-                      _selectedSubjectType = newValue;
+                      _selectedSubjectTypeIndex = newValue;
                     });
                   },
                   validator: (value) {
@@ -204,20 +242,20 @@ class _AddCourseState extends State<AddCourse> {
                   },
                 ),
                 const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  value: _selectedTeacher,
+                DropdownButtonFormField<int>(
+                  value: _selectedTeacherIndex,
                   decoration: const InputDecoration(
                     labelText: 'المدرس',
                   ),
-                  items: _teachers.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+                  items: List.generate(_teachers.length, (index) {
+                    return DropdownMenuItem<int>(
+                      value: index,
+                      child: Text(_teachers[index]),
                     );
-                  }).toList(),
-                  onChanged: (String? newValue) {
+                  }),
+                  onChanged: (int? newValue) {
                     setState(() {
-                      _selectedTeacher = newValue;
+                      _selectedTeacherIndex = newValue;
                     });
                   },
                   validator: (value) {
@@ -228,20 +266,20 @@ class _AddCourseState extends State<AddCourse> {
                   },
                 ),
                 const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  value: _selectedSubject,
+                DropdownButtonFormField<int>(
+                  value: _selectedSubjectIndex,
                   decoration: const InputDecoration(
                     labelText: 'المادة',
                   ),
-                  items: _subjects.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+                  items: List.generate(_subjects.length, (index) {
+                    return DropdownMenuItem<int>(
+                      value: index,
+                      child: Text(_subjects[index]),
                     );
-                  }).toList(),
-                  onChanged: (String? newValue) {
+                  }),
+                  onChanged: (int? newValue) {
                     setState(() {
-                      _selectedSubject = newValue;
+                      _selectedSubjectIndex = newValue;
                     });
                   },
                   validator: (value) {
@@ -252,20 +290,20 @@ class _AddCourseState extends State<AddCourse> {
                   },
                 ),
                 const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  value: _selectedGrade,
+                DropdownButtonFormField<int>(
+                  value: _selectedGradeIndex,
                   decoration: const InputDecoration(
                     labelText: 'الصف',
                   ),
-                  items: _grades.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
+                  items: List.generate(_grades.length, (index) {
+                    return DropdownMenuItem<int>(
+                      value: index,
+                      child: Text(_grades[index]),
                     );
-                  }).toList(),
-                  onChanged: (String? newValue) {
+                  }),
+                  onChanged: (int? newValue) {
                     setState(() {
-                      _selectedGrade = newValue;
+                      _selectedGradeIndex = newValue;
                     });
                   },
                   validator: (value) {
@@ -274,6 +312,47 @@ class _AddCourseState extends State<AddCourse> {
                     }
                     return null;
                   },
+                ),
+                const SizedBox(height: 24),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'الفيديوهات',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  height: 200.sp, // Fixed height for the video list
+                  child: ListView.builder(
+                    itemCount: _videos.length,
+                    itemBuilder: (context, index) {
+                      final video = _videos[index];
+                      return ListTile(
+                        title: Text(video['title']),
+                        onTap: () {
+                          setState(() {
+                            if (_selectedVideos
+                                .contains(video['id'].toString())) {
+                              _selectedVideos.remove(video['id'].toString());
+                            } else {
+                              _selectedVideos.add(video['id'].toString());
+                            }
+                          });
+                        },
+                        selected:
+                            _selectedVideos.contains(video['id'].toString()),
+                        selectedTileColor: Colors.grey[300],
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(

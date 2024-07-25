@@ -16,6 +16,7 @@ class _TeacherRegState extends State<TeacherReg> {
   List<Color> colorsGrades = [];
   bool isLoadingGrades = true;
   bool isLoadingSubjects = true;
+  bool isSubmitting = false; // Added to track submission state
 
   List<String> selectedSubjects = [];
   List<String> selectedGrades = [];
@@ -23,9 +24,9 @@ class _TeacherRegState extends State<TeacherReg> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  // Password fields are commented out
+  // final TextEditingController _passwordController = TextEditingController();
+  // final TextEditingController _confirmPasswordController = TextEditingController();
 
   List<Map<String, dynamic>> grades = [];
   List<Map<String, dynamic>> subjects = [];
@@ -149,6 +150,9 @@ class _TeacherRegState extends State<TeacherReg> {
   Future<void> submitForm() async {
     // Validate form fields
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        isSubmitting = true; // Start loading
+      });
       try {
         // Retrieve token from SharedPreferences
         final prefs = await SharedPreferences.getInstance();
@@ -173,11 +177,12 @@ class _TeacherRegState extends State<TeacherReg> {
           },
           body: json.encode({
             'name': _nameController.text,
-            'age': "22",
+            'age': "22", // Replace this with appropriate data if necessary
             'subjects': selectedSubjects,
             'grades': selectedGrades,
           }),
         );
+
         // Handle successful response
         if (response.statusCode == 201) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -201,6 +206,10 @@ class _TeacherRegState extends State<TeacherReg> {
             content: Text('فشل في التسجيل'),
           ),
         );
+      } finally {
+        setState(() {
+          isSubmitting = false; // Stop loading
+        });
       }
     }
   }
@@ -211,113 +220,122 @@ class _TeacherRegState extends State<TeacherReg> {
       appBar: AppBar(
         title: const Text('تسجيل أستاذ'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              // Form fields
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'الإسم',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'الرجاء ادخال الإسم';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'الإيميل',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'الرجاء إدخال الإيميل';
-                  }
-                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'الإيميل غير صحيح';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'كلمة السر',
-                ),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'الرجاء إدخال كلمة السر';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _confirmPasswordController,
-                decoration: const InputDecoration(
-                  labelText: 'تأكيد كلمة السر',
-                ),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'الرجاء تأكيد كلمة السر';
-                  }
-                  if (value != _passwordController.text) {
-                    return 'لا يوجد تطابق';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'تحديد المواد التي يدرسها الإستاذ',
-                    style: TextStyle(fontSize: 20.sp, color: Colors.blue),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: <Widget>[
+                  // Form fields
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'الإسم',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء ادخال الإسم';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'الإيميل',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال الإيميل';
+                      }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return 'الإيميل غير صحيح';
+                      }
+                      return null;
+                    },
+                  ),
+                  // Password fields are commented out
+                  // TextFormField(
+                  //   controller: _passwordController,
+                  //   decoration: const InputDecoration(
+                  //     labelText: 'كلمة السر',
+                  //   ),
+                  //   obscureText: true,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'الرجاء إدخال كلمة السر';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
+                  // TextFormField(
+                  //   controller: _confirmPasswordController,
+                  //   decoration: const InputDecoration(
+                  //     labelText: 'تأكيد كلمة السر',
+                  //   ),
+                  //   obscureText: true,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'الرجاء تأكيد كلمة السر';
+                  //     }
+                  //     if (value != _passwordController.text) {
+                  //       return 'كلمة السر وتأكيد كلمة السر لا يتطابقان';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'تحديد المواد التي يدرسها الإستاذ',
+                        style: TextStyle(fontSize: 20.sp, color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                  if (isLoadingSubjects)
+                    Center(child: const CircularProgressIndicator())
+                  else
+                    ...subjects.map((subject) {
+                      int index = subjects.indexOf(subject);
+                      return buildCard(
+                          index, subject['name'], "", subject['name'], true);
+                    }).toList(),
+                  const SizedBox(height: 20),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'تحديد الصفوف التي يدرسها الإستاذ',
+                        style: TextStyle(fontSize: 20.sp, color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                  if (isLoadingGrades)
+                    Center(child: const CircularProgressIndicator())
+                  else
+                    ...grades.map((grade) {
+                      int index = grades.indexOf(grade);
+                      return buildCard(index, "Grade ${grade['level']}", "",
+                          grade['level'], false);
+                    }).toList(),
+                  ElevatedButton(
+                    onPressed: submitForm,
+                    child: const Text('تسجيل'),
                   ),
                 ],
               ),
-              if (isLoadingSubjects)
-                Center(child: const CircularProgressIndicator())
-              else
-                ...subjects.map((subject) {
-                  int index = subjects.indexOf(subject);
-                  return buildCard(
-                      index, subject['name'], "", subject['name'], true);
-                }).toList(),
-              const SizedBox(height: 20),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'تحديد الصفوف التي يدرسها الإستاذ',
-                    style: TextStyle(fontSize: 20.sp, color: Colors.blue),
-                  ),
-                ],
-              ),
-              if (isLoadingGrades)
-                Center(child: const CircularProgressIndicator())
-              else
-                ...grades.map((grade) {
-                  int index = grades.indexOf(grade);
-                  return buildCard(index, "Grade ${grade['level']}", "",
-                      grade['level'], false);
-                }).toList(),
-              ElevatedButton(
-                onPressed: submitForm,
-                child: const Text('تسجيل'),
-              ),
-            ],
+            ),
           ),
-        ),
+          if (isSubmitting) // Show loading indicator if submitting
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
     );
   }
