@@ -89,7 +89,7 @@ class Profile extends StatelessWidget {
               child: Text(
                 'تغيير كلمة المرور',
                 style: TextStyle(
-                  fontSize: 15.sp,
+                  fontSize: 16.sp,
                 ),
               ),
             ),
