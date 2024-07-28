@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:testt/screens/ChangePassword.dart';
+import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
   final String username;
@@ -54,6 +56,22 @@ class Profile extends StatelessWidget {
               email,
               style: TextStyle(
                 fontSize: 12.sp,
+              ),
+            ),
+          ),
+          // Add the change password button
+          const SizedBox(height: 20),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Get.to(ChangePassword());
+                // Handle change password logic here
+              },
+              child: Text(
+                'تغيير كلمة المرور',
+                style: TextStyle(
+                  fontSize: 15.sp,
+                ),
               ),
             ),
           ),
