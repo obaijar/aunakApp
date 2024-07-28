@@ -23,50 +23,69 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 20),
-          ListTile(
-            leading: Icon(Icons.account_circle, size: 35.w),
-            title: Text('الإسم',
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            elevation: 4,
+            child: ListTile(
+              leading: Icon(Icons.account_circle, size: 35.w),
+              title: Text(
+                'الإسم',
                 style: TextStyle(
                   fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto',
-                )),
-            subtitle: Text(firstName,
+                ),
+              ),
+              subtitle: Text(
+                firstName,
                 style: TextStyle(
                   fontSize: 12.sp,
-                )),
-          ),
-          ListTile(
-            leading: Icon(Icons.email, size: 35.w),
-            title: Text(
-              'الإيميل',
-              style: TextStyle(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Roboto',
-              ),
-            ),
-            subtitle: Text(
-              email,
-              style: TextStyle(
-                fontSize: 12.sp,
+                ),
               ),
             ),
           ),
-          // Add the change password button
+          const SizedBox(height: 10),
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            elevation: 4,
+            child: ListTile(
+              leading: Icon(Icons.email, size: 35.w),
+              title: Text(
+                'الإيميل',
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              subtitle: Text(
+                email,
+                style: TextStyle(
+                  fontSize: 12.sp,
+                ),
+              ),
+            ),
+          ),
           const SizedBox(height: 20),
           Center(
             child: ElevatedButton(
               onPressed: () {
-                Get.to(ChangePassword());
-                // Handle change password logic here
+                Get.to(() => const ChangePassword());
               },
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
               child: Text(
                 'تغيير كلمة المرور',
                 style: TextStyle(

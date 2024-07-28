@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -16,15 +17,17 @@ class _ChangePasswordState extends State<ChangePassword> {
   final TextEditingController _newPasswordController = TextEditingController();
 
   Future<void> _changePassword() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
     if (_formKey.currentState!.validate()) {
       final String currentPassword = _currentPasswordController.text;
       final String newPassword = _newPasswordController.text;
 
       // Perform the POST request
       final response = await http.post(
-        Uri.parse('http://yourdomain.com/api/change-password/'),
+        Uri.parse('https://obai.aunakit-hosting.com/api/change-password/'),
         headers: {
-          'Authorization': 'Token your_knox_token',
+          'Authorization': 'Token $token',
         },
         body:
             '{"current_password": "$currentPassword", "new_password": "$newPassword"}',
@@ -35,6 +38,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Password changed successfully')),
         );
+        Navigator.of(context).pop();
       } else {
         // Handle error response
         ScaffoldMessenger.of(context).showSnackBar(
