@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, camel_case_types, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, avoid_print
+// ignore_for_file: depend_on_referenced_packages, camel_case_types, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, avoid_print, unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -53,8 +53,6 @@ class _teachersState extends State<teachers> {
         return; // Exit the button press function if no connection
       }
 
-      print("9f${widget.grade}");
-      print("widget.subject${subject2}");
       var response = await Dio().get(
         "https://obai.aunakit-hosting.com/api/teachers/${widget.grade}/${widget.subject}",
       );

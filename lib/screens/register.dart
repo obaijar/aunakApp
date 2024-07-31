@@ -269,9 +269,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     );
                                     Navigator.pop(context);
                                   }
-                                  print(response.statusCode);
                                   if (response.statusCode == 403) {
-                                    print("hiiiiii");
                                     //var responseBody = response.data;
 
                                     //if (responseBody['username'] != null &&

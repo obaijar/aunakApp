@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, non_constant_identifier_names, prefer_collection_literals, prefer_final_fields, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -125,6 +127,7 @@ class _AddCourseState extends State<AddCourse> {
 
   Future<bool> _checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
+    // ignore: unrelated_type_equality_checks
     bool isConnected = connectivityResult != ConnectivityResult.none;
     if (!isConnected) {
       showDialog(

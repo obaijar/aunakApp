@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, prefer_const_declarations, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -100,25 +102,26 @@ class _DeleteVideoState extends State<DeleteVideo> {
     }
   }
 
+  // ignore: unused_element
   void _confirmDeleteVideo(int id) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('تأكيد الحذف'),
-          content: Text('هل انت متاكد تريد حذف هذا الفيديو'),
+          title: const Text('تأكيد الحذف'),
+          content: const Text('هل انت متاكد تريد حذف هذا الفيديو'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false); // Return false
               },
-              child: Text('لا'),
+              child: const Text('لا'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true); // Return true
               },
-              child: Text('نعم'),
+              child: const Text('نعم'),
             ),
           ],
         );
@@ -134,10 +137,10 @@ class _DeleteVideoState extends State<DeleteVideo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('حذف فيديو'),
+        title: const Text('حذف فيديو'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: _videos.length,
               itemBuilder: (context, index) {
@@ -150,21 +153,22 @@ class _DeleteVideoState extends State<DeleteVideo> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('تأكيد الحذف'),
-                          content: Text('هل انت متاكد تريد حذف هذا الفيديو'),
+                          title: const Text('تأكيد الحذف'),
+                          content:
+                              const Text('هل انت متاكد تريد حذف هذا الفيديو'),
                           actions: [
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context)
                                     .pop(false); // Return false
                               },
-                              child: Text('لا'),
+                              child: const Text('لا'),
                             ),
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).pop(true); // Return true
                               },
-                              child: Text('نعم'),
+                              child: const Text('نعم'),
                             ),
                           ],
                         );
@@ -215,7 +219,7 @@ class _DeleteVideoState extends State<DeleteVideo> {
                             ),
                           ],
                         ),
-                        trailing: Icon(Icons.arrow_forward),
+                        trailing: const Icon(Icons.arrow_forward),
                         isThreeLine: true,
                         dense: false,
                       ),

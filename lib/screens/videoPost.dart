@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, avoid_print, library_private_types_in_public_api
+
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -8,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class VideoPost extends StatefulWidget {
+  const VideoPost({super.key});
+
   @override
   _VideoPostState createState() => _VideoPostState();
 }
@@ -159,7 +163,7 @@ class _VideoPostState extends State<VideoPost> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
@@ -168,7 +172,7 @@ class _VideoPostState extends State<VideoPost> {
                 children: <Widget>[
                   TextFormField(
                     controller: _titleController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'العنوان',
                       border: OutlineInputBorder(),
                     ),
@@ -179,7 +183,7 @@ class _VideoPostState extends State<VideoPost> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   DropdownButtonFormField<String>(
                     value: _selectedGrade,
                     items: _grades.keys.map((grade) {
@@ -195,7 +199,7 @@ class _VideoPostState extends State<VideoPost> {
                             'Selected grade value: ${_grades[_selectedGrade]}');
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'الصف',
                       border: OutlineInputBorder(),
                     ),
@@ -206,7 +210,7 @@ class _VideoPostState extends State<VideoPost> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   DropdownButtonFormField<String>(
                     value: _selectedSubject,
                     items: _subjects.keys.map((subject) {
@@ -222,7 +226,7 @@ class _VideoPostState extends State<VideoPost> {
                             'Selected subject value: ${_subjects[_selectedSubject]}');
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'المادة',
                       border: OutlineInputBorder(),
                     ),
@@ -233,7 +237,7 @@ class _VideoPostState extends State<VideoPost> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   DropdownButtonFormField<String>(
                     value: _selectedSubjectType,
                     items: _subjectTypes.keys.map((subjectType) {
@@ -249,7 +253,7 @@ class _VideoPostState extends State<VideoPost> {
                             'Selected subject type value: ${_subjectTypes[_selectedSubjectType]}');
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'نوع الدروس',
                       border: OutlineInputBorder(),
                     ),
@@ -260,7 +264,7 @@ class _VideoPostState extends State<VideoPost> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   DropdownButtonFormField<String>(
                     value: _selectedTeacherId,
                     items: _teachers.map((teacher) {
@@ -275,7 +279,7 @@ class _VideoPostState extends State<VideoPost> {
                         print('Selected teacher ID: $_selectedTeacherId');
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'المدرس',
                       border: OutlineInputBorder(),
                     ),
@@ -286,7 +290,7 @@ class _VideoPostState extends State<VideoPost> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: pickVideo,
                     child: Text(
@@ -299,7 +303,7 @@ class _VideoPostState extends State<VideoPost> {
                       '   :الملف المختار ${_videoFile!.path}',
                       style: TextStyle(fontSize: 15.sp),
                     ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate() &&

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:testt/screens/ChangePassword.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatelessWidget {
   final String username;
@@ -20,6 +21,11 @@ class Profile extends StatelessWidget {
     required this.lastName,
     required this.gender,
   });
+
+  Future<bool> _isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey('token');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,24 +81,36 @@ class Profile extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                Get.to(() => const ChangePassword());
-              },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              child: Text(
-                'تغيير كلمة المرور',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                ),
-              ),
-            ),
+          FutureBuilder<bool>(
+            future: _isLoggedIn(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasData && snapshot.data == true) {
+                return Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => const ChangePassword());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 32.w, vertical: 12.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: Text(
+                      'تغيير كلمة المرور',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
           ),
         ],
       ),

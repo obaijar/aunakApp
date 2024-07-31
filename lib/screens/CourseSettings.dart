@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, file_names
+
 import 'package:flutter/material.dart';
 import 'package:testt/screens/AddCourse.dart';
 import 'package:get/get.dart';
@@ -46,7 +48,7 @@ class CourseSettings extends StatelessWidget {
               ],
             ),
             const Divider(),
-            SizedBox(height: 16.0), // Spacing between elements
+            const SizedBox(height: 16.0), // Spacing between elements
 
             // Second Text and Button
             Row(
@@ -76,7 +78,7 @@ class CourseSettings extends StatelessWidget {
               ],
             ),
             const Divider(),
-            SizedBox(height: 16.0), // Spacing between elements
+            const SizedBox(height: 16.0), // Spacing between elements
 
             // Third Text and Button
             Row(

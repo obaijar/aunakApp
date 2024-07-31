@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, camel_case_types
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testt/screens/video_player_page.dart'; // Ensure this path is correct
@@ -39,7 +41,7 @@ class _watchCourseState extends State<watchCourse> {
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
                 contentPadding: const EdgeInsets.all(16.0),
-                leading: Icon(
+                leading: const Icon(
                   Icons.video_library,
                   color: Colors.deepPurple,
                 ),

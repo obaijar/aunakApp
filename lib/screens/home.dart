@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, sized_box_for_whitespace, no_leading_underscores_for_local_identifiers, prefer_typing_uninitialized_variables, library_private_types_in_public_api
+// ignore_for_file: depend_on_referenced_packages, sized_box_for_whitespace, no_leading_underscores_for_local_identifiers, prefer_typing_uninitialized_variables, library_private_types_in_public_api, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:testt/main.dart';
@@ -172,7 +172,7 @@ class _HomeState extends State<Home> {
                           color: Colors.blue);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
-                    } else if (true == true) {
+                    } else if (snapshot.data == true) {
                       return Column(
                         children: [
                           const Divider(),
@@ -265,7 +265,7 @@ class _HomeState extends State<Home> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Get.to(AddSubject());
+                              Get.to(const AddSubject());
                             },
                             child: Text(
                               'إضافة',
@@ -291,7 +291,7 @@ class _HomeState extends State<Home> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Get.to(CourseSettings());
+                              Get.to(const CourseSettings());
                             },
                             child: Text(
                               'دخول',
@@ -317,7 +317,7 @@ class _HomeState extends State<Home> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Get.to(DeleteVideo());
+                              Get.to(const DeleteVideo());
                             },
                             child: Text(
                               'الحذف',

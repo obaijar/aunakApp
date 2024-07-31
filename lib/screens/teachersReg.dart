@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, library_private_types_in_public_api, avoid_print, unnecessary_to_list_in_spreads
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -5,6 +7,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TeacherReg extends StatefulWidget {
+  const TeacherReg({super.key});
+
   @override
   _TeacherRegState createState() => _TeacherRegState();
 }
@@ -297,7 +301,7 @@ class _TeacherRegState extends State<TeacherReg> {
                     ],
                   ),
                   if (isLoadingSubjects)
-                    Center(child: const CircularProgressIndicator())
+                    const Center(child: CircularProgressIndicator())
                   else
                     ...subjects.map((subject) {
                       int index = subjects.indexOf(subject);
@@ -316,7 +320,7 @@ class _TeacherRegState extends State<TeacherReg> {
                     ],
                   ),
                   if (isLoadingGrades)
-                    Center(child: const CircularProgressIndicator())
+                    const Center(child: CircularProgressIndicator())
                   else
                     ...grades.map((grade) {
                       int index = grades.indexOf(grade);

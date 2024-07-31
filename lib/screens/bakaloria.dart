@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, camel_case_types, duplicate_ignore
+// ignore_for_file: depend_on_referenced_packages, camel_case_types, duplicate_ignore, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -71,7 +71,7 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
         ),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : GridView.count(
               crossAxisCount: 2, // Number of columns in the grid
               children: List.generate(gridItems.length, (index) {
@@ -194,7 +194,7 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
         ),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : GridView.count(
               crossAxisCount: 2, // Number of columns in the grid
               children: List.generate(gridItems.length, (index) {

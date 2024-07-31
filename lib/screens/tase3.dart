@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, avoid_print, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:testt/screens/teachers.dart';
@@ -13,7 +15,7 @@ class GridItem {
 }
 
 class Tase3 extends StatefulWidget {
-  const Tase3({Key? key}) : super(key: key);
+  const Tase3({super.key});
 
   @override
   State<Tase3> createState() => _Tase3State();

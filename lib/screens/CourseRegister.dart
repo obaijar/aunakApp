@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, library_private_types_in_public_api, depend_on_referenced_packages, file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart' as dio;
@@ -96,8 +98,7 @@ class _CourseRegisterState extends State<CourseRegister> {
 
         if (postResponse.statusCode == 201) {
           // Navigate to the confirmation page
-          print("ook doneeeeeeeeeeeee");
-          Get.to(() => RegisterConformation());
+          Get.to(() => const RegisterConformation());
         } else {
           // Handle POST request failure
           print('Failed to register purchase');

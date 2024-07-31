@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -101,16 +103,16 @@ class _PaidCoursesState extends State<PaidCourses> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('تأكيد الحذف'),
-              content: Text('هل أنت متاكد من حذف هذا الكورس'),
+              title: const Text('تأكيد الحذف'),
+              content: const Text('هل أنت متاكد من حذف هذا الكورس'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
-                  child: Text('لا'),
+                  child: const Text('لا'),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: Text('نعم'),
+                  child: const Text('نعم'),
                 ),
               ],
             );
@@ -171,7 +173,7 @@ class _PaidCoursesState extends State<PaidCourses> {
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  trailing: Icon(Icons.arrow_forward),
+                  trailing: const Icon(Icons.arrow_forward),
                   isThreeLine: true,
                   dense: false,
                 ),
