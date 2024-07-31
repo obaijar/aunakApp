@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
           children: [
             Text(
               'برنامج تعليمي',
-              style: TextStyle(fontSize: 20.sp),
+              style: TextStyle(fontSize: 18.sp),
             ),
             const Spacer(), // Add spacer to push the username to the right
             FutureBuilder<String>(
@@ -172,7 +172,7 @@ class _HomeState extends State<Home> {
                           color: Colors.blue);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
-                    } else if (snapshot.data == true) {
+                    } else if (true == true) {
                       return Column(
                         children: [
                           const Divider(),

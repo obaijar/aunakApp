@@ -9,10 +9,10 @@ class UnbordingContent {
 
 List<UnbordingContent> contents = [
   UnbordingContent(
-      title: 'إدارة محتوى الدورة التعليمية',
+      title: 'محتوى الدورة التعليمية',
       image: 'images/image 17.png',
-      discription: " القدرة على إشارة أو حفظ الدورات للمشاهدة لاحقًا"
-          "  وتتبع التقدم داخل كل دورة"),
+      discription: " مشاهدة الفيديوهات لمختلف المواد العلمية والأدبية"
+          " لطلاب التاسع والبكالوريا"),
   UnbordingContent(
       title: 'فهرس الدورات',
       image: 'images/image 19.png',

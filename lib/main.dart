@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
+import 'package:testt/screens/dependency_injection.dart';
 import 'package:testt/screens/home.dart';
 import 'package:testt/screens/onboarding.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +19,7 @@ void main() async {
       builder: (context) => const MyApp(),
     ),
   );
+  DependencyInjection.init();
 }
 
 class MyApp extends StatelessWidget {
