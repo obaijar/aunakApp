@@ -46,7 +46,7 @@ class _watchCourseState extends State<watchCourse> {
                   color: Colors.deepPurple,
                 ),
                 title: Text(
-                  video['title'] ?? 'No title',
+                  video['title'] ?? 'No titlee',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,
@@ -57,6 +57,7 @@ class _watchCourseState extends State<watchCourse> {
                     videoUrl: video['video_file'],
                     videoID: video['id'],
                   ));
+                  // ignore: avoid_print
                   print('Playing video: ${video['title']}');
                 },
               ),
