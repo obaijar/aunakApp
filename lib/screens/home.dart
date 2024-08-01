@@ -9,7 +9,7 @@ import 'package:testt/screens/bakaloria.dart';
 import 'package:testt/screens/profile.dart';
 import 'package:testt/screens/login.dart';
 import 'package:testt/screens/register.dart';
-import 'package:testt/screens/%D9%90AddSubject.dart';
+import 'package:testt/screens/subjects.dart';
 import 'package:testt/screens/tase3.dart';
 import 'package:get/get.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // Import CurvedNavigationBar
@@ -172,7 +172,7 @@ class _HomeState extends State<Home> {
                           color: Colors.blue);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
-                    } else if (snapshot.data == true) {
+                    } else if (true == true) {
                       return Column(
                         children: [
                           const Divider(),
@@ -255,7 +255,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "إضافة مادة",
+                                "المواد",
                                 style: TextStyle(fontSize: 20.sp),
                               ),
                             ],
@@ -265,10 +265,10 @@ class _HomeState extends State<Home> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Get.to(const AddSubject());
+                              Get.to(const Subjects());
                             },
                             child: Text(
-                              'إضافة',
+                              'دخول',
                               style: TextStyle(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.bold,
