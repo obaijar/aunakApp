@@ -50,7 +50,7 @@ class _AddSubjectState extends State<AddSubject> {
       return;
     }
     print(authToken);
-    final url = 'https://obai.aunakit-hosting.com/api/subject_create/';
+    final url = 'http://10.0.2.2:8000/api/subject_create/';
     final headers = {
       'Authorization': 'Token $authToken',
       'Content-Type': 'application/json',

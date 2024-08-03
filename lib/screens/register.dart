@@ -151,26 +151,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       height: 20.h,
                     ),
-                    Material(
-                      elevation: 4.0, // Adjust the elevation value as needed
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: TextFormField(
-                        controller: phonenumberController,
-                        decoration: InputDecoration(
-                          labelStyle: TextStyle(fontSize: 12.sp),
-                          labelText: 'رقم الهاتف',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'يرجى إدخال رقم الهاتف';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
                     SizedBox(
                       height: 20.h,
                     ),
@@ -245,7 +225,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   if (selectedRole == 'أدمن') isadmin = true;
                                   var dio = Dio();
                                   var url =
-                                      'https://obai.aunakit-hosting.com/api/register/';
+                                      'http://10.0.2.2:8000/api/register/';
                                   var response = await dio.post(
                                     url,
                                     data: {
@@ -253,6 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       'password': passwordController.text,
                                       'is_admin':
                                           isadmin, // Include the selected role
+                                      'email': emailController.text
                                     },
                                     options: Options(
                                       headers: {
@@ -290,6 +271,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     );
                                   }
                                 } catch (e) {
+                                  print(e);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text("هناك خطأ ما"),

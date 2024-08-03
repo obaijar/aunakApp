@@ -33,8 +33,7 @@ class _Tase3State extends State<Tase3> {
 
   Future<void> fetchSubjects() async {
     const grade = 1; // Use the correct grade as needed
-    final url =
-        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
+    final url = Uri.parse('http://10.0.2.2:8000/api/Subject/$grade/');
     final response = await http.get(
       url,
     );

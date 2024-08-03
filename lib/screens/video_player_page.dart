@@ -34,8 +34,7 @@ class _SamplePlayerState extends State<SamplePlayer> {
   }
 
   Future<void> _checkVideoAccess() async {
-    String apiUrl =
-        'https://obai.aunakit-hosting.com/videos/${widget.videoID}/track-view/';
+    String apiUrl = 'http://10.0.2.2:8000/videos/${widget.videoID}/track-view/';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
     final response = await http.get(

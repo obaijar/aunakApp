@@ -28,9 +28,6 @@ class _TeacherRegState extends State<TeacherReg> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  // Password fields are commented out
-  // final TextEditingController _passwordController = TextEditingController();
-  // final TextEditingController _confirmPasswordController = TextEditingController();
 
   List<Map<String, dynamic>> grades = [];
   List<Map<String, dynamic>> subjects = [];
@@ -58,10 +55,7 @@ class _TeacherRegState extends State<TeacherReg> {
         return; // Exit if no token is found
       }
       final response = await http.get(
-        Uri.parse('https://obai.aunakit-hosting.com/api/Grade/'),
-        headers: {
-          'Authorization': 'Token $token', // Add your token here
-        },
+        Uri.parse('http://10.0.2.2:8000/api/Grade/'),
       );
 
       if (response.statusCode == 200) {
@@ -99,10 +93,7 @@ class _TeacherRegState extends State<TeacherReg> {
         return; // Exit if no token is found
       }
       final response = await http.get(
-        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/'),
-        headers: {
-          'Authorization': 'Token $token', // Add your token here
-        },
+        Uri.parse('http://10.0.2.2:8000/api/Subject/'),
       );
 
       if (response.statusCode == 200) {
@@ -174,14 +165,14 @@ class _TeacherRegState extends State<TeacherReg> {
 
         // Send HTTP POST request
         final response = await http.post(
-          Uri.parse('https://obai.aunakit-hosting.com/api/add-teacher/'),
+          Uri.parse('http://10.0.2.2:8000/api/add-teacher/'),
           headers: {
             'Authorization': 'Token $token',
             'Content-Type': 'application/json',
           },
           body: json.encode({
             'name': _nameController.text,
-            'age': "22", // Replace this with appropriate data if necessary
+            'email': _emailController.text,
             'subjects': selectedSubjects,
             'grades': selectedGrades,
           }),
@@ -216,6 +207,45 @@ class _TeacherRegState extends State<TeacherReg> {
         });
       }
     }
+  }
+
+  String getLevelDisplay(String level) {
+    switch (level) {
+      case '9':
+        return 'تاسع';
+      case '12':
+        return 'بكالوريا علمي';
+      case '13':
+        return 'بكالوريا أدبي';
+      default:
+        return 'غير محدد';
+    }
+  }
+
+  Widget buildCard(int index, String title, String subtitle, String trailing,
+      bool isSubject) {
+    final bool isSelected =
+        isSubject ? isSelectedSubjects[index] : isSelectedGrades[index];
+    final Color color = isSubject ? colorsSubjects[index] : colorsGrades[index];
+
+    String displayText = isSubject ? title : getLevelDisplay(trailing);
+
+    return Card(
+      color: color,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            selected: isSelected,
+            leading: const Icon(Icons.info),
+            title: Text(displayText),
+            subtitle: subtitle.isEmpty ? null : Text(subtitle),
+            trailing: isSubject ? null : Text(getLevelDisplay(trailing)),
+            onLongPress: () => toggleSelection(index, isSubject),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -260,43 +290,13 @@ class _TeacherRegState extends State<TeacherReg> {
                       return null;
                     },
                   ),
-                  // Password fields are commented out
-                  // TextFormField(
-                  //   controller: _passwordController,
-                  //   decoration: const InputDecoration(
-                  //     labelText: 'كلمة السر',
-                  //   ),
-                  //   obscureText: true,
-                  //   validator: (value) {
-                  //     if (value == null || value.isEmpty) {
-                  //       return 'الرجاء إدخال كلمة السر';
-                  //     }
-                  //     return null;
-                  //   },
-                  // ),
-                  // TextFormField(
-                  //   controller: _confirmPasswordController,
-                  //   decoration: const InputDecoration(
-                  //     labelText: 'تأكيد كلمة السر',
-                  //   ),
-                  //   obscureText: true,
-                  //   validator: (value) {
-                  //     if (value == null || value.isEmpty) {
-                  //       return 'الرجاء تأكيد كلمة السر';
-                  //     }
-                  //     if (value != _passwordController.text) {
-                  //       return 'كلمة السر وتأكيد كلمة السر لا يتطابقان';
-                  //     }
-                  //     return null;
-                  //   },
-                  // ),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'تحديد المواد التي يدرسها الإستاذ',
-                        style: TextStyle(fontSize: 20.sp, color: Colors.blue),
+                        'تحديد المواد التي يدرسها الأستاذ (كبسة مطولة)',
+                        style: TextStyle(fontSize: 15.sp, color: Colors.blue),
                       ),
                     ],
                   ),
@@ -309,12 +309,11 @@ class _TeacherRegState extends State<TeacherReg> {
                           index, subject['name'], "", subject['name'], true);
                     }).toList(),
                   const SizedBox(height: 20),
-                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'تحديد الصفوف التي يدرسها الإستاذ',
+                        'تحديد الصفوف التي يدرسها الأستاذ',
                         style: TextStyle(fontSize: 20.sp, color: Colors.blue),
                       ),
                     ],
@@ -324,8 +323,12 @@ class _TeacherRegState extends State<TeacherReg> {
                   else
                     ...grades.map((grade) {
                       int index = grades.indexOf(grade);
-                      return buildCard(index, "Grade ${grade['level']}", "",
-                          grade['level'], false);
+                      return buildCard(
+                          index,
+                          "Grade ${getLevelDisplay(grade['level'])}",
+                          "",
+                          grade['level'],
+                          false);
                     }).toList(),
                   ElevatedButton(
                     onPressed: submitForm,
@@ -339,30 +342,6 @@ class _TeacherRegState extends State<TeacherReg> {
             const Center(
               child: CircularProgressIndicator(),
             ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildCard(int index, String title, String subtitle, String trailing,
-      bool isSubject) {
-    final bool isSelected =
-        isSubject ? isSelectedSubjects[index] : isSelectedGrades[index];
-    final Color color = isSubject ? colorsSubjects[index] : colorsGrades[index];
-
-    return Card(
-      color: color,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            selected: isSelected,
-            leading: const Icon(Icons.info),
-            title: Text(title),
-            subtitle: Text(subtitle),
-            trailing: Text(trailing),
-            onLongPress: () => toggleSelection(index, isSubject),
-          ),
         ],
       ),
     );

@@ -54,7 +54,7 @@ class _teachersState extends State<teachers> {
       }
 
       var response = await Dio().get(
-        "https://obai.aunakit-hosting.com/api/teachers/${widget.grade}/${widget.subject}",
+        "http://10.0.2.2:8000/api/teachers/${widget.grade}/${widget.subject}",
       );
 
       if (response.statusCode == 200) {

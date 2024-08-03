@@ -119,8 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           });
 
                           try {
-                            var url =
-                                'https://obai.aunakit-hosting.com/api/login/';
+                            var url = 'http://10.0.2.2:8000/api/login/';
                             var dio = Dio();
 
                             var response = await dio.post(
@@ -159,6 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               Get.off(const Home());
                             }
                           } on DioException catch (e) {
+                            print(e);
                             if (e.response?.statusCode == 401) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

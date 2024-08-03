@@ -1,9 +1,9 @@
 // ignore_for_file: file_names, depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -26,15 +26,23 @@ class _ChangePasswordState extends State<ChangePassword> {
       final String newPassword = _newPasswordController.text;
 
       // Perform the POST request
-      final response = await http.post(
-        Uri.parse('https://obai.aunakit-hosting.com/api/change-password/'),
-        headers: {
-          'Authorization': 'Token $token',
-        },
-        body:
-            '{"current_password": "$currentPassword", "new_password": "$newPassword"}',
-      );
+      var dio = Dio();
+      var url = 'http://10.0.2.2:8000/api/change-password/';
 
+      var response = await dio.post(
+        url,
+        data: {
+          'current_password': currentPassword,
+          'new_password': newPassword,
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Token $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      print(response.statusCode);
       if (response.statusCode == 200) {
         // Handle successful response
         ScaffoldMessenger.of(context).showSnackBar(

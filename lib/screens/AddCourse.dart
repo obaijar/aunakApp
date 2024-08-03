@@ -46,10 +46,10 @@ class _AddCourseState extends State<AddCourse> {
 
   Future<void> _fetchDropdownData() async {
     // URLs for APIs
-    const subjectUrl = 'https://obai.aunakit-hosting.com/api/Subject/';
-    const subjectTypeUrl = 'https://obai.aunakit-hosting.com/api/Subject_type/';
-    const teacherUrl = 'https://obai.aunakit-hosting.com/api/teachers/';
-    const gradeUrl = 'https://obai.aunakit-hosting.com/api/Grade/';
+    const subjectUrl = 'http://10.0.2.2:8000/api/Subject/';
+    const subjectTypeUrl = 'http://10.0.2.2:8000/api/Subject_type/';
+    const teacherUrl = 'http://10.0.2.2:8000/api/teachers/';
+    const gradeUrl = 'http://10.0.2.2:8000/api/Grade/';
 
     // Fetch data from APIs
     try {
@@ -101,7 +101,7 @@ class _AddCourseState extends State<AddCourse> {
       return;
     }
 
-    const videoUrl = 'https://obai.aunakit-hosting.com/api/videos/';
+    const videoUrl = 'http://10.0.2.2:8000/api/videos/';
 
     try {
       final response = await http.get(
