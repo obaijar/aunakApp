@@ -1,5 +1,3 @@
-// ignore_for_file: file_names, depend_on_referenced_packages, avoid_print, library_private_types_in_public_api
-
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -32,28 +30,24 @@ class _VideoPostState extends State<VideoPost> {
   };
 
   Map<String, String> _subjects = {}; // Empty initially
-  final Map<String, String> _subjectTypes = {
-    'Lecture': '1',
-    'Tutorial': '2',
-    'Lab': '3'
-  };
+  Map<String, String> _subjectTypes = {}; // Empty initially
 
   List<Map<String, String>> _teachers = [];
+
+  bool _isUploading = false;
 
   @override
   void initState() {
     super.initState();
     fetchTeachers();
     fetchSubjects(); // Fetch subjects when the widget is initialized
+    fetchSubjectTypes(); // Fetch subject types when the widget is initialized
   }
 
   Future<void> fetchTeachers() async {
     final url = Uri.parse('http://10.0.2.2:8000/api/teachers/');
     try {
-      final response = await http.get(
-        url,
-      );
-      print(response.statusCode);
+      final response = await http.get(url);
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         setState(() {
@@ -77,17 +71,14 @@ class _VideoPostState extends State<VideoPost> {
   }
 
   Future<void> fetchSubjects() async {
-    final url = Uri.parse(
-        'http://10.0.2.2:8000/api/Subject/'); // Replace with your API URL
+    final url = Uri.parse('http://10.0.2.2:8000/api/Subject/');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         setState(() {
           _subjects = {
-            for (var subject in data)
-              subject['name']: subject['id']
-                  .toString(), // Adjust according to your API response
+            for (var subject in data) subject['name']: subject['id'].toString(),
           };
 
           if (_subjects.isNotEmpty && _selectedSubject == null) {
@@ -102,6 +93,30 @@ class _VideoPostState extends State<VideoPost> {
     }
   }
 
+  Future<void> fetchSubjectTypes() async {
+    final url = Uri.parse('http://10.0.2.2:8000/api/Subject_type/');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          _subjectTypes = {
+            for (var subjectType in data)
+              subjectType['name']: subjectType['id'].toString(),
+          };
+
+          if (_subjectTypes.isNotEmpty && _selectedSubjectType == null) {
+            _selectedSubjectType = _subjectTypes.keys.first;
+          }
+        });
+      } else {
+        print('Failed to fetch subject types');
+      }
+    } catch (e) {
+      print('Error during fetching subject types: $e');
+    }
+  }
+
   Future<void> pickVideo() async {
     final pickedFile =
         await ImagePicker().pickVideo(source: ImageSource.gallery);
@@ -113,9 +128,13 @@ class _VideoPostState extends State<VideoPost> {
   }
 
   Future<void> uploadVideo(File videoFile) async {
+    setState(() {
+      _isUploading = true;
+    });
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    final url = Uri.parse('http://10.0.2.2:8000/api/videos_upload/');
+    final url = Uri.parse('http://10.0.2.2:8000/upload-video/');
     final request = http.MultipartRequest('POST', url);
     request.headers[HttpHeaders.authorizationHeader] = 'Token $token';
     request.files
@@ -129,12 +148,22 @@ class _VideoPostState extends State<VideoPost> {
     try {
       final response = await request.send();
       if (response.statusCode == 201) {
-        print('Video uploaded successfully');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('تم رفع الفيديو بنجاح')),
+        );
       } else {
-        print('Failed to upload video');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('فشل في رفع الفيديو')),
+        );
       }
     } catch (e) {
-      print('Error during upload: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error during upload: $e')),
+      );
+    } finally {
+      setState(() {
+        _isUploading = false;
+      });
     }
   }
 
@@ -150,162 +179,162 @@ class _VideoPostState extends State<VideoPost> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  TextFormField(
-                    controller: _titleController,
-                    decoration: const InputDecoration(
-                      labelText: 'العنوان',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال العنوان';
-                      }
-                      return null;
-                    },
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextFormField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'العنوان',
+                    border: OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField<String>(
-                    value: _selectedGrade,
-                    items: _grades.keys.map((grade) {
-                      return DropdownMenuItem(
-                        value: grade,
-                        child: Text(grade),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedGrade = newValue;
-                        print(
-                            'Selected grade value: ${_grades[_selectedGrade]}');
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      labelText: 'الصف',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'الرجاء اختيار الصف';
-                      }
-                      return null;
-                    },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال العنوان';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: _selectedGrade,
+                  items: _grades.keys.map((grade) {
+                    return DropdownMenuItem(
+                      value: grade,
+                      child: Text(grade),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedGrade = newValue;
+                      print('Selected grade value: ${_grades[_selectedGrade]}');
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'الصف',
+                    border: OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField<String>(
-                    value: _selectedSubject,
-                    items: _subjects.keys.map((subject) {
-                      return DropdownMenuItem(
-                        value: subject,
-                        child: Text(subject),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedSubject = newValue;
-                        print(
-                            'Selected subject value: ${_subjects[_selectedSubject]}');
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      labelText: 'المادة',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'الرجاء اختيار المادة';
-                      }
-                      return null;
-                    },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'الرجاء اختيار الصف';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: _selectedSubject,
+                  items: _subjects.keys.map((subject) {
+                    return DropdownMenuItem(
+                      value: subject,
+                      child: Text(subject),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedSubject = newValue;
+                      print(
+                          'Selected subject value: ${_subjects[_selectedSubject]}');
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'المادة',
+                    border: OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField<String>(
-                    value: _selectedSubjectType,
-                    items: _subjectTypes.keys.map((subjectType) {
-                      return DropdownMenuItem(
-                        value: subjectType,
-                        child: Text(subjectType),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedSubjectType = newValue;
-                        print(
-                            'Selected subject type value: ${_subjectTypes[_selectedSubjectType]}');
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      labelText: 'نوع الدروس',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'الرجاء الاختيار';
-                      }
-                      return null;
-                    },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'الرجاء اختيار المادة';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: _selectedSubjectType,
+                  items: _subjectTypes.keys.map((subjectType) {
+                    return DropdownMenuItem(
+                      value: subjectType,
+                      child: Text(subjectType),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedSubjectType = newValue;
+                      print(
+                          'Selected subject type value: ${_subjectTypes[_selectedSubjectType]}');
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'نوع الدروس',
+                    border: OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField<String>(
-                    value: _selectedTeacherId,
-                    items: _teachers.map((teacher) {
-                      return DropdownMenuItem<String>(
-                        value: teacher['id'],
-                        child: Text(teacher['name']!),
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedTeacherId = newValue;
-                        print('Selected teacher ID: $_selectedTeacherId');
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      labelText: 'المدرس',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null) {
-                        return 'الرجاء اختيار المدرس';
-                      }
-                      return null;
-                    },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'الرجاء الاختيار';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: _selectedTeacherId,
+                  items: _teachers.map((teacher) {
+                    return DropdownMenuItem<String>(
+                      value: teacher['id'],
+                      child: Text(teacher['name']!),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedTeacherId = newValue;
+                      print('Selected teacher ID: $_selectedTeacherId');
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'المدرس',
+                    border: OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: pickVideo,
-                    child: Text(
-                      'إختيار درس',
-                      style: TextStyle(fontSize: 15.sp, color: Colors.blue),
-                    ),
+                  validator: (value) {
+                    if (value == null) {
+                      return 'الرجاء اختيار المدرس';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: pickVideo,
+                  child: Text(
+                    'إختيار درس',
+                    style: TextStyle(fontSize: 15.sp, color: Colors.blue),
                   ),
-                  if (_videoFile != null)
-                    Text(
-                      '   :الملف المختار ${_videoFile!.path}',
-                      style: TextStyle(fontSize: 15.sp),
-                    ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate() &&
-                          _videoFile != null) {
-                        uploadVideo(_videoFile!);
-                      } else {
-                        print('Please complete all fields and select a video');
-                      }
-                    },
-                    child: Text(
-                      'رفع الدرس',
-                      style: TextStyle(fontSize: 15.sp, color: Colors.blue),
-                    ),
+                ),
+                if (_videoFile != null)
+                  Text(
+                    '   :الملف المختار ${_videoFile!.path}',
+                    style: TextStyle(fontSize: 15.sp),
                   ),
-                ],
-              ),
+                const SizedBox(height: 20),
+                _isUploading
+                    ? Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate() &&
+                              _videoFile != null) {
+                            uploadVideo(_videoFile!);
+                          } else {
+                            print(
+                                'Please complete all fields and select a video');
+                          }
+                        },
+                        child: Text(
+                          'رفع الدرس',
+                          style: TextStyle(fontSize: 15.sp, color: Colors.blue),
+                        ),
+                      ),
+              ],
             ),
           ),
         ),

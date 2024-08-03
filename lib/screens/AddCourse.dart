@@ -1,5 +1,3 @@
-// ignore_for_file: file_names, depend_on_referenced_packages, non_constant_identifier_names, prefer_collection_literals, prefer_final_fields, avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -36,6 +34,8 @@ class _AddCourseState extends State<AddCourse> {
   int? _selectedTeacherIndex;
   int? _selectedSubjectIndex;
   int? _selectedGradeIndex;
+
+  bool _isLoading = false; // Loading state
 
   @override
   void initState() {
@@ -153,11 +153,15 @@ class _AddCourseState extends State<AddCourse> {
     return true;
   }
 
-  void _submitForm() async {
+  Future<void> _submitForm() async {
     bool isConnected = await _checkConnectivity();
     if (isConnected) {
       if (_formKey.currentState?.validate() ?? false) {
-        // Process data
+        setState(() {
+          _isLoading = true; // Start loading
+        });
+
+        // Prepare the data to be sent in the POST request
         final courseData = {
           "title": _titleController.text,
           "description": _descriptionController.text,
@@ -175,8 +179,46 @@ class _AddCourseState extends State<AddCourse> {
               : null,
           "videos": _selectedVideos.toList(),
         };
-        print(courseData);
-        // Handle the courseData as needed
+
+        // Define the API endpoint
+        const createCourseUrl = 'http://10.0.2.2:8000/api/courses/create/';
+
+        // Send POST request
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? token = prefs.getString('token');
+          final response = await http.post(
+            Uri.parse(createCourseUrl),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Token $token',
+            },
+            body: json.encode(courseData),
+          );
+
+          if (response.statusCode == 201) {
+            // Successfully created the course
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Course added successfully')),
+            );
+          } else {
+            // Failed to create the course
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content:
+                      Text('Failed to add course: ${response.reasonPhrase}')),
+            );
+          }
+        } catch (e) {
+          print('Error during POST request: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error during POST request: $e')),
+          );
+        } finally {
+          setState(() {
+            _isLoading = false; // Stop loading
+          });
+        }
       }
     }
   }
@@ -187,185 +229,203 @@ class _AddCourseState extends State<AddCourse> {
       appBar: AppBar(
         title: const Text('إضافة كورس'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(
-                    labelText: 'العنوان',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'الرجاء ادخال عنوان';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: 'الوصف',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'الرجاء ادخال الوصف';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<int>(
-                  value: _selectedSubjectTypeIndex,
-                  decoration: const InputDecoration(
-                    labelText: 'نوع المادة',
-                  ),
-                  items: List.generate(_subjectTypes.length, (index) {
-                    return DropdownMenuItem<int>(
-                      value: index,
-                      child: Text(_subjectTypes[index]),
-                    );
-                  }),
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      _selectedSubjectTypeIndex = newValue;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'الرجاء ادخال نوع المادة';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<int>(
-                  value: _selectedTeacherIndex,
-                  decoration: const InputDecoration(
-                    labelText: 'المدرس',
-                  ),
-                  items: List.generate(_teachers.length, (index) {
-                    return DropdownMenuItem<int>(
-                      value: index,
-                      child: Text(_teachers[index]),
-                    );
-                  }),
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      _selectedTeacherIndex = newValue;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'الرجاء ادخال مدرس';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<int>(
-                  value: _selectedSubjectIndex,
-                  decoration: const InputDecoration(
-                    labelText: 'المادة',
-                  ),
-                  items: List.generate(_subjects.length, (index) {
-                    return DropdownMenuItem<int>(
-                      value: index,
-                      child: Text(_subjects[index]),
-                    );
-                  }),
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      _selectedSubjectIndex = newValue;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'الرجاء إدخال مادة';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<int>(
-                  value: _selectedGradeIndex,
-                  decoration: const InputDecoration(
-                    labelText: 'الصف',
-                  ),
-                  items: List.generate(_grades.length, (index) {
-                    return DropdownMenuItem<int>(
-                      value: index,
-                      child: Text(_grades[index]),
-                    );
-                  }),
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      _selectedGradeIndex = newValue;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'الرجاء إدخال الصف';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'الفيديوهات',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    TextFormField(
+                      controller: _titleController,
+                      decoration: const InputDecoration(
+                        labelText: 'العنوان',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء ادخال عنوان';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
+                        labelText: 'الوصف',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء ادخال الوصف';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<int>(
+                      value: _selectedSubjectTypeIndex,
+                      decoration: const InputDecoration(
+                        labelText: 'نوع المادة',
+                      ),
+                      items: List.generate(_subjectTypes.length, (index) {
+                        return DropdownMenuItem<int>(
+                          value: index,
+                          child: Text(_subjectTypes[index]),
+                        );
+                      }),
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          _selectedSubjectTypeIndex = newValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'الرجاء ادخال نوع المادة';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<int>(
+                      value: _selectedTeacherIndex,
+                      decoration: const InputDecoration(
+                        labelText: 'المدرس',
+                      ),
+                      items: List.generate(_teachers.length, (index) {
+                        return DropdownMenuItem<int>(
+                          value: index,
+                          child: Text(_teachers[index]),
+                        );
+                      }),
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          _selectedTeacherIndex = newValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'الرجاء ادخال مدرس';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<int>(
+                      value: _selectedSubjectIndex,
+                      decoration: const InputDecoration(
+                        labelText: 'المادة',
+                      ),
+                      items: List.generate(_subjects.length, (index) {
+                        return DropdownMenuItem<int>(
+                          value: index,
+                          child: Text(_subjects[index]),
+                        );
+                      }),
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          _selectedSubjectIndex = newValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'الرجاء إدخال مادة';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<int>(
+                      value: _selectedGradeIndex,
+                      decoration: const InputDecoration(
+                        labelText: 'الصف',
+                      ),
+                      items: List.generate(_grades.length, (index) {
+                        return DropdownMenuItem<int>(
+                          value: index,
+                          child: Text(_grades[index]),
+                        );
+                      }),
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          _selectedGradeIndex = newValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'الرجاء إدخال الصف';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'الفيديوهات',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      height: 200.sp, // Fixed height for the video list
+                      child: ListView.builder(
+                        itemCount: _videos.length,
+                        itemBuilder: (context, index) {
+                          final video = _videos[index];
+                          return ListTile(
+                            title: Text(video['title']),
+                            onTap: () {
+                              setState(() {
+                                if (_selectedVideos
+                                    .contains(video['id'].toString())) {
+                                  _selectedVideos
+                                      .remove(video['id'].toString());
+                                } else {
+                                  _selectedVideos.add(video['id'].toString());
+                                }
+                              });
+                            },
+                            selected: _selectedVideos
+                                .contains(video['id'].toString()),
+                            selectedTileColor: Colors.grey[300],
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: _isLoading ? null : _submitForm,
+                      child: _isLoading
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(),
+                            )
+                          : const Text('إضافة'),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  height: 200.sp, // Fixed height for the video list
-                  child: ListView.builder(
-                    itemCount: _videos.length,
-                    itemBuilder: (context, index) {
-                      final video = _videos[index];
-                      return ListTile(
-                        title: Text(video['title']),
-                        onTap: () {
-                          setState(() {
-                            if (_selectedVideos
-                                .contains(video['id'].toString())) {
-                              _selectedVideos.remove(video['id'].toString());
-                            } else {
-                              _selectedVideos.add(video['id'].toString());
-                            }
-                          });
-                        },
-                        selected:
-                            _selectedVideos.contains(video['id'].toString()),
-                        selectedTileColor: Colors.grey[300],
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('إضافة'),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+          if (_isLoading)
+            Container(
+              color: Colors.black54,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
       ),
     );
   }
