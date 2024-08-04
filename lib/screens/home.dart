@@ -3,21 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:testt/main.dart';
 import 'package:testt/screens/CourseSettings.dart';
-import 'package:testt/screens/DeleteVideo.dart';
+import 'package:testt/screens/DrosPage.dart';
 import 'package:testt/screens/PaidCourses.dart';
+import 'package:testt/screens/Users.dart';
 import 'package:testt/screens/bakaloria.dart';
 import 'package:testt/screens/profile.dart';
 import 'package:testt/screens/login.dart';
-import 'package:testt/screens/register.dart';
 import 'package:testt/screens/subjects.dart';
 import 'package:testt/screens/tase3.dart';
 import 'package:get/get.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // Import CurvedNavigationBar
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testt/screens/teachersReg.dart';
-
-import 'videoPost.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -156,7 +153,7 @@ class _HomeState extends State<Home> {
                     Get.to(const PaidCourses());
                   },
                   child: Text(
-                    'المدفوعة',
+                    'دخول',
                     style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
@@ -172,7 +169,7 @@ class _HomeState extends State<Home> {
                           color: Colors.blue);
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
-                    } else if (true == true) {
+                    } else if (snapshot.data == true) {
                       return Column(
                         children: [
                           const Divider(),
@@ -180,7 +177,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                " تسجيل الأدمن والطلاب",
+                                "المستخدمين",
                                 style: TextStyle(fontSize: 20.sp),
                               ),
                             ],
@@ -190,10 +187,10 @@ class _HomeState extends State<Home> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              Get.to(const RegisterScreen());
+                              Get.to(const Users());
                             },
                             child: Text(
-                              'التسجيل',
+                              'دخول',
                               style: TextStyle(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.bold,
@@ -206,30 +203,7 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "تسجيل أستاذ",
-                                style: TextStyle(fontSize: 20.sp),
-                              ),
-                            ],
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Get.to(TeacherReg());
-                            },
-                            child: Text(
-                              'التسجيل',
-                              style: TextStyle(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Roboto',
-                                  color: Colors.blue),
-                            ),
-                          ),
-                          const Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "تحميل دروس",
+                                "دروس",
                                 style: TextStyle(fontSize: 20.sp),
                               ),
                             ],
@@ -239,10 +213,10 @@ class _HomeState extends State<Home> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Get.to(VideoPost());
+                              Get.to(DrosPage());
                             },
                             child: Text(
-                              'التحميل',
+                              'دخول',
                               style: TextStyle(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.bold,
@@ -295,32 +269,6 @@ class _HomeState extends State<Home> {
                             },
                             child: Text(
                               'دخول',
-                              style: TextStyle(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Roboto',
-                                  color: Colors.blue),
-                            ),
-                          ),
-                          const Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "حذف فيديو",
-                                style: TextStyle(fontSize: 20.sp),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Get.to(const DeleteVideo());
-                            },
-                            child: Text(
-                              'الحذف',
                               style: TextStyle(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.bold,

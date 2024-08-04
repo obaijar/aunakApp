@@ -35,6 +35,7 @@ class _VideoPostState extends State<VideoPost> {
   List<Map<String, String>> _teachers = [];
 
   bool _isUploading = false;
+  double _uploadProgress = 0.0; // Added for upload progress
 
   @override
   void initState() {
@@ -130,6 +131,7 @@ class _VideoPostState extends State<VideoPost> {
   Future<void> uploadVideo(File videoFile) async {
     setState(() {
       _isUploading = true;
+      _uploadProgress = 0.0; // Reset upload progress
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -146,14 +148,22 @@ class _VideoPostState extends State<VideoPost> {
     request.fields['teacher'] = _selectedTeacherId!;
 
     try {
-      final response = await request.send();
+      final streamedResponse = await request.send();
+
+      streamedResponse.stream.listen((event) {
+        setState(() {
+          _uploadProgress = event.length / streamedResponse.contentLength!;
+        });
+      });
+
+      final response = await http.Response.fromStream(streamedResponse);
       if (response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('تم رفع الفيديو بنجاح')),
+          const SnackBar(content: Text('تم رفع الفيديو بنجاح')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('فشل في رفع الفيديو')),
+          const SnackBar(content: Text('فشل في رفع')),
         );
       }
     } catch (e) {
@@ -316,9 +326,12 @@ class _VideoPostState extends State<VideoPost> {
                     '   :الملف المختار ${_videoFile!.path}',
                     style: TextStyle(fontSize: 15.sp),
                   ),
+
+                // ... other form fields
                 const SizedBox(height: 20),
                 _isUploading
-                    ? Center(child: CircularProgressIndicator())
+                    ? LinearProgressIndicator(
+                        value: _uploadProgress) // Display progress bar
                     : ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate() &&

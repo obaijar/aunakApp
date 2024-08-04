@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:testt/screens/AddCourse.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'dart:io';
 
 class CourseSettings extends StatelessWidget {
   const CourseSettings({super.key});
@@ -98,6 +102,7 @@ class CourseSettings extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
+                    Get.to(() => const DeleteCourse());
                     // Action for Button 3
                   },
                   child: Text(
@@ -106,6 +111,132 @@ class CourseSettings extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DeleteCourse extends StatefulWidget {
+  const DeleteCourse({super.key});
+
+  @override
+  State<DeleteCourse> createState() => _DeleteCourseState();
+}
+
+class _DeleteCourseState extends State<DeleteCourse> {
+  String? _selectedSubject;
+  Map<String, String> _subjects = {};
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCourses();
+  }
+
+  Future<void> fetchCourses() async {
+    final url = Uri.parse('http://10.0.2.2:8000/api/courses/');
+    try {
+      final response = await http.get(url);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          _subjects = {
+            for (var subject in data)
+              subject['id'].toString(): subject['title'],
+          };
+
+          // Set the initial selected subject if available
+          if (_subjects.isNotEmpty) {
+            _selectedSubject = _subjects.keys.first;
+          }
+        });
+      } else {
+        print('Failed to fetch courses');
+      }
+    } catch (e) {
+      print('Error during fetching subjects: $e');
+    }
+  }
+
+  Future<void> deleteCourse(String subjectId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    final url =
+        Uri.parse('http://10.0.2.2:8000/api/courses/delete/$subjectId/');
+
+    try {
+      final response = await http.delete(url, headers: {
+        HttpHeaders.authorizationHeader: 'Token $token',
+      });
+
+      if (response.statusCode == 204) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('تم حذف الكورس بنجاح')),
+        );
+        // Refresh the list after deletion
+        fetchCourses();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('فشل في حذف الكورس')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error during deletion: $e')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('حذف كورس'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            DropdownButtonFormField<String>(
+              value: _selectedSubject,
+              items: _subjects.entries.map((entry) {
+                return DropdownMenuItem<String>(
+                  value: entry.key,
+                  child: Text(entry.value),
+                );
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedSubject = newValue;
+                });
+              },
+              decoration: const InputDecoration(
+                labelText: 'اختيار كورس',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null) {
+                  return 'الرجاء تحديد الكورس';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                if (_selectedSubject != null) {
+                  deleteCourse(_selectedSubject!);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('الرجاء تحديد مادة لحذفها')),
+                  );
+                }
+              },
+              child: Text('حذف الكورس'),
             ),
           ],
         ),

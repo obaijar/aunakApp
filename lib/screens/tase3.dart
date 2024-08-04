@@ -6,6 +6,7 @@ import 'package:testt/screens/teachers.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:arabic_font/arabic_font.dart';
 
 class GridItem {
   final String imageUrl;
@@ -39,7 +40,7 @@ class _Tase3State extends State<Tase3> {
     );
 
     if (response.statusCode == 200) {
-      final List subjects = json.decode(response.body);
+      final List subjects = json.decode(utf8.decode(response.bodyBytes));
       setState(() {
         gridItems = subjects
             .map((subject) => GridItem(
@@ -110,7 +111,10 @@ class _Tase3State extends State<Tase3> {
                                     ),
                                     Text(
                                       gridItems[index].text,
-                                      style: TextStyle(fontSize: 18.sp),
+                                      style: ArabicTextStyle(
+                                          arabicFont:
+                                              ArabicFont.dinNextLTArabic,
+                                          fontSize: 25),
                                     ),
                                     Image.asset(
                                       "images/111.png",

@@ -79,7 +79,7 @@ class _DeleteVideoState extends State<DeleteVideo> {
       return;
     }
 
-    final url = 'http://10.0.2.2:8000/videos/$id/delete/';
+    final url = 'http://10.0.2.2:8000/videos/delete/$id/';
     final dio = Dio();
     try {
       final response = await dio.delete(
@@ -90,7 +90,8 @@ class _DeleteVideoState extends State<DeleteVideo> {
           },
         ),
       );
-      if (response.statusCode == 204) {
+      print(response.statusCode);
+      if (response.statusCode == 200) {
         setState(() {
           _videos.removeWhere((video) => video['id'] == id);
         });
@@ -102,7 +103,6 @@ class _DeleteVideoState extends State<DeleteVideo> {
     }
   }
 
-  // ignore: unused_element
   void _confirmDeleteVideo(int id) {
     showDialog(
       context: context,
@@ -141,92 +141,111 @@ class _DeleteVideoState extends State<DeleteVideo> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _videos.length,
-              itemBuilder: (context, index) {
-                final video = _videos[index];
-                return Dismissible(
-                  key: Key(video['id'].toString()), // Unique key for each item
-                  direction: DismissDirection.endToStart,
-                  confirmDismiss: (direction) async {
-                    return await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('تأكيد الحذف'),
-                          content:
-                              const Text('هل انت متاكد تريد حذف هذا الفيديو'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .pop(false); // Return false
-                              },
-                              child: const Text('لا'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(true); // Return true
-                              },
-                              child: const Text('نعم'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  onDismissed: (direction) {
-                    // This callback is executed if the confirmDismiss returns true
-                    _deleteVideo(video['id']);
-                  },
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: const Icon(Icons.delete, color: Colors.white),
+          : Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'إسحب إلى اليسار للحذف',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red, // Optional: Color to emphasize
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SamplePlayer(
-                            videoUrl: video['video_file'],
-                            videoID: video['id'],
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _videos.length,
+                    itemBuilder: (context, index) {
+                      final video = _videos[index];
+                      return Dismissible(
+                        key: Key(video['id'].toString()),
+                        direction: DismissDirection.endToStart,
+                        confirmDismiss: (direction) async {
+                          return await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('تأكيد الحذف'),
+                                content: const Text(
+                                    'هل انت متاكد تريد حذف هذا الفيديو'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(false); // Return false
+                                    },
+                                    child: const Text('لا'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(true); // Return true
+                                    },
+                                    child: const Text('نعم'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        onDismissed: (direction) {
+                          _deleteVideo(video['id']);
+                        },
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: const Icon(Icons.delete, color: Colors.white),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => SamplePlayer(
+                                  videoUrl: video['video_file'],
+                                  videoID: video['id'],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            elevation: 5,
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(16),
+                              title: Text(
+                                video['title'] ?? 'No title',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Grade: ${video['grade'] ?? 'No grade'}',
+                                    style: TextStyle(color: Colors.grey[600]),
+                                  ),
+                                  Text(
+                                    'Subject: ${video['subject'] ?? 'No subject'}',
+                                    style: TextStyle(color: Colors.grey[600]),
+                                  ),
+                                ],
+                              ),
+                              trailing: const Icon(Icons.arrow_forward),
+                              isThreeLine: true,
+                              dense: false,
+                            ),
                           ),
                         ),
                       );
                     },
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      elevation: 5,
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(16),
-                        title: Text(
-                          video['title'] ?? 'No title',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Grade: ${video['grade'] ?? 'No grade'}',
-                              style: TextStyle(color: Colors.grey[600]),
-                            ),
-                            Text(
-                              'Subject: ${video['subject'] ?? 'No subject'}',
-                              style: TextStyle(color: Colors.grey[600]),
-                            ),
-                          ],
-                        ),
-                        trailing: const Icon(Icons.arrow_forward),
-                        isThreeLine: true,
-                        dense: false,
-                      ),
-                    ),
                   ),
-                );
-              },
+                ),
+              ],
             ),
     );
   }

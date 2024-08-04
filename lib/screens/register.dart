@@ -274,7 +274,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   print(e);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("هناك خطأ ما"),
+                                      content: Text("يوجد مستخدم بهذا الاسم"),
                                     ),
                                   );
                                 } finally {

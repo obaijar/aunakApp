@@ -129,56 +129,75 @@ class _PaidCoursesState extends State<PaidCourses> {
       appBar: AppBar(
         title: const Text('الكورسات المدفوعة'),
       ),
-      body: ListView.builder(
-        itemCount: _courses.length,
-        itemBuilder: (context, index) {
-          final course = _courses[index];
-          return Dismissible(
-            key: Key(course['id'].toString()), // Unique key for each item
-            direction: DismissDirection.endToStart,
-            confirmDismiss: (direction) async {
-              return await _confirmDelete(context);
-            },
-            onDismissed: (direction) {
-              _deleteCourse(course['id']);
-            },
-            background: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            child: Card(
-              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              elevation: 5,
-              child: InkWell(
-                onTap: () {
-                  // Navigate to watchCourse and pass the video list
-                  Get.to(() => watchCourse(
-                        videoList: course['videos'], // Pass the video list here
-                      ));
-                  print('Tapped on course: ${course['title']}');
-                },
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(16),
-                  leading: Icon(Icons.book, color: Colors.blueGrey[700]),
-                  title: Text(
-                    course['title'] ?? 'No title',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    course['description'] ?? 'No description',
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: const Icon(Icons.arrow_forward),
-                  isThreeLine: true,
-                  dense: false,
-                ),
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'إسحب لليسار للحذف',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
               ),
+              textAlign: TextAlign.center,
             ),
-          );
-        },
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _courses.length,
+              itemBuilder: (context, index) {
+                final course = _courses[index];
+                return Dismissible(
+                  key: Key(course['id'].toString()),
+                  direction: DismissDirection.endToStart,
+                  confirmDismiss: (direction) async {
+                    return await _confirmDelete(context);
+                  },
+                  onDismissed: (direction) {
+                    _deleteCourse(course['id']);
+                  },
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  child: Card(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    elevation: 5,
+                    child: InkWell(
+                      onTap: () {
+                        // Navigate to watchCourse and pass the video list
+                        Get.to(() => watchCourse(
+                              videoList: course['videos'],
+                            ));
+                        print('Tapped on course: ${course['title']}');
+                      },
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(16),
+                        leading: Icon(Icons.book, color: Colors.blueGrey[700]),
+                        title: Text(
+                          course['title'] ?? 'No title',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          course['description'] ?? 'No description',
+                          maxLines: 4,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: const Icon(Icons.arrow_forward),
+                        isThreeLine: true,
+                        dense: false,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
