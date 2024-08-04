@@ -41,7 +41,7 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
     );
 
     if (response.statusCode == 200) {
-      final List subjects = json.decode(response.body);
+      final List subjects = json.decode(utf8.decode(response.bodyBytes));
       setState(() {
         gridItems = subjects
             .map((subject) => GridItem(
@@ -163,7 +163,7 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
     );
 
     if (response.statusCode == 200) {
-      final List subjects = json.decode(response.body);
+      final List subjects = json.decode(utf8.decode(response.bodyBytes));
       setState(() {
         gridItems = subjects
             .map((subject) => GridItem(

@@ -45,7 +45,8 @@ class _PaidCoursesState extends State<PaidCourses> {
         },
       );
       if (response.statusCode == 200) {
-        final List<dynamic> jsonResponse = json.decode(response.body);
+        final List<dynamic> jsonResponse =
+            json.decode(utf8.decode(response.bodyBytes));
         setState(() {
           _courses = jsonResponse.map((item) {
             return {

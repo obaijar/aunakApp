@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:testt/screens/UsersList.dart';
 import 'package:testt/screens/register.dart';
 import 'package:testt/screens/teachersReg.dart';
 
@@ -95,7 +96,7 @@ class Users extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Get.to(() => const RegisterScreen());
+                    Get.to(() => UserList());
                   },
                   child: Text(
                     'دخول',

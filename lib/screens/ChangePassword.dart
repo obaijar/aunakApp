@@ -21,38 +21,46 @@ class _ChangePasswordState extends State<ChangePassword> {
   Future<void> _changePassword() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
+
     if (_formKey.currentState!.validate()) {
       final String currentPassword = _currentPasswordController.text;
       final String newPassword = _newPasswordController.text;
 
-      // Perform the POST request
       var dio = Dio();
       var url = 'http://10.0.2.2:8000/api/change-password/';
 
-      var response = await dio.post(
-        url,
-        data: {
-          'current_password': currentPassword,
-          'new_password': newPassword,
-        },
-        options: Options(
-          headers: {
-            'Authorization': 'Token $token',
-            'Content-Type': 'application/json',
+      try {
+        var response = await dio.post(
+          url,
+          data: {
+            'current_password': currentPassword,
+            'new_password': newPassword,
           },
-        ),
-      );
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        // Handle successful response
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Password changed successfully')),
+          options: Options(
+            headers: {
+              'Authorization': 'Token $token',
+              'Content-Type': 'application/json',
+            },
+          ),
         );
-        Navigator.of(context).pop();
-      } else {
-        // Handle error response
+
+        if (response.statusCode == 200) {
+          // Handle successful response
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('تم تغيير كلمة المرور')),
+          );
+          Navigator.of(context).pop();
+        } else {
+          // Handle error response
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to change password')),
+          );
+        }
+      } catch (e) {
+        // Handle any exceptions that occur during the POST request
+        print('Error: $e'); // Optionally log the error
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to change password')),
+          const SnackBar(content: Text('كلمة المرور الحالية غير صحيحة')),
         );
       }
     }

@@ -142,7 +142,7 @@ class _DeleteCourseState extends State<DeleteCourse> {
       final response = await http.get(url);
       print(response.statusCode);
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         setState(() {
           _subjects = {
             for (var subject in data)

@@ -60,7 +60,8 @@ class _TeacherRegState extends State<TeacherReg> {
 
       if (response.statusCode == 200) {
         setState(() {
-          grades = List<Map<String, dynamic>>.from(json.decode(response.body));
+          grades = List<Map<String, dynamic>>.from(
+              json.decode(utf8.decode(response.bodyBytes)));
           isSelectedGrades = List<bool>.filled(grades.length, false);
           colorsGrades = List<Color>.filled(grades.length, Colors.white);
         });
@@ -98,8 +99,8 @@ class _TeacherRegState extends State<TeacherReg> {
 
       if (response.statusCode == 200) {
         setState(() {
-          subjects =
-              List<Map<String, dynamic>>.from(json.decode(response.body));
+          subjects = List<Map<String, dynamic>>.from(
+              json.decode(utf8.decode(response.bodyBytes)));
           isSelectedSubjects = List<bool>.filled(subjects.length, false);
           colorsSubjects = List<Color>.filled(subjects.length, Colors.white);
         });

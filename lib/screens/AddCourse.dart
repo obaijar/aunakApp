@@ -62,10 +62,14 @@ class _AddCourseState extends State<AddCourse> {
           subjectTypeResponse.statusCode == 200 &&
           teacherResponse.statusCode == 200 &&
           gradeResponse.statusCode == 200) {
-        final subjectData = json.decode(subjectResponse.body) as List;
-        final subjectTypeData = json.decode(subjectTypeResponse.body) as List;
-        final teacherData = json.decode(teacherResponse.body) as List;
-        final gradeData = json.decode(gradeResponse.body) as List;
+        final subjectData =
+            json.decode(utf8.decode(subjectResponse.bodyBytes)) as List;
+        final subjectTypeData =
+            json.decode(utf8.decode(subjectTypeResponse.bodyBytes)) as List;
+        final teacherData =
+            json.decode(utf8.decode(teacherResponse.bodyBytes)) as List;
+        final gradeData =
+            json.decode(utf8.decode(gradeResponse.bodyBytes)) as List;
 
         setState(() {
           _subjects =
@@ -112,7 +116,7 @@ class _AddCourseState extends State<AddCourse> {
       );
 
       if (response.statusCode == 200) {
-        final videoData = json.decode(response.body) as List;
+        final videoData = json.decode(utf8.decode(response.bodyBytes)) as List;
         setState(() {
           _videos = videoData;
         });

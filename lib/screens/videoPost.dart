@@ -35,7 +35,6 @@ class _VideoPostState extends State<VideoPost> {
   List<Map<String, String>> _teachers = [];
 
   bool _isUploading = false;
-  double _uploadProgress = 0.0; // Added for upload progress
 
   @override
   void initState() {
@@ -50,7 +49,7 @@ class _VideoPostState extends State<VideoPost> {
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         setState(() {
           _teachers = data.map((teacher) {
             return {
@@ -76,7 +75,7 @@ class _VideoPostState extends State<VideoPost> {
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         setState(() {
           _subjects = {
             for (var subject in data) subject['name']: subject['id'].toString(),
@@ -99,7 +98,7 @@ class _VideoPostState extends State<VideoPost> {
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         setState(() {
           _subjectTypes = {
             for (var subjectType in data)
@@ -131,7 +130,6 @@ class _VideoPostState extends State<VideoPost> {
   Future<void> uploadVideo(File videoFile) async {
     setState(() {
       _isUploading = true;
-      _uploadProgress = 0.0; // Reset upload progress
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -148,22 +146,14 @@ class _VideoPostState extends State<VideoPost> {
     request.fields['teacher'] = _selectedTeacherId!;
 
     try {
-      final streamedResponse = await request.send();
-
-      streamedResponse.stream.listen((event) {
-        setState(() {
-          _uploadProgress = event.length / streamedResponse.contentLength!;
-        });
-      });
-
-      final response = await http.Response.fromStream(streamedResponse);
+      final response = await request.send();
       if (response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم رفع الفيديو بنجاح')),
+          SnackBar(content: Text('تم رفع الفيديو بنجاح')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('فشل في رفع')),
+          SnackBar(content: Text('فشل في رفع')),
         );
       }
     } catch (e) {
@@ -326,12 +316,9 @@ class _VideoPostState extends State<VideoPost> {
                     '   :الملف المختار ${_videoFile!.path}',
                     style: TextStyle(fontSize: 15.sp),
                   ),
-
-                // ... other form fields
                 const SizedBox(height: 20),
                 _isUploading
-                    ? LinearProgressIndicator(
-                        value: _uploadProgress) // Display progress bar
+                    ? Center(child: CircularProgressIndicator())
                     : ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate() &&

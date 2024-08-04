@@ -45,7 +45,7 @@ class _SamplePlayerState extends State<SamplePlayer> {
     );
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      final data = json.decode(utf8.decode(response.bodyBytes));
       setState(() {
         canViewVideo = true;
         flickManager = FlickManager(
