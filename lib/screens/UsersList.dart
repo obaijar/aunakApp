@@ -38,7 +38,7 @@ class _UserListState extends State<UserList> {
     );
     if (response.statusCode == 200) {
       setState(() {
-        users = json.decode(response.body);
+        users = json.decode(utf8.decode(response.bodyBytes));
         filteredUsers = users;
         isLoading = false;
       });

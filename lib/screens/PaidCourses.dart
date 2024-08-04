@@ -170,6 +170,7 @@ class _PaidCoursesState extends State<PaidCourses> {
                     elevation: 5,
                     child: InkWell(
                       onTap: () {
+                        print(course['videos']);
                         // Navigate to watchCourse and pass the video list
                         Get.to(() => watchCourse(
                               videoList: course['videos'],

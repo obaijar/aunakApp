@@ -54,7 +54,7 @@ class _watchCourseState extends State<watchCourse> {
                 ),
                 onTap: () {
                   Get.to(SamplePlayer(
-                    videoUrl: video['video_file'],
+                    videoUrl: video['preview_link'],
                     videoID: video['id'],
                   ));
                   // ignore: avoid_print

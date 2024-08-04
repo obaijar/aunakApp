@@ -153,7 +153,7 @@ class _HomeState extends State<Home> {
                     Get.to(const PaidCourses());
                   },
                   child: Text(
-                    'دخول',
+                    'الكورسات',
                     style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
@@ -300,17 +300,18 @@ class _HomeState extends State<Home> {
               return Text('Error: ${snapshot.error}');
             } else {
               final userInfo = snapshot.data;
-              final email, _firstName, _lastName, _gender;
-              email = userInfo?.email; // Update the state variable with email
-              _firstName = userInfo
-                  ?.firstName; // Update the state variable with firstName
+
+              final email = prefs?.getString('email') ?? '';
+              final username = prefs?.getString('username') ?? '';
+              final _lastName, _gender;
+              // Update the state variable with email
               _lastName =
                   userInfo?.lastName; // Update the state variable with lastName
               _gender =
                   userInfo?.gender; // Update the state variable with gender
               return Profile(
                 email: email,
-                firstName: _firstName,
+                firstName: username,
                 lastName: _lastName,
                 gender: _gender,
                 username: '',

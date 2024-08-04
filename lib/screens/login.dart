@@ -136,18 +136,11 @@ class _SignInScreenState extends State<SignInScreen> {
                             );
                             if (response.statusCode == 200) {
                               final jsonResponse = response.data;
-                              print("token");
                               final int id = jsonResponse['user_id'];
                               final String token = jsonResponse['token'];
                               final String username = jsonResponse['user'];
                               final bool isadmin = jsonResponse['isadmin'];
-                              /*final jsonResponse = response.data;
-                              final String username = jsonResponse['username'];
                               final String email = jsonResponse['email'];
-                              final String firstName =
-                                  jsonResponse['firstName'];
-                              final String lastName = jsonResponse['lastName'];
-                              final String gender = jsonResponse['gender'];*/
 
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
@@ -155,6 +148,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               prefs.setString('id', id.toString());
                               prefs.setString('username', username.toString());
                               prefs.setString('isadmin', isadmin.toString());
+                              prefs.setString('email', email.toString());
                               Get.off(const Home());
                             }
                           } on DioException catch (e) {

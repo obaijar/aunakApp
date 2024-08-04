@@ -37,33 +37,44 @@ class _SamplePlayerState extends State<SamplePlayer> {
     String apiUrl = 'http://10.0.2.2:8000/videos/${widget.videoID}/track-view/';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    final response = await http.get(
-      Uri.parse(apiUrl),
-      headers: {
-        'Authorization': 'Token $token', // replace with actual token
-      },
-    );
 
-    if (response.statusCode == 200) {
-      final data = json.decode(utf8.decode(response.bodyBytes));
-      setState(() {
-        canViewVideo = true;
-        flickManager = FlickManager(
-          videoPlayerController: VideoPlayerController.networkUrl(
-            Uri.parse(data['video_url']),
-          ),
-        );
-      });
-    } else if (response.statusCode == 403) {
+    try {
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          'Authorization': 'Token $token', // replace with actual token
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          canViewVideo = true;
+          flickManager = FlickManager(
+            videoPlayerController: VideoPlayerController.networkUrl(
+              Uri.parse(data['video_url']),
+            ),
+          );
+        });
+      } else if (response.statusCode == 403) {
+        setState(() {
+          canViewVideo = false;
+          message = "لقد تجاوزت الحد المسموح لمشاهدة الفيديو";
+        });
+      } else {
+        setState(() {
+          canViewVideo = false;
+          message = 'An error occurred. Please try again later.';
+        });
+      }
+    } catch (e) {
+      // Handle exceptions, such as network errors
       setState(() {
         canViewVideo = false;
-        message = ("لقد تجاوزت الحد المسموح لمشاهدة الفيديو");
+        message =
+            'Failed to connect to server. Please check your internet connection and try again.';
       });
-    } else {
-      setState(() {
-        canViewVideo = false;
-        message = 'An error occurred. Please try again later.';
-      });
+      print('Error: $e');
     }
   }
 
