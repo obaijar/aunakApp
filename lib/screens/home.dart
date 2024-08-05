@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:testt/main.dart';
-import 'package:testt/screens/AddSubject_Type.dart';
+import 'package:testt/screens/AddCourse_Type.dart';
 import 'package:testt/screens/CourseSettings.dart';
+import 'package:testt/screens/CourseTypeSettings.dart';
 import 'package:testt/screens/DrosPage.dart';
 import 'package:testt/screens/PaidCourses.dart';
 import 'package:testt/screens/Users.dart';
@@ -282,17 +283,17 @@ class _HomeState extends State<Home> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "إضافة نوع كورس(مكثفات,تاسيس...)",
+                                "  نوع كورس(مكثفات,تاسيس...)",
                                 style: TextStyle(fontSize: 20.sp),
                               ),
                             ],
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Get.to(const AddSubjectType());
+                              Get.to(const CourseTypeSettings());
                             },
                             child: Text(
-                              'إضافة',
+                              'دخول',
                               style: TextStyle(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.bold,
