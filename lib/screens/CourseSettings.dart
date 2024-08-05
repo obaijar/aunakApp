@@ -51,7 +51,7 @@ class CourseSettings extends StatelessWidget {
                 ),
               ],
             ),
-            const Divider(),
+            /* const Divider(),
             const SizedBox(height: 16.0), // Spacing between elements
 
             // Second Text and Button
@@ -80,7 +80,7 @@ class CourseSettings extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
+            ),*/
             const Divider(),
             const SizedBox(height: 16.0), // Spacing between elements
 

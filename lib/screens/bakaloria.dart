@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages, camel_case_types, duplicate_ignore, avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -36,9 +34,7 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
   Future<void> fetchSubjects() async {
     const grade = 3; // Use the correct grade as needed
     final url = Uri.parse('http://10.0.2.2:8000/api/Subject/$grade/');
-    final response = await http.get(
-      url,
-    );
+    final response = await http.get(url);
 
     if (response.statusCode == 200) {
       final List subjects = json.decode(utf8.decode(response.bodyBytes));
@@ -94,7 +90,6 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
                                     subject: gridItems[index].text,
                                     grade: 13,
                                   ));
-                              // Handle click event here, for example, navigate to a new page
                               print('Image clicked: ${gridItems[index].text}');
                             },
                             child: Column(
@@ -104,23 +99,30 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
                                   gridItems[index].imageUrl,
                                   height: 80.h,
                                   fit: BoxFit.cover,
-                                ), // Spacer between image and text
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 40.w,
-                                    ),
-                                    Text(
-                                      gridItems[index].text,
-                                      style: TextStyle(fontSize: 20.sp),
-                                    ),
-                                    Image.asset(
-                                      width: 40.w,
-                                      height: 40.h,
-                                      "images/111.png",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 8.w),
+                                      Expanded(
+                                        child: Text(
+                                          gridItems[index].text,
+                                          style: TextStyle(fontSize: 20.sp),
+                                          overflow: TextOverflow
+                                              .ellipsis, // Handle overflow
+                                          maxLines: 1, // Limit to 1 line
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Image.asset(
+                                        width: 40.w,
+                                        height: 40.h,
+                                        "images/111.png",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -158,9 +160,7 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
   Future<void> fetchSubjects() async {
     const grade = 2; // Use the correct grade as needed
     final url = Uri.parse('http://10.0.2.2:8000/api/Subject/$grade/');
-    final response = await http.get(
-      url,
-    );
+    final response = await http.get(url);
 
     if (response.statusCode == 200) {
       final List subjects = json.decode(utf8.decode(response.bodyBytes));
@@ -216,7 +216,6 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
                                     subject: gridItems[index].text,
                                     grade: 12,
                                   ));
-                              // Handle click event here, for example, navigate to a new page
                               print('Image clicked: ${gridItems[index].text}');
                             },
                             child: Column(
@@ -226,21 +225,28 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
                                   gridItems[index].imageUrl,
                                   height: 80.h,
                                   fit: BoxFit.cover,
-                                ), // Spacer between image and text
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 40.w,
-                                    ),
-                                    Text(
-                                      gridItems[index].text,
-                                      style: TextStyle(fontSize: 20.sp),
-                                    ),
-                                    Image.asset(
-                                      "images/111.png",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 8.w),
+                                      Expanded(
+                                        child: Text(
+                                          gridItems[index].text,
+                                          style: TextStyle(fontSize: 20.sp),
+                                          overflow: TextOverflow
+                                              .ellipsis, // Handle overflow
+                                          maxLines: 1, // Limit to 1 line
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Image.asset(
+                                        "images/111.png",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),

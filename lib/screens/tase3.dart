@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages, avoid_print, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:testt/screens/teachers.dart';
@@ -103,24 +101,32 @@ class _Tase3State extends State<Tase3> {
                                   gridItems[index].imageUrl,
                                   height: 80.h,
                                   fit: BoxFit.cover,
-                                ), // Spacer between image and text
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 40.w,
-                                    ),
-                                    Text(
-                                      gridItems[index].text,
-                                      style: ArabicTextStyle(
-                                          arabicFont:
-                                              ArabicFont.dinNextLTArabic,
-                                          fontSize: 25),
-                                    ),
-                                    Image.asset(
-                                      "images/111.png",
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8.h), // Add vertical padding
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          gridItems[index].text,
+                                          style: ArabicTextStyle(
+                                              arabicFont:
+                                                  ArabicFont.dinNextLTArabic,
+                                              fontSize: 25),
+                                          overflow: TextOverflow
+                                              .ellipsis, // Handle overflow
+                                          maxLines: 1, // Limit to 1 line
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Image.asset(
+                                        "images/111.png",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
