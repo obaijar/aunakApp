@@ -1,7 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, file_names
 
 import 'package:flutter/material.dart';
-import 'package:testt/screens/AddCourse.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;

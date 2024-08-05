@@ -9,7 +9,6 @@ class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
@@ -25,12 +24,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool isLoading = false;
   String selectedRole = '..'; // Default value
   bool isadmin = false;
+
   @override
   Widget build(BuildContext context) {
     final double wScreen = MediaQuery.of(context).size.width;
     final double hScreen = MediaQuery.of(context).size.height;
     final bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
       appBar: AppBar(title: const Text('التسجيل')),
       body: SingleChildScrollView(
@@ -71,9 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
+                    SizedBox(height: 20.h),
                     Material(
                       elevation: 4.0, // Adjust the elevation value as needed
                       borderRadius: BorderRadius.circular(10.0),
@@ -97,9 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
+                    SizedBox(height: 20.h),
                     Material(
                       elevation: 4.0, // Adjust the elevation value as needed
                       borderRadius: BorderRadius.circular(10.0),
@@ -121,9 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
+                    SizedBox(height: 20.h),
                     Material(
                       elevation: 4.0, // Adjust the elevation value as needed
                       borderRadius: BorderRadius.circular(10.0),
@@ -148,18 +143,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
+                    SizedBox(height: 20.h),
                     isLoading
                         ? const CircularProgressIndicator(color: Colors.blue)
                         : ElevatedButton(
                             onPressed: () async {
                               var connectivityResult =
                                   await Connectivity().checkConnectivity();
-                              bool isConnected = connectivityResult.any(
-                                  (result) =>
-                                      result != ConnectivityResult.none);
+                              bool isConnected =
+                                  connectivityResult != ConnectivityResult.none;
+
                               if (!isConnected) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -168,6 +161,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 );
                                 return; // Exit the button press function if no connection
                               }
+
                               if (_formKey.currentState!.validate()) {
                                 setState(() {
                                   isLoading = true;
@@ -183,9 +177,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     data: {
                                       'username': usernameController.text,
                                       'password': passwordController.text,
-                                      'is_admin':
-                                          true, // Include the selected role
-                                      'email': emailController.text
+                                      'is_admin': true,
+                                      'email': emailController.text,
                                     },
                                     options: Options(
                                       headers: {
@@ -200,20 +193,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         content: Text('تم التسجيل بنجاح'),
                                       ),
                                     );
-                                    Navigator.pop(context);
-                                  }
-                                  if (response.statusCode == 403) {
-                                    //var responseBody = response.data;
-
-                                    //if (responseBody['username'] != null &&
-                                    //   responseBody['username'].contains(
-                                    //      'A user with that username already exists.')) {
+                                    Navigator.pop(
+                                        context); // Navigate back after successful registration
+                                  } else if (response.statusCode == 403) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('يوجد مستخدم بهذا الاسم'),
                                       ),
                                     );
-                                    //}
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -226,7 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   print(e);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("يوجد مستخدم بهذا الاسم"),
+                                      content: Text('حدث خطأ غير متوقع.'),
                                     ),
                                   );
                                 } finally {

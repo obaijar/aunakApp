@@ -214,12 +214,6 @@ class _RegisterStudentState extends State<RegisterStudent> {
                                       ),
                                     );
                                     //}
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('  يرجى اعادة المحاولة'),
-                                      ),
-                                    );
                                   }
                                 } catch (e) {
                                   print(e);

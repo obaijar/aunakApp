@@ -68,7 +68,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: TextField(
                     controller: emailController,
                     decoration: InputDecoration(
-                      labelText: 'البريد الإلكتروني',
+                      labelText: 'اسم المستخدم',
                       labelStyle: TextStyle(fontSize: 12.sp),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
