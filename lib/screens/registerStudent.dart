@@ -5,15 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class RegisterStudent extends StatefulWidget {
+  const RegisterStudent({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _RegisterStudentState createState() => _RegisterStudentState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterStudentState extends State<RegisterStudent> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -184,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       'username': usernameController.text,
                                       'password': passwordController.text,
                                       'is_admin':
-                                          true, // Include the selected role
+                                          false, // Include the selected role
                                       'email': emailController.text
                                     },
                                     options: Options(
@@ -217,8 +217,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                        content: Text(
-                                            'إسم المستخدم أو كلمة المرور خاطئة , يرجى اعادة المحاولة'),
+                                        content: Text('  يرجى اعادة المحاولة'),
                                       ),
                                     );
                                   }

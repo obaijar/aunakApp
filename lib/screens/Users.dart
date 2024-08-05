@@ -55,7 +55,7 @@ class Users extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'تسجيل أدمن أو طالب',
+                    'تسجيل أدمن',
                     textAlign: TextAlign.right,
                     style: TextStyle(fontSize: 20.sp),
                   ),

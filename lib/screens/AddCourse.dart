@@ -22,10 +22,14 @@ class _AddCourseState extends State<AddCourse> {
   List<String> _subjects_id = [];
   List<String> _teachers = [];
   List<String> _teachers_id = [];
-  List<String> _grades = [];
   List<String> _subjectTypes = [];
   List<String> _subjectTypes_id = [];
 
+  final List<String> _grades = [
+    'تاسع',
+    'بكالوريا علمي',
+    'بكالوريا أدبي',
+  ];
   // Variables to hold video data
   List<dynamic> _videos = [];
   Set<String> _selectedVideos = Set<String>();
@@ -85,7 +89,7 @@ class _AddCourseState extends State<AddCourse> {
           _teachers_id =
               teacherData.map((item) => item['id'].toString()).toList();
 
-          _grades = gradeData.map((item) => item['level'] as String).toList();
+          // _grades = gradeData.map((item) => item['level'] as String).toList();
         });
       } else {
         throw Exception('Failed to load data');
@@ -203,14 +207,12 @@ class _AddCourseState extends State<AddCourse> {
           if (response.statusCode == 201) {
             // Successfully created the course
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Course added successfully')),
+              SnackBar(content: Text('تم اضافة الكورس بنجاح')),
             );
           } else {
             // Failed to create the course
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content:
-                      Text('Failed to add course: ${response.reasonPhrase}')),
+              SnackBar(content: Text('فشل في اضافة الكورس')),
             );
           }
         } catch (e) {

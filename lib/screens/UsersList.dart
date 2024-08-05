@@ -62,12 +62,12 @@ class _UserListState extends State<UserList> {
         users.removeWhere((user) => user['id'] == userId);
         filteredUsers.removeWhere((user) => user['id'] == userId);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User successfully deleted')),
+          SnackBar(content: Text('تم الحذف بنجاح')),
         );
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete user')),
+        SnackBar(content: Text('فشل في الحذف')),
       );
     }
   }

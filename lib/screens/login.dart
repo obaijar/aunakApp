@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:testt/screens/registerStudent.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -188,6 +189,23 @@ class _SignInScreenState extends State<SignInScreen> {
                               fontWeight: FontWeight.bold,
                             )),
                       ),
+                SizedBox(height: 10.h),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(const RegisterStudent());
+                    },
+                    child: Text(
+                      'التسجيل',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(height: 10.h),
                 Center(
                   child: GestureDetector(
