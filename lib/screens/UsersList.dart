@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, use_key_in_widget_constructors, library_private_types_in_public_api
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +49,7 @@ class _UserListState extends State<UserList> {
         isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load users')),
+        const SnackBar(content: Text('Failed to load users')),
       );
     }
   }
@@ -62,12 +64,12 @@ class _UserListState extends State<UserList> {
         users.removeWhere((user) => user['id'] == userId);
         filteredUsers.removeWhere((user) => user['id'] == userId);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('تم الحذف بنجاح')),
+          const SnackBar(content: Text('تم الحذف بنجاح')),
         );
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('فشل في الحذف')),
+        const SnackBar(content: Text('فشل في الحذف')),
       );
     }
   }
@@ -78,11 +80,11 @@ class _UserListState extends State<UserList> {
       barrierDismissible: false, // Prevent dismissing by tapping outside
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Deletion'),
-          content: Text('Are you sure you want to delete this user?'),
+          title: const Text('Confirm Deletion'),
+          content: const Text('Are you sure you want to delete this user?'),
           actions: <Widget>[
             TextButton(
-              child: Text('No'),
+              child: const Text('No'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 setState(() {
@@ -91,7 +93,7 @@ class _UserListState extends State<UserList> {
               },
             ),
             TextButton(
-              child: Text('Yes'),
+              child: const Text('Yes'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 _deleteUser(userId); // Proceed with deletion
@@ -126,15 +128,15 @@ class _UserListState extends State<UserList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User List'),
+        title: const Text('User List'),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: TextField(
               controller: _searchController,
               onChanged: _filterUsers,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search',
                 border: OutlineInputBorder(),
               ),
@@ -143,7 +145,7 @@ class _UserListState extends State<UserList> {
         ),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: filteredUsers.length,
               itemBuilder: (context, index) {

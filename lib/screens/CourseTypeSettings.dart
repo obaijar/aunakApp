@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, file_names
+// ignore_for_file: depend_on_referenced_packages, file_names, avoid_print, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -111,7 +111,6 @@ class _DeleteCourseTypeState extends State<DeleteCourseType> {
     final url = Uri.parse('http://10.0.2.2:8000/api/Subject_type/');
     try {
       final response = await http.get(url);
-      print(response.statusCode);
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         setState(() {
@@ -145,13 +144,13 @@ class _DeleteCourseTypeState extends State<DeleteCourseType> {
       print(response.statusCode);
       if (response.statusCode == 204) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('تم حذف الكورس بنجاح')),
+          const SnackBar(content: Text('تم حذف الكورس بنجاح')),
         );
         // Refresh the list after deletion
         fetchCoursesType();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('فشل في حذف الكورس')),
+          const SnackBar(content: Text('فشل في حذف الكورس')),
         );
       }
     } catch (e) {
@@ -165,7 +164,7 @@ class _DeleteCourseTypeState extends State<DeleteCourseType> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('حذف نوع كورس'),
+        title: const Text('حذف نوع كورس'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -202,11 +201,11 @@ class _DeleteCourseTypeState extends State<DeleteCourseType> {
                   DeleteCourseType(_selectedSubject!);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('الرجاء تحديد مادة لحذفها')),
+                    const SnackBar(content: Text('الرجاء تحديد مادة لحذفها')),
                   );
                 }
               },
-              child: Text('حذف'),
+              child: const Text('حذف'),
             ),
           ],
         ),

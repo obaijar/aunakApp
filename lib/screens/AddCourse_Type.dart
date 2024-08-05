@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors, avoid_print, prefer_const_declarations, file_names
+// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors, avoid_print, prefer_const_declarations, file_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -14,11 +14,11 @@ class AddSubjectType extends StatefulWidget {
 
 class _AddSubjectTypeState extends State<AddSubjectType> {
   final TextEditingController _nameController = TextEditingController();
- 
+
   bool _isLoading = false;
 
   Future<void> _AddSubjectType() async {
-    final String name = _nameController.text.trim(); 
+    final String name = _nameController.text.trim();
 
     if (name.isEmpty) {
       // Show error message
@@ -49,7 +49,7 @@ class _AddSubjectTypeState extends State<AddSubjectType> {
       'Content-Type': 'application/json',
     };
     final body = jsonEncode({
-      'name': name, 
+      'name': name,
     });
 
     try {
@@ -67,7 +67,6 @@ class _AddSubjectTypeState extends State<AddSubjectType> {
         );
         // Clear the form
         _nameController.clear();
-        
       } else {
         throw Exception('فشل في لاضافة  ');
       }

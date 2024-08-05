@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, file_names
+// ignore_for_file: depend_on_referenced_packages, file_names, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:testt/screens/AddCourse.dart';
@@ -140,7 +140,6 @@ class _DeleteCourseState extends State<DeleteCourse> {
     final url = Uri.parse('http://10.0.2.2:8000/api/courses/');
     try {
       final response = await http.get(url);
-      print(response.statusCode);
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         setState(() {
@@ -175,13 +174,13 @@ class _DeleteCourseState extends State<DeleteCourse> {
 
       if (response.statusCode == 204) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('تم حذف الكورس بنجاح')),
+          const SnackBar(content: Text('تم حذف الكورس بنجاح')),
         );
         // Refresh the list after deletion
         fetchCourses();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('فشل في حذف الكورس')),
+          const SnackBar(content: Text('فشل في حذف الكورس')),
         );
       }
     } catch (e) {
@@ -195,7 +194,7 @@ class _DeleteCourseState extends State<DeleteCourse> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('حذف كورس'),
+        title: const Text('حذف كورس'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -232,11 +231,11 @@ class _DeleteCourseState extends State<DeleteCourse> {
                   deleteCourse(_selectedSubject!);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('الرجاء تحديد مادة لحذفها')),
+                    const SnackBar(content: Text('الرجاء تحديد مادة لحذفها')),
                   );
                 }
               },
-              child: Text('حذف الكورس'),
+              child: const Text('حذف الكورس'),
             ),
           ],
         ),

@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, depend_on_referenced_packages
+// ignore_for_file: file_names, depend_on_referenced_packages, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

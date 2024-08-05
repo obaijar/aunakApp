@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, depend_on_referenced_packages, prefer_const_declarations, avoid_print
+// ignore_for_file: file_names, depend_on_referenced_packages, prefer_const_declarations, avoid_print, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';

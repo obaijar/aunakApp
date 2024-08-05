@@ -74,7 +74,6 @@ class _SamplePlayerState extends State<SamplePlayer> {
         message =
             'Failed to connect to server. Please check your internet connection and try again.';
       });
-      print('Error: $e');
     }
   }
 

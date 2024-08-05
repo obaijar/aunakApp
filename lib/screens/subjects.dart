@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, file_names
+// ignore_for_file: depend_on_referenced_packages, file_names, avoid_print, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

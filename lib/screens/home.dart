@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:testt/main.dart';
-import 'package:testt/screens/AddCourse_Type.dart';
 import 'package:testt/screens/CourseSettings.dart';
 import 'package:testt/screens/CourseTypeSettings.dart';
 import 'package:testt/screens/DrosPage.dart';

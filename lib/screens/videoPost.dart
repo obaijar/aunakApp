@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, library_private_types_in_public_api, avoid_print
+
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -149,11 +151,11 @@ class _VideoPostState extends State<VideoPost> {
       final response = await request.send();
       if (response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('تم رفع الفيديو بنجاح')),
+          const SnackBar(content: Text('تم رفع الفيديو بنجاح')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('فشل في رفع')),
+          const SnackBar(content: Text('فشل في رفع')),
         );
       }
     } catch (e) {
@@ -318,7 +320,7 @@ class _VideoPostState extends State<VideoPost> {
                   ),
                 const SizedBox(height: 20),
                 _isUploading
-                    ? Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate() &&

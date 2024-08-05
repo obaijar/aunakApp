@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -216,7 +216,6 @@ class _RegisterStudentState extends State<RegisterStudent> {
                                     //}
                                   }
                                 } catch (e) {
-                                  print(e);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text("يوجد مستخدم بهذا الاسم"),

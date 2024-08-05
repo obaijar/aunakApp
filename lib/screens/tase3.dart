@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:testt/screens/teachers.dart';
@@ -50,6 +52,7 @@ class _Tase3State extends State<Tase3> {
         isLoading = false;
       });
     } else {
+      // ignore: avoid_print
       print('Failed to load subjects');
       setState(() {
         isLoading = false;
@@ -67,7 +70,7 @@ class _Tase3State extends State<Tase3> {
         ),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : GridView.count(
               crossAxisCount: 2, // Number of columns in the grid
               children: List.generate(gridItems.length, (index) {
@@ -91,8 +94,6 @@ class _Tase3State extends State<Tase3> {
                                     subject: gridItems[index].text,
                                     grade: 9,
                                   ));
-                              // Handle click event here, for example, navigate to a new page
-                              print('Image clicked: ${gridItems[index].text}');
                             },
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +112,7 @@ class _Tase3State extends State<Tase3> {
                                       Expanded(
                                         child: Text(
                                           gridItems[index].text,
-                                          style: ArabicTextStyle(
+                                          style: const ArabicTextStyle(
                                               arabicFont:
                                                   ArabicFont.dinNextLTArabic,
                                               fontSize: 25),

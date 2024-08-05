@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, depend_on_referenced_packages, non_constant_identifier_names, prefer_collection_literals, prefer_final_fields, avoid_print, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -72,6 +74,7 @@ class _AddCourseState extends State<AddCourse> {
             json.decode(utf8.decode(subjectTypeResponse.bodyBytes)) as List;
         final teacherData =
             json.decode(utf8.decode(teacherResponse.bodyBytes)) as List;
+        // ignore: unused_local_variable
         final gradeData =
             json.decode(utf8.decode(gradeResponse.bodyBytes)) as List;
 

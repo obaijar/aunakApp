@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, library_private_types_in_public_api, unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -210,7 +210,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     );
                                   }
                                 } catch (e) {
-                                  print(e);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text('حدث خطأ غير متوقع.'),
