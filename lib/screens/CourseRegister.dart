@@ -53,11 +53,6 @@ class _CourseRegisterState extends State<CourseRegister> {
         });
         return;
       }
-      print('courseName: ${widget.courseName}');
-      print('courseID: ${widget.courseID}');
-      print('teacher: ${widget.teacher}');
-      print('subject: ${widget.subject}');
-      print('section: ${widget.section}');
       if (widget.section == 9) grade = 1;
       if (widget.section == 12) grade = 2;
       if (widget.section == 13) grade = 3;
@@ -80,7 +75,6 @@ class _CourseRegisterState extends State<CourseRegister> {
 
         // Define the POST request URL
         const String postUrl = 'http://10.0.2.2:8000/api/purchases/';
-
         // Perform the POST request to register the purchase
         dio.Response postResponse = await dio.Dio().post(
           postUrl,

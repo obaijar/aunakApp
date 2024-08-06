@@ -80,11 +80,11 @@ class _UserListState extends State<UserList> {
       barrierDismissible: false, // Prevent dismissing by tapping outside
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Deletion'),
-          content: const Text('Are you sure you want to delete this user?'),
+          title: const Text('تأكيد الحذف'),
+          content: const Text('هل أنت متأكد من حذف هذا المستخدم ؟'),
           actions: <Widget>[
             TextButton(
-              child: const Text('No'),
+              child: const Text('لا'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 setState(() {
@@ -93,7 +93,7 @@ class _UserListState extends State<UserList> {
               },
             ),
             TextButton(
-              child: const Text('Yes'),
+              child: const Text('نعم'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 _deleteUser(userId); // Proceed with deletion

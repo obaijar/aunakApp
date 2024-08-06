@@ -1,11 +1,11 @@
-// ignore_for_file: depend_on_referenced_packages, file_names, prefer_const_constructors, avoid_print
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:testt/screens/CourseRegister.dart';
 import 'package:get/get.dart';
 import 'package:fancy_button_flutter/fancy_button_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class CourseDetailPage extends StatefulWidget {
   final String courseName;
@@ -13,6 +13,7 @@ class CourseDetailPage extends StatefulWidget {
   final int teacher;
   final String subject;
   final int section;
+
   const CourseDetailPage({
     super.key,
     required this.courseName,
@@ -28,6 +29,69 @@ class CourseDetailPage extends StatefulWidget {
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  String? description;
+  int? price;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCourseDescription();
+  }
+
+  Future<void> _fetchCourseDescription() async {
+    final SharedPreferences prefs = await _prefs;
+    String? token = prefs.getString('token');
+    if (token == null || token.isEmpty) {
+      _showNotLoggedInDialog();
+      return;
+    }
+    int grade = _getGradeInt(widget.section);
+
+    print(grade);
+    print(widget.subject);
+    print(widget.teacher);
+    print(widget.courseID);
+
+    String url =
+        'http://10.0.2.2:8000/api/courses/search/$grade/${widget.subject}/${widget.courseID}/${widget.teacher}/';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': 'Token $token'},
+      );
+
+      if (response.statusCode == 200) {
+        var data = json.decode(utf8.decode(response.bodyBytes));
+        if (data is List && data.isNotEmpty) {
+          // Assuming we want the description and price of the first course in the list
+          setState(() {
+            description = data[0]['description'] as String?;
+            price = data[0]['price'] as int?;
+          });
+        } else {
+          print('Unexpected response format or empty data: $data');
+        }
+      } else {
+        print('Failed to fetch course description: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching course description: $e');
+    }
+  }
+
+  int _getGradeInt(int section) {
+    switch (section) {
+      case 9:
+        return 1;
+      case 12:
+        return 2;
+      case 13:
+        return 3;
+      default:
+        return 0;
+    }
+  }
 
   Future<String> getUsername() async {
     final SharedPreferences prefs = await _prefs;
@@ -39,13 +103,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     if (username.isEmpty) {
       _showNotLoggedInDialog();
     } else {
-      // Proceed with the action for logged-in users
-      print('courseName: ${widget.courseName}');
-      print('courseID: ${widget.courseID}');
-
-      print('teacher: ${widget.teacher}');
-      print('subject: ${widget.subject}');
-      print('section: ${widget.section}');
       Get.to(() => CourseRegister(
             courseID: widget.courseID,
             courseName: widget.courseName,
@@ -62,7 +119,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('تسجيل الدخول'),
-          content: const Text('للمتابعة  يرجى تسجيل الدخول'),
+          content: const Text('للمتابعة يرجى تسجيل الدخول'),
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),
@@ -78,98 +135,92 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    int sectionid = 0;
-    if (widget.section == 1) sectionid = 9;
-    if (widget.section == 2) sectionid = 12;
-    if (widget.section == 3) sectionid = 13;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.courseName),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("images/121.png"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset("images/121.png"),
+                if (description != null) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'عن هذا الكورس',
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                   Text(
-                    " عن هذا الكورس",
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    description!,
+                    style: TextStyle(fontSize: 16.sp),
                   ),
                 ],
-              ),
-              Text(
-                'التفاصيل عن',
-                style: TextStyle(
-                    fontSize: 16.sp), // Adjust the font size as needed
-              ),
-              Text(
-                widget.courseName,
-                style: TextStyle(fontSize: 16.sp),
-              ),
-              Text(
-                'الإستاذ: ${widget.teacher}',
-                style: TextStyle(fontSize: 16.sp),
-              ),
-              Text(
-                'المادة: ${widget.subject}',
-                style: TextStyle(fontSize: 16.sp),
-              ),
-              Text(
-                'الصف: $sectionid',
-                style: TextStyle(fontSize: 16.sp),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                      child: Card(
-                    elevation: 2.0, // Small elevation
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Container(
-                      width: 100.w, // Width of the card
-                      height: 35.h, // Height of the card
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'السعر',
-                            style:
-                                TextStyle(fontSize: 16.sp, color: Colors.blue),
-                          ),
-                        ],
+                const SizedBox(height: 20),
+                if (price != null) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'السعر',
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Card(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 15.0.h, horizontal: 20.0.w),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '$price',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  )),
-                  SizedBox(
-                    width: 10.w,
                   ),
-                  FancyButton(
-                      button_text: "التسجيل في الكورس",
-                      button_height: 40.h,
-                      button_width: 150.w,
-                      button_color: const Color.fromARGB(255, 26, 114, 186),
-                      button_outline_color: Colors.white,
-                      button_text_color: Colors.white,
-                      button_text_size: 15.sp,
-                      onClick: _checkLoginStatus),
                 ],
-              ),
-            ],
+                const SizedBox(height: 50),
+                FancyButton(
+                  button_text: "التسجيل في الكورس",
+                  button_height: 40.h,
+                  button_width: 150.w,
+                  button_color: const Color.fromARGB(255, 26, 114, 186),
+                  button_outline_color: Colors.white,
+                  button_text_color: Colors.white,
+                  button_text_size: 15.sp,
+                  onClick: _checkLoginStatus,
+                ),
+              ],
+            ),
           ),
         ),
       ),

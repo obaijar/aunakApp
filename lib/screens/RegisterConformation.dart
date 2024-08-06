@@ -68,7 +68,7 @@ class _RegisterConformationState extends State<RegisterConformation> {
               child: InkWell(
                 onTap: () {
                   //Get.to(const CourseVideo());
-                  Get.to(const Home());
+                  Get.off(() => Home());
                 },
                 child: Ink.image(image: const AssetImage("images/141.png")),
               ),
