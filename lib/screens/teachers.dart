@@ -52,9 +52,10 @@ class _teachersState extends State<teachers> {
         });
         return; // Exit the button press function if no connection
       }
-
+      print("${widget.grade}");
+      print("${widget.subject}");
       var response = await Dio().get(
-        "http://10.0.2.2:8000/api/teachers/${widget.grade}/${widget.subject}",
+        "https://obai.aunakit-hosting.com/api/teachers/${widget.grade}/${widget.subject}/",
       );
 
       if (response.statusCode == 200) {

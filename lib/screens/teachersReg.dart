@@ -55,7 +55,7 @@ class _TeacherRegState extends State<TeacherReg> {
         return; // Exit if no token is found
       }
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/api/Grade/'),
+        Uri.parse('https://obai.aunakit-hosting.com/api/Grade/'),
       );
 
       if (response.statusCode == 200) {
@@ -94,7 +94,7 @@ class _TeacherRegState extends State<TeacherReg> {
         return; // Exit if no token is found
       }
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/api/Subject/'),
+        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/'),
       );
 
       if (response.statusCode == 200) {
@@ -166,7 +166,7 @@ class _TeacherRegState extends State<TeacherReg> {
 
         // Send HTTP POST request
         final response = await http.post(
-          Uri.parse('http://10.0.2.2:8000/api/add-teacher/'),
+          Uri.parse('https://obai.aunakit-hosting.com/api/add-teacher/'),
           headers: {
             'Authorization': 'Token $token',
             'Content-Type': 'application/json',

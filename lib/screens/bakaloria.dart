@@ -35,7 +35,8 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
 
   Future<void> fetchSubjects() async {
     const grade = 3; // Use the correct grade as needed
-    final url = Uri.parse('http://10.0.2.2:8000/api/Subject/$grade/');
+    final url =
+        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -161,7 +162,8 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
 
   Future<void> fetchSubjects() async {
     const grade = 2; // Use the correct grade as needed
-    final url = Uri.parse('http://10.0.2.2:8000/api/Subject/$grade/');
+    final url =
+        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

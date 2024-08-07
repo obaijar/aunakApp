@@ -36,7 +36,8 @@ class _PaidCoursesState extends State<PaidCourses> {
       return;
     }
 
-    final url = Uri.parse('http://10.0.2.2:8000/purchases/user/$id/');
+    final url =
+        Uri.parse('https://obai.aunakit-hosting.com/purchases/user/$id/');
     try {
       final response = await http.get(
         url,
@@ -77,7 +78,8 @@ class _PaidCoursesState extends State<PaidCourses> {
       return;
     }
 
-    final url = Uri.parse('http://10.0.2.2:8000/api/purchase/delete/$id/');
+    final url =
+        Uri.parse('https://obai.aunakit-hosting.com/api/purchase/delete/$id/');
     try {
       final response = await http.delete(
         url,

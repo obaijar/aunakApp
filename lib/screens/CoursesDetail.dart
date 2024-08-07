@@ -47,13 +47,8 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     }
     int grade = _getGradeInt(widget.section);
 
-    print(grade);
-    print(widget.subject);
-    print(widget.teacher);
-    print(widget.courseID);
-
     String url =
-        'http://10.0.2.2:8000/api/courses/search/$grade/${widget.subject}/${widget.courseID}/${widget.teacher}/';
+        'https://obai.aunakit-hosting.com/api/courses/search/$grade/${widget.subject}/${widget.courseID}/${widget.teacher}/';
 
     try {
       final response = await http.get(
@@ -148,38 +143,40 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset("images/121.png"),
-                if (description != null) ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'عن هذا الكورس',
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'عن هذا الكورس',
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
+                if (description != null) ...[
                   Text(
                     description!,
                     style: TextStyle(fontSize: 16.sp),
                   ),
                 ],
                 const SizedBox(height: 20),
-                if (price != null) ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'السعر',
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'السعر',
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
+                if (price != null) ...[
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Card(
@@ -208,6 +205,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                     ),
                   ),
                 ],
+                const Divider(),
                 const SizedBox(height: 50),
                 FancyButton(
                   button_text: "التسجيل في الكورس",

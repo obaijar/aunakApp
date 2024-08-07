@@ -34,7 +34,7 @@ class _DeleteVideoState extends State<DeleteVideo> {
       return;
     }
 
-    final url = 'http://10.0.2.2:8000/api/videos/';
+    final url = 'https://obai.aunakit-hosting.com/api/videos/';
     final dio = Dio();
     try {
       final response = await dio.get(
@@ -79,7 +79,7 @@ class _DeleteVideoState extends State<DeleteVideo> {
       return;
     }
 
-    final url = 'http://10.0.2.2:8000/videos/delete/$id/';
+    final url = 'https://obai.aunakit-hosting.com/videos/delete/$id/';
     final dio = Dio();
     try {
       final response = await dio.delete(

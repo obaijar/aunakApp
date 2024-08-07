@@ -43,7 +43,7 @@ class _AddSubjectTypeState extends State<AddSubjectType> {
       return;
     }
     print(authToken);
-    final url = 'http://10.0.2.2:8000/api/subject-type/add/';
+    final url = 'https://obai.aunakit-hosting.com/api/subject-type/add/';
     final headers = {
       'Authorization': 'Token $authToken',
       'Content-Type': 'application/json',

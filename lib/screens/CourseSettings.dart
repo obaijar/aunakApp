@@ -137,7 +137,7 @@ class _DeleteCourseState extends State<DeleteCourse> {
   }
 
   Future<void> fetchCourses() async {
-    final url = Uri.parse('http://10.0.2.2:8000/api/courses/');
+    final url = Uri.parse('https://obai.aunakit-hosting.com/api/courses/');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -164,8 +164,8 @@ class _DeleteCourseState extends State<DeleteCourse> {
   Future<void> deleteCourse(String subjectId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    final url =
-        Uri.parse('http://10.0.2.2:8000/api/courses/delete/$subjectId/');
+    final url = Uri.parse(
+        'https://obai.aunakit-hosting.com/api/courses/delete/$subjectId/');
 
     try {
       final response = await http.delete(url, headers: {

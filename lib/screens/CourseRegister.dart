@@ -58,7 +58,7 @@ class _CourseRegisterState extends State<CourseRegister> {
       if (widget.section == 13) grade = 3;
       // Define the GET request URL
       final String getUrl =
-          'http://10.0.2.2:8000/api/courses/search/$grade/${widget.subject}/${widget.courseID}/${widget.teacher}/';
+          'https://obai.aunakit-hosting.com/api/courses/search/$grade/${widget.subject}/${widget.courseID}/${widget.teacher}/';
 
       // Perform the GET request to get the course ID
       dio.Response getResponse = await dio.Dio().get(
@@ -74,7 +74,8 @@ class _CourseRegisterState extends State<CourseRegister> {
             ['id']; // Assuming the first course is the relevant one
 
         // Define the POST request URL
-        const String postUrl = 'http://10.0.2.2:8000/api/purchases/';
+        const String postUrl =
+            'https://obai.aunakit-hosting.com/api/purchases/';
         // Perform the POST request to register the purchase
         dio.Response postResponse = await dio.Dio().post(
           postUrl,

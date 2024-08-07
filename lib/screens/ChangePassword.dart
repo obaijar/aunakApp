@@ -27,7 +27,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       final String newPassword = _newPasswordController.text;
 
       var dio = Dio();
-      var url = 'http://10.0.2.2:8000/api/change-password/';
+      var url = 'https://obai.aunakit-hosting.com/api/change-password/';
 
       try {
         var response = await dio.post(

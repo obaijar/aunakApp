@@ -171,7 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   if (selectedRole == 'أدمن') isadmin = true;
                                   var dio = Dio();
                                   var url =
-                                      'http://10.0.2.2:8000/api/register/';
+                                      'https://obai.aunakit-hosting.com/api/register/';
                                   var response = await dio.post(
                                     url,
                                     data: {

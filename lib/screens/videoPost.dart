@@ -47,7 +47,7 @@ class _VideoPostState extends State<VideoPost> {
   }
 
   Future<void> fetchTeachers() async {
-    final url = Uri.parse('http://10.0.2.2:8000/api/teachers/');
+    final url = Uri.parse('https://obai.aunakit-hosting.com/api/teachers/');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -73,7 +73,7 @@ class _VideoPostState extends State<VideoPost> {
   }
 
   Future<void> fetchSubjects() async {
-    final url = Uri.parse('http://10.0.2.2:8000/api/Subject/');
+    final url = Uri.parse('https://obai.aunakit-hosting.com/api/Subject/');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -96,7 +96,7 @@ class _VideoPostState extends State<VideoPost> {
   }
 
   Future<void> fetchSubjectTypes() async {
-    final url = Uri.parse('http://10.0.2.2:8000/api/Subject_type/');
+    final url = Uri.parse('https://obai.aunakit-hosting.com/api/Subject_type/');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -136,7 +136,7 @@ class _VideoPostState extends State<VideoPost> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    final url = Uri.parse('http://10.0.2.2:8000/upload-video/');
+    final url = Uri.parse('https://obai.aunakit-hosting.com/upload-video/');
     final request = http.MultipartRequest('POST', url);
     request.headers[HttpHeaders.authorizationHeader] = 'Token $token';
     request.files

@@ -28,8 +28,8 @@ class _CoursesState extends State<Courses> {
   }
 
   Future<List<Map<String, dynamic>>> fetchCourses() async {
-    final response =
-        await http.get(Uri.parse('http://10.0.2.2:8000/api/Subject_type/'));
+    final response = await http
+        .get(Uri.parse('https://obai.aunakit-hosting.com/api/Subject_type/'));
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));

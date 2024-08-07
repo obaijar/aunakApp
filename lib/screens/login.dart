@@ -120,7 +120,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           });
 
                           try {
-                            var url = 'http://10.0.2.2:8000/api/login/';
+                            var url =
+                                'https://obai.aunakit-hosting.com/api/login/';
                             var dio = Dio();
 
                             var response = await dio.post(
