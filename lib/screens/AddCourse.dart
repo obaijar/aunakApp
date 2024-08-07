@@ -18,6 +18,8 @@ class _AddCourseState extends State<AddCourse> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _priceController =
+      TextEditingController(); // New price controller
 
   // Variables to hold dropdown data
   List<String> _subjects = [];
@@ -176,6 +178,7 @@ class _AddCourseState extends State<AddCourse> {
         final courseData = {
           "title": _titleController.text,
           "description": _descriptionController.text,
+          "price": _priceController.text, // Add price to courseData
           "subject_type": _selectedSubjectTypeIndex != null
               ? _subjectTypes_id[_selectedSubjectTypeIndex!]
               : null,
@@ -270,6 +273,23 @@ class _AddCourseState extends State<AddCourse> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'الرجاء ادخال الوصف';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _priceController,
+                      decoration: const InputDecoration(
+                        labelText: 'السعر',
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء ادخال السعر';
+                        }
+                        if (!RegExp(r'^\d+$').hasMatch(value)) {
+                          return 'الرجاء ادخال أرقام فقط';
                         }
                         return null;
                       },
