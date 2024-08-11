@@ -53,14 +53,13 @@ class _CourseRegisterState extends State<CourseRegister> {
         });
         return;
       }
+
+      // Determine grade based on section
+      int? grade;
       if (widget.section == 9) grade = 1;
       if (widget.section == 12) grade = 2;
       if (widget.section == 13) grade = 3;
-      print(widget.section);
-      print("grade$grade");
-      print("{widget.subject}${widget.subject}");
-      print("{widget.courseID}${widget.courseID}");
-      print("{widget.teacher}${widget.teacher}");
+
       // Define the GET request URL
       final String getUrl =
           'https://obai.aunakit-hosting.com/api/courses/search/${widget.section}/${widget.subject}/${widget.courseID}/${widget.teacher}/';
@@ -74,43 +73,71 @@ class _CourseRegisterState extends State<CourseRegister> {
           },
         ),
       );
-      if (getResponse.statusCode == 200 && getResponse.data.isNotEmpty) {
-        int courseId = getResponse.data[0]
-            ['id']; // Assuming the first course is the relevant one
 
-        // Define the POST request URL
-        const String postUrl =
-            'https://obai.aunakit-hosting.com/api/purchases/';
-        // Perform the POST request to register the purchase
-        dio.Response postResponse = await dio.Dio().post(
-          postUrl,
-          data: {
-            'user': userId,
-            'course': courseId,
-          },
-          options: dio.Options(
-            headers: {
-              'Authorization': 'Token $token',
-            },
-          ),
-        );
+      // Debug response data
+      print(getResponse.data);
 
-        if (postResponse.statusCode == 201) {
-          // Navigate to the confirmation page
-          Get.to(() => const RegisterConformation());
+      // Check if response data is not null and contains courses
+      if (getResponse.statusCode == 200 && getResponse.data != null) {
+        var responseData = getResponse.data;
+        if (responseData is Map<String, dynamic> &&
+            responseData.containsKey('courses')) {
+          var courses = responseData['courses'];
+          if (courses is List && courses.isNotEmpty) {
+            int courseId = courses[0]
+                ['id']; // Assuming the first course is the relevant one
+
+            // Define the POST request URL
+            const String postUrl =
+                'https://obai.aunakit-hosting.com/api/purchases/';
+
+            // Perform the POST request to register the purchase
+            dio.Response postResponse = await dio.Dio().post(
+              postUrl,
+              data: {
+                'user': userId,
+                'course': courseId,
+              },
+              options: dio.Options(
+                headers: {
+                  'Authorization': 'Token $token',
+                },
+              ),
+            );
+
+            if (postResponse.statusCode == 201) {
+              // Navigate to the confirmation page
+              Get.to(() => const RegisterConformation());
+            } else {
+              // Handle POST request failure
+              print('Failed to register purchase');
+            }
+          } else {
+            // Handle empty or invalid courses list
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('لا يوجد كورس بهذه البيانات'),
+              ),
+            );
+            print('No courses found');
+          }
         } else {
-          // Handle POST request failure
-          print('Failed to register purchase');
+          // Handle invalid response format
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('فشل استرجاع البيانات'),
+            ),
+          );
+          print('Invalid response format');
         }
       } else {
         // Handle GET request failure or empty response
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('لا يوجد كورس بهذه البيانات'),
+            content: Text('فشل استرجاع الكورس'),
           ),
         );
         print('Failed to retrieve course');
-        return; // Exit if no token is found
       }
     } catch (e) {
       // Handle any exceptions

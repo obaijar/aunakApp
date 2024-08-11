@@ -314,8 +314,8 @@ class _TeacherRegState extends State<TeacherReg> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'تحديد الصفوف التي يدرسها الأستاذ',
-                        style: TextStyle(fontSize: 20.sp, color: Colors.blue),
+                        '(كبسة مطولة) تحديد الصفوف التي يدرسها الأستاذ',
+                        style: TextStyle(fontSize: 16.sp, color: Colors.blue),
                       ),
                     ],
                   ),

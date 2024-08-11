@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:io';
 
+import 'EditCourse.dart';
+
 class CourseSettings extends StatelessWidget {
   const CourseSettings({super.key});
 
@@ -51,7 +53,7 @@ class CourseSettings extends StatelessWidget {
                 ),
               ],
             ),
-            /* const Divider(),
+            const Divider(),
             const SizedBox(height: 16.0), // Spacing between elements
 
             // Second Text and Button
@@ -67,7 +69,7 @@ class CourseSettings extends StatelessWidget {
                 ),
               ],
             ),
-           Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
@@ -82,7 +84,7 @@ class CourseSettings extends StatelessWidget {
                   ),
                 ),
               ],
-            ),*/
+            ),
             const Divider(),
             const SizedBox(height: 16.0), // Spacing between elements
 

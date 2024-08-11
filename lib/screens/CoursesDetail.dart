@@ -46,7 +46,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       _showNotLoggedInDialog();
       return;
     }
-    int grade = _getGradeInt(widget.section);
     String url =
         'https://obai.aunakit-hosting.com/api/courses/search/${widget.section}/${widget.subject}/${widget.courseID}/${widget.teacher}/';
 

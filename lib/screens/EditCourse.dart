@@ -19,6 +19,7 @@ class _EditCourseScreenState extends State<EditCourseScreen> {
   int? _gradeId;
   int? _price;
   List<int> _selectedVideoIds = [];
+  bool _isLoading = false;
 
   List<dynamic> _courses = [];
   List<dynamic> _subjectTypes = [];
@@ -142,6 +143,11 @@ class _EditCourseScreenState extends State<EditCourseScreen> {
       return;
     }
 
+    // Start loading
+    setState(() {
+      _isLoading = true;
+    });
+
     // Save the form fields
     _formKey.currentState!.save();
 
@@ -165,16 +171,20 @@ class _EditCourseScreenState extends State<EditCourseScreen> {
         'subject': _subjectId,
         'grade': _gradeId,
         'price': _price,
+        'videos': _selectedVideoIds,
       }),
     );
+
+    // Stop loading
+    setState(() {
+      _isLoading = false;
+    });
 
     // Handle the response from the API
     print("Response status code: ${response.statusCode}");
     if (response.statusCode == 200) {
-      // On successful update, navigate back or show a success message
       Navigator.of(context).pop();
     } else {
-      // Handle any errors that occur
       print('Failed to edit course: ${response.body}');
     }
   }
@@ -185,174 +195,204 @@ class _EditCourseScreenState extends State<EditCourseScreen> {
       appBar: AppBar(
         title: Text('تعديل كورس'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              DropdownButtonFormField<int>(
-                value: _selectedCourseId,
-                decoration: InputDecoration(labelText: 'اختار كورس'),
-                items: _courses
-                    .map((course) => DropdownMenuItem<int>(
-                          value: course[
-                              'id'], // Ensure this matches the API response
-                          child: Text(course['title']),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedCourseId = value;
-                  });
-                  if (value != null) {
-                    _fetchCourseDetails(value);
-                  }
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'الرجاء اختيار كورس';
-                  }
-                  return null;
-                },
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: [
+                  DropdownButtonFormField<int>(
+                    value: _selectedCourseId,
+                    decoration: InputDecoration(labelText: 'اختار كورس'),
+                    items: _courses
+                        .map((course) => DropdownMenuItem<int>(
+                              value: course['id'],
+                              child: Text(course['title']),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCourseId = value;
+                      });
+                      if (value != null) {
+                        _fetchCourseDetails(value);
+                      }
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'الرجاء اختيار كورس';
+                      }
+                      return null;
+                    },
+                  ),
+                  if (_selectedCourseId != null) ...[
+                    TextFormField(
+                      initialValue: _title,
+                      decoration: InputDecoration(labelText: 'العنوان'),
+                      onSaved: (value) => _title = value,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء ادخال عنوان';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      initialValue: _description,
+                      decoration: InputDecoration(labelText: 'الوصف'),
+                      onSaved: (value) => _description = value,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء ادخال الوصف';
+                        }
+                        return null;
+                      },
+                    ),
+                    DropdownButtonFormField<int>(
+                      value: _subjectTypeId,
+                      decoration: InputDecoration(labelText: 'نوع'),
+                      items: _subjectTypes
+                          .map((item) => DropdownMenuItem<int>(
+                                value: item['id'],
+                                child: Text(item['name']),
+                              ))
+                          .toList(),
+                      onChanged: (value) =>
+                          setState(() => _subjectTypeId = value),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'الرجاء اختيار نوع';
+                        }
+                        return null;
+                      },
+                    ),
+                    DropdownButtonFormField<int>(
+                      value: _teacherId,
+                      decoration: InputDecoration(labelText: 'المدرس'),
+                      items: _teachers
+                          .map((item) => DropdownMenuItem<int>(
+                                value: item['id'],
+                                child: Text(item['name']),
+                              ))
+                          .toList(),
+                      onChanged: (value) => setState(() => _teacherId = value),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'الرجاء اختيار مدرس';
+                        }
+                        return null;
+                      },
+                    ),
+                    DropdownButtonFormField<int>(
+                      value: _subjectId,
+                      decoration: InputDecoration(labelText: 'المادة'),
+                      items: _subjects
+                          .map((item) => DropdownMenuItem<int>(
+                                value: item['id'],
+                                child: Text(item['name']),
+                              ))
+                          .toList(),
+                      onChanged: (value) => setState(() => _subjectId = value),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'الرجاء اختيار مادة';
+                        }
+                        return null;
+                      },
+                    ),
+                    DropdownButtonFormField<int>(
+                      value: _gradeId,
+                      decoration: InputDecoration(labelText: 'الصف'),
+                      items: _grades.map((item) {
+                        String gradeName;
+                        switch (item['id']) {
+                          case 9:
+                            gradeName = 'تاسع';
+                            break;
+                          case 12:
+                            gradeName = 'بكالوريا علمي';
+                            break;
+                          case 13:
+                            gradeName = 'بكالوريا أدبي';
+                            break;
+                          default:
+                            gradeName = item['level'];
+                        }
+                        return DropdownMenuItem<int>(
+                          value: item['id'],
+                          child: Text(gradeName),
+                        );
+                      }).toList(),
+                      onChanged: (value) => setState(() => _gradeId = value),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'الرجاء اختيار صف';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      initialValue: _price?.toString(),
+                      decoration: InputDecoration(labelText: 'السعر'),
+                      keyboardType: TextInputType.number,
+                      onSaved: (value) => _price = int.tryParse(value!),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'الرجاء ادخال السعر';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'الرجاء إدخال رقم صحيح';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Select Videos',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        children: _videos.map((video) {
+                          return CheckboxListTile(
+                            title: Text(video['title']),
+                            value: _selectedVideoIds.contains(video['id']),
+                            onChanged: (bool? value) {
+                              setState(() {
+                                if (value == true) {
+                                  _selectedVideoIds.add(video['id']);
+                                } else {
+                                  _selectedVideoIds.remove(video['id']);
+                                }
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _editCourse,
+                      child: Text('حفظ التغييرات'),
+                    ),
+                  ]
+                ],
               ),
-              if (_selectedCourseId != null) ...[
-                TextFormField(
-                  initialValue: _title,
-                  decoration: InputDecoration(labelText: 'العنوان'),
-                  onSaved: (value) => _title = value,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'الرجاء ادخال عنوان';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  initialValue: _description,
-                  decoration: InputDecoration(labelText: 'الوصف'),
-                  onSaved: (value) => _description = value,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'الرجاء ادخال الوصف';
-                    }
-                    return null;
-                  },
-                ),
-                DropdownButtonFormField<int>(
-                  value: _subjectTypeId,
-                  decoration: InputDecoration(labelText: 'نوع'),
-                  items: _subjectTypes
-                      .map((item) => DropdownMenuItem<int>(
-                            value: item[
-                                'id'], // Ensure this matches the API response
-                            child: Text(item['name']),
-                          ))
-                      .toList(),
-                  onChanged: (value) => setState(() => _subjectTypeId = value),
-                ),
-                DropdownButtonFormField<int>(
-                  value: _teacherId,
-                  decoration: InputDecoration(labelText: 'المدرس'),
-                  items: _teachers
-                      .map((item) => DropdownMenuItem<int>(
-                            value: item[
-                                'id'], // Ensure this matches the API response
-                            child: Text(item['name']),
-                          ))
-                      .toList(),
-                  onChanged: (value) => setState(() => _teacherId = value),
-                ),
-                DropdownButtonFormField<int>(
-                  value: _subjectId,
-                  decoration: InputDecoration(labelText: 'المادة'),
-                  items: _subjects
-                      .map((item) => DropdownMenuItem<int>(
-                            value: item[
-                                'id'], // Ensure this matches the API response
-                            child: Text(item['name']),
-                          ))
-                      .toList(),
-                  onChanged: (value) => setState(() => _subjectId = value),
-                ),
-                DropdownButtonFormField<int>(
-                  value: _gradeId,
-                  decoration: InputDecoration(labelText: 'الصف'),
-                  items: _grades.map((item) {
-                    String gradeName;
-                    switch (item['id']) {
-                      case 9:
-                        gradeName = 'تاسع';
-                        break;
-                      case 12:
-                        gradeName = 'بكالوريا علمي';
-                        break;
-                      case 13:
-                        gradeName = 'بكالوريا أدبي';
-                        break;
-                      default:
-                        gradeName = item['level'];
-                    }
-                    return DropdownMenuItem<int>(
-                      value: item['id'], // Ensure this matches the API response
-                      child: Text(gradeName),
-                    );
-                  }).toList(),
-                  onChanged: (value) => setState(() => _gradeId = value),
-                ),
-                TextFormField(
-                  initialValue: _price?.toString(),
-                  decoration: InputDecoration(labelText: 'السعر'),
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _price = int.tryParse(value!),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'الرجاء ادخال السعر';
-                    }
-                    if (int.tryParse(value) == null) {
-                      return 'الرجاء إدخال رقم صحيح';
-                    }
-                    return null;
-                  },
-                ),
-                /*SizedBox(height: 20),
-                Text(
-                  'Select Videos',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                    children: _videos.map((video) {
-                      return CheckboxListTile(
-                        title: Text(video['title']),
-                        value: _selectedVideoIds.contains(video['id']),
-                        onChanged: (bool? value) {
-                          setState(() {
-                            if (value == true) {
-                              _selectedVideoIds.add(video['id']);
-                            } else {
-                              _selectedVideoIds.remove(video['id']);
-                            }
-                          });
-                        },
-                      );
-                    }).toList(),
-                  ),
-                ),*/
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _editCourse,
-                  child: Text('حفظ التغييرات'),
-                ),
-              ]
-            ],
+            ),
           ),
-        ),
+          if (_isLoading)
+            Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
     );
   }
