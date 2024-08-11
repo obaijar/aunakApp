@@ -86,7 +86,7 @@ class _AddSubjectTypeState extends State<AddSubjectType> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('إضافة مادة'),
+        title: Text('إضافة نوع كورس'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -95,7 +95,7 @@ class _AddSubjectTypeState extends State<AddSubjectType> {
           children: [
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'المادة'),
+              decoration: InputDecoration(labelText: 'نوع الكورس'),
             ),
             SizedBox(height: 32.0),
             _isLoading

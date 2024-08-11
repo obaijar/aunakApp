@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:testt/screens/teachers.dart';
@@ -11,8 +9,9 @@ import 'package:arabic_font/arabic_font.dart';
 class GridItem {
   final String imageUrl;
   final String text;
+  final int id; // Add id field
 
-  GridItem({required this.imageUrl, required this.text});
+  GridItem({required this.imageUrl, required this.text, required this.id});
 }
 
 class Tase3 extends StatefulWidget {
@@ -36,9 +35,7 @@ class _Tase3State extends State<Tase3> {
     const grade = 1; // Use the correct grade as needed
     final url =
         Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
-    final response = await http.get(
-      url,
-    );
+    final response = await http.get(url);
 
     if (response.statusCode == 200) {
       final List subjects = json.decode(utf8.decode(response.bodyBytes));
@@ -48,6 +45,8 @@ class _Tase3State extends State<Tase3> {
                   imageUrl: 'images/img8.png', // Use appropriate image URL
                   text: subject[
                       'name'], // Adjust according to your API response structure
+                  id: subject[
+                      'id'], // Adjust according to your API response structure
                 ))
             .toList();
         isLoading = false;
@@ -92,8 +91,9 @@ class _Tase3State extends State<Tase3> {
                           child: GestureDetector(
                             onTap: () {
                               Get.to(() => teachers(
-                                    subject: gridItems[index].text,
-                                    grade: 9,
+                                    subject: gridItems[index]
+                                        .id, // Pass the id instead of text
+                                    grade: 1,
                                   ));
                             },
                             child: Column(

@@ -25,6 +25,32 @@ class _RegisterStudentState extends State<RegisterStudent> {
   bool isLoading = false;
   String selectedRole = '..'; // Default value
   bool isadmin = false;
+
+  void _showAlert(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('خطأ'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text('حسناً'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  bool _isEnglishOnly(String input) {
+    final RegExp englishOnly = RegExp(r'^[a-zA-Z0-9@._-]*$');
+    return englishOnly.hasMatch(input);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double wScreen = MediaQuery.of(context).size.width;
@@ -67,6 +93,9 @@ class _RegisterStudentState extends State<RegisterStudent> {
                           if (value == null || value.isEmpty) {
                             return 'يرجى إدخال إسم المستخدم';
                           }
+                          if (!_isEnglishOnly(value)) {
+                            return 'يرجى إدخال إسم المستخدم باللغة الإنجليزية فقط';
+                          }
                           return null;
                         },
                       ),
@@ -93,6 +122,9 @@ class _RegisterStudentState extends State<RegisterStudent> {
                           if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                             return 'يرجى إدخال بريد إلكتروني صحيح';
                           }
+                          if (!_isEnglishOnly(value)) {
+                            return 'يرجى إدخال الإيميل باللغة الإنجليزية فقط';
+                          }
                           return null;
                         },
                       ),
@@ -116,6 +148,9 @@ class _RegisterStudentState extends State<RegisterStudent> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'يرجى إدخال كلمة المرور';
+                          }
+                          if (!_isEnglishOnly(value)) {
+                            return 'يرجى إدخال كلمة المرور باللغة الإنجليزية فقط';
                           }
                           return null;
                         },
@@ -143,6 +178,9 @@ class _RegisterStudentState extends State<RegisterStudent> {
                           }
                           if (value != passwordController.text) {
                             return 'كلمة المرور غير متطابقة';
+                          }
+                          if (!_isEnglishOnly(value)) {
+                            return 'يرجى إدخال كلمة المرور باللغة الإنجليزية فقط';
                           }
                           return null;
                         },

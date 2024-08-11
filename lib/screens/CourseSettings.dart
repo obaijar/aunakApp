@@ -67,11 +67,13 @@ class CourseSettings extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
+           Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   onPressed: () {
+                    Get.to(() => EditCourseScreen());
+
                     // Action for Button 2
                   },
                   child: Text(

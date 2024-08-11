@@ -11,7 +11,7 @@ class CourseRegister extends StatefulWidget {
   final String courseName;
   final int courseID;
   final int teacher;
-  final String subject;
+  final int subject;
   final int section;
 
   const CourseRegister({
@@ -56,9 +56,14 @@ class _CourseRegisterState extends State<CourseRegister> {
       if (widget.section == 9) grade = 1;
       if (widget.section == 12) grade = 2;
       if (widget.section == 13) grade = 3;
+      print(widget.section);
+      print("grade$grade");
+      print("{widget.subject}${widget.subject}");
+      print("{widget.courseID}${widget.courseID}");
+      print("{widget.teacher}${widget.teacher}");
       // Define the GET request URL
       final String getUrl =
-          'https://obai.aunakit-hosting.com/api/courses/search/$grade/${widget.subject}/${widget.courseID}/${widget.teacher}/';
+          'https://obai.aunakit-hosting.com/api/courses/search/${widget.section}/${widget.subject}/${widget.courseID}/${widget.teacher}/';
 
       // Perform the GET request to get the course ID
       dio.Response getResponse = await dio.Dio().get(

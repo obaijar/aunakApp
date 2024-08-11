@@ -9,7 +9,7 @@ import 'package:testt/screens/CoursesDetail.dart';
 
 class Courses extends StatefulWidget {
   final int teacher;
-  final String subject;
+  final int subject;
   final int section;
   Courses(
       {required this.teacher, required this.subject, required this.section});
@@ -61,8 +61,7 @@ class _CoursesState extends State<Courses> {
     }
   }
 
-  void _onCourseTap(
-      String courseName, int courseID, int teacher, String subject) {
+  void _onCourseTap(String courseName, int courseID, int teacher, int subject) {
     Get.to(() => CourseDetailPage(
           courseID: courseID,
           courseName: courseName,

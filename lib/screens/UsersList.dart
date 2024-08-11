@@ -147,17 +147,33 @@ class _UserListState extends State<UserList> {
       appBar: AppBar(
         title: const Text('المستخدمين'),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TextField(
-              controller: _searchController,
-              onChanged: _filterUsers,
-              decoration: const InputDecoration(
-                labelText: 'بحث',
-                border: OutlineInputBorder(),
+          preferredSize: const Size.fromHeight(
+              100), // Adjust the height to accommodate the additional text
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: _filterUsers,
+                  decoration: const InputDecoration(
+                    labelText: 'بحث',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
               ),
-            ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Text(
+                  'اسحب لليسار للحذف',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0, // Adjust font size as needed
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -178,7 +194,18 @@ class _UserListState extends State<UserList> {
                           });
                           _showDeleteConfirmationDialog(user['id']);
                         },
-                        background: Container(color: Colors.red),
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: const Text(
+                            'اسحب لليسار للحذف',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                         child: ListTile(
                           title: Text(user['username']),
                           onTap: () => _navigateToChangePassword(user['id']),
@@ -264,7 +291,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change Password'),
+        title: const Text('تغيير كلمة المرور'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -281,7 +308,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _changePassword,
-                    child: const Text('Change Password'),
+                    child: const Text('تغيير'),
                   ),
                 ],
               ),

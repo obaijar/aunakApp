@@ -68,6 +68,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value == null || value.isEmpty) {
                             return 'يرجى إدخال إسم المستخدم';
                           }
+                          if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
+                            return 'يرجى إدخال إسم المستخدم باللغة الإنجليزية فقط';
+                          }
                           return null;
                         },
                       ),
@@ -89,8 +92,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value == null || value.isEmpty) {
                             return 'يرجى إدخال الإيميل';
                           }
-                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$')
+                              .hasMatch(value)) {
                             return 'يرجى إدخال بريد إلكتروني صحيح';
+                          }
+                          if (!RegExp(r'^[a-zA-Z0-9@.]+$').hasMatch(value)) {
+                            return 'يرجى إدخال الإيميل باللغة الإنجليزية فقط';
                           }
                           return null;
                         },
@@ -113,6 +120,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'يرجى إدخال كلمة المرور';
+                          }
+                          if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
+                            return 'يرجى إدخال كلمة المرور باللغة الإنجليزية فقط';
                           }
                           return null;
                         },
@@ -138,6 +148,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           }
                           if (value != passwordController.text) {
                             return 'كلمة المرور غير متطابقة';
+                          }
+                          if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
+                            return 'يرجى إدخال كلمة المرور باللغة الإنجليزية فقط';
                           }
                           return null;
                         },

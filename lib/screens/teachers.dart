@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 class teachers extends StatefulWidget {
-  final String subject;
+  final int subject;
   final int grade;
   teachers({required this.subject, required this.grade});
   @override

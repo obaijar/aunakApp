@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages, avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,11 +8,11 @@ import 'dart:convert';
 class GridItem {
   final String imageUrl;
   final String text;
+  final int id; // Add id field
 
-  GridItem({required this.imageUrl, required this.text});
+  GridItem({required this.imageUrl, required this.text, required this.id});
 }
 
-// ignore: camel_case_types
 class bakaloriaAdabi extends StatefulWidget {
   const bakaloriaAdabi({super.key});
 
@@ -22,7 +20,6 @@ class bakaloriaAdabi extends StatefulWidget {
   State<bakaloriaAdabi> createState() => _bakaloriaAdabiState();
 }
 
-// ignore: camel_case_types
 class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
   List<GridItem> gridItems = [];
   bool isLoading = true;
@@ -47,6 +44,8 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
                   imageUrl: 'images/img8.png', // Use appropriate image URL
                   text: subject[
                       'name'], // Adjust according to your API response structure
+                  id: subject[
+                      'id'], // Adjust according to your API response structure
                 ))
             .toList();
         isLoading = false;
@@ -90,8 +89,9 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
                           child: GestureDetector(
                             onTap: () {
                               Get.to(() => teachers(
-                                    subject: gridItems[index].text,
-                                    grade: 13,
+                                    subject: gridItems[index]
+                                        .id, // Pass the id instead of text
+                                    grade: 3,
                                   ));
                               print('Image clicked: ${gridItems[index].text}');
                             },
@@ -141,7 +141,6 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
   }
 }
 
-// ignore: camel_case_types
 class bakaloria3lmi extends StatefulWidget {
   const bakaloria3lmi({super.key});
 
@@ -149,7 +148,6 @@ class bakaloria3lmi extends StatefulWidget {
   State<bakaloria3lmi> createState() => _bakaloria3lmiState();
 }
 
-// ignore: camel_case_types
 class _bakaloria3lmiState extends State<bakaloria3lmi> {
   List<GridItem> gridItems = [];
   bool isLoading = true;
@@ -174,6 +172,8 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
                   imageUrl: 'images/img8.png', // Use appropriate image URL
                   text: subject[
                       'name'], // Adjust according to your API response structure
+                  id: subject[
+                      'id'], // Adjust according to your API response structure
                 ))
             .toList();
         isLoading = false;
@@ -217,8 +217,9 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
                           child: GestureDetector(
                             onTap: () {
                               Get.to(() => teachers(
-                                    subject: gridItems[index].text,
-                                    grade: 12,
+                                    subject: gridItems[index]
+                                        .id, // Pass the id instead of text
+                                    grade: 2,
                                   ));
                               print('Image clicked: ${gridItems[index].text}');
                             },
