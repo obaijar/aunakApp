@@ -75,7 +75,6 @@ class _CourseRegisterState extends State<CourseRegister> {
       );
 
       // Debug response data
-      print(getResponse.data);
 
       // Check if response data is not null and contains courses
       if (getResponse.statusCode == 200 && getResponse.data != null) {

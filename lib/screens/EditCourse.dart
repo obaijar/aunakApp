@@ -37,86 +37,99 @@ class _EditCourseScreenState extends State<EditCourseScreen> {
   }
 
   Future<void> _fetchCourses() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
 
-    final response = await http.get(
-      Uri.parse('https://obai.aunakit-hosting.com/api/courses/'),
-      headers: {'Authorization': 'Token $token'},
-    );
+      final response = await http.get(
+        Uri.parse('https://obai.aunakit-hosting.com/api/courses/'),
+        headers: {'Authorization': 'Token $token'},
+      );
 
-    if (response.statusCode == 200) {
-      setState(() {
-        _courses = json.decode(utf8.decode(response.bodyBytes));
-      });
-    } else {
-      print('Failed to load courses');
+      if (response.statusCode == 200) {
+        setState(() {
+          _courses = json.decode(utf8.decode(response.bodyBytes));
+        });
+      } else {
+        print('Failed to load courses');
+      }
+    } catch (e) {
+      print('An error occurred: $e');
     }
   }
 
   Future<void> _fetchCourseDetails(int courseId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
 
-    final response = await http.get(
-      Uri.parse('https://obai.aunakit-hosting.com/api/courses/$courseId/'),
-      headers: {'Authorization': 'Token $token'},
-    );
+      final response = await http.get(
+        Uri.parse('https://obai.aunakit-hosting.com/api/courses/$courseId/'),
+        headers: {'Authorization': 'Token $token'},
+      );
 
-    if (response.statusCode == 200) {
-      var data = json.decode(utf8.decode(response.bodyBytes));
-      setState(() {
-        _selectedCourseId = courseId;
-        _title = data['title'];
-        _description = data['description'];
-        _subjectTypeId = data['subject_type'];
-        _teacherId = data['teacher'];
-        _subjectId = data['subject'];
-        _gradeId = data['grade'];
-        _price = data['price'];
-        _selectedVideoIds = List<int>.from(data['videos']);
-      });
-    } else {
-      print('Failed to load course details');
+      if (response.statusCode == 200) {
+        var data = json.decode(utf8.decode(response.bodyBytes));
+        setState(() {
+          _selectedCourseId = courseId;
+          _title = data['title'];
+          _description = data['description'];
+          _subjectTypeId = data['subject_type'];
+          _teacherId = data['teacher'];
+          _subjectId = data['subject'];
+          _gradeId = data['grade'];
+          _price = data['price'];
+          _selectedVideoIds = List<int>.from(data['videos']);
+        });
+      } else {
+        print('Failed to load course details');
+      }
+    } catch (e) {
+      print('An error occurred: $e');
     }
   }
 
   Future<void> _fetchDropdownData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
 
-    final subjectTypeResponse = await http.get(
-      Uri.parse('https://obai.aunakit-hosting.com/api/Subject_type/'),
-      headers: {'Authorization': 'Token $token'},
-    );
+      final subjectTypeResponse = await http.get(
+        Uri.parse('https://obai.aunakit-hosting.com/api/Subject_type/'),
+        headers: {'Authorization': 'Token $token'},
+      );
 
-    final teacherResponse = await http.get(
-      Uri.parse('https://obai.aunakit-hosting.com/api/teachers/'),
-      headers: {'Authorization': 'Token $token'},
-    );
+      final teacherResponse = await http.get(
+        Uri.parse('https://obai.aunakit-hosting.com/api/teachers/'),
+        headers: {'Authorization': 'Token $token'},
+      );
 
-    final subjectResponse = await http.get(
-      Uri.parse('https://obai.aunakit-hosting.com/api/Subject/'),
-      headers: {'Authorization': 'Token $token'},
-    );
+      final subjectResponse = await http.get(
+        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/'),
+        headers: {'Authorization': 'Token $token'},
+      );
 
-    final gradeResponse = await http.get(
-      Uri.parse('https://obai.aunakit-hosting.com/api/Grade/'),
-      headers: {'Authorization': 'Token $token'},
-    );
+      final gradeResponse = await http.get(
+        Uri.parse('https://obai.aunakit-hosting.com/api/Grade/'),
+        headers: {'Authorization': 'Token $token'},
+      );
 
-    if (subjectTypeResponse.statusCode == 200 &&
-        teacherResponse.statusCode == 200 &&
-        subjectResponse.statusCode == 200 &&
-        gradeResponse.statusCode == 200) {
-      setState(() {
-        _subjectTypes = json.decode(utf8.decode(subjectTypeResponse.bodyBytes));
-        _teachers = json.decode(utf8.decode(teacherResponse.bodyBytes));
-        _subjects = json.decode(utf8.decode(subjectResponse.bodyBytes));
-        _grades = json.decode(utf8.decode(gradeResponse.bodyBytes));
-      });
-    } else {
-      print('Failed to load dropdown data');
+      if (subjectTypeResponse.statusCode == 200 &&
+          teacherResponse.statusCode == 200 &&
+          subjectResponse.statusCode == 200 &&
+          gradeResponse.statusCode == 200) {
+        setState(() {
+          _subjectTypes =
+              json.decode(utf8.decode(subjectTypeResponse.bodyBytes));
+          _teachers = json.decode(utf8.decode(teacherResponse.bodyBytes));
+          _subjects = json.decode(utf8.decode(subjectResponse.bodyBytes));
+          _grades = json.decode(utf8.decode(gradeResponse.bodyBytes));
+        });
+      } else {
+        print('Failed to load dropdown data');
+      }
+    } catch (e) {
+      print('An error occurred: $e');
     }
   }
 
@@ -156,6 +169,7 @@ class _EditCourseScreenState extends State<EditCourseScreen> {
     String? token = prefs.getString('token');
 
     // Make the PATCH request to update the course
+    print("_gradeId$_gradeId");
     final response = await http.patch(
       Uri.parse(
           'https://obai.aunakit-hosting.com/api/courses/$_selectedCourseId/'),
@@ -308,13 +322,13 @@ class _EditCourseScreenState extends State<EditCourseScreen> {
                       items: _grades.map((item) {
                         String gradeName;
                         switch (item['id']) {
-                          case 9:
+                          case 1:
                             gradeName = 'تاسع';
                             break;
-                          case 12:
+                          case 2:
                             gradeName = 'بكالوريا علمي';
                             break;
-                          case 13:
+                          case 3:
                             gradeName = 'بكالوريا أدبي';
                             break;
                           default:
@@ -350,7 +364,7 @@ class _EditCourseScreenState extends State<EditCourseScreen> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Select Videos',
+                      'تحديد فيديو',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
