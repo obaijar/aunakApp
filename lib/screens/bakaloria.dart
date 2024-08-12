@@ -31,27 +31,34 @@ class _bakaloriaAdabiState extends State<bakaloriaAdabi> {
   }
 
   Future<void> fetchSubjects() async {
-    const grade = 3; // Use the correct grade as needed
-    final url =
-        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
-    final response = await http.get(url);
+    try {
+      const grade = 3; // Use the correct grade as needed
+      final url =
+          Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
+      final response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      final List subjects = json.decode(utf8.decode(response.bodyBytes));
-      setState(() {
-        gridItems = subjects
-            .map((subject) => GridItem(
-                  imageUrl: 'images/img8.png', // Use appropriate image URL
-                  text: subject[
-                      'name'], // Adjust according to your API response structure
-                  id: subject[
-                      'id'], // Adjust according to your API response structure
-                ))
-            .toList();
-        isLoading = false;
-      });
-    } else {
-      print('Failed to load subjects');
+      if (response.statusCode == 200) {
+        final List subjects = json.decode(utf8.decode(response.bodyBytes));
+        setState(() {
+          gridItems = subjects
+              .map((subject) => GridItem(
+                    imageUrl: 'images/img8.png', // Use appropriate image URL
+                    text: subject[
+                        'name'], // Adjust according to your API response structure
+                    id: subject[
+                        'id'], // Adjust according to your API response structure
+                  ))
+              .toList();
+          isLoading = false;
+        });
+      } else {
+        print('Failed to load subjects');
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('An error occurred: $e');
       setState(() {
         isLoading = false;
       });
@@ -159,27 +166,34 @@ class _bakaloria3lmiState extends State<bakaloria3lmi> {
   }
 
   Future<void> fetchSubjects() async {
-    const grade = 2; // Use the correct grade as needed
-    final url =
-        Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
-    final response = await http.get(url);
+    try {
+      const grade = 2; // Use the correct grade as needed
+      final url =
+          Uri.parse('https://obai.aunakit-hosting.com/api/Subject/$grade/');
+      final response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      final List subjects = json.decode(utf8.decode(response.bodyBytes));
-      setState(() {
-        gridItems = subjects
-            .map((subject) => GridItem(
-                  imageUrl: 'images/img8.png', // Use appropriate image URL
-                  text: subject[
-                      'name'], // Adjust according to your API response structure
-                  id: subject[
-                      'id'], // Adjust according to your API response structure
-                ))
-            .toList();
-        isLoading = false;
-      });
-    } else {
-      print('Failed to load subjects');
+      if (response.statusCode == 200) {
+        final List subjects = json.decode(utf8.decode(response.bodyBytes));
+        setState(() {
+          gridItems = subjects
+              .map((subject) => GridItem(
+                    imageUrl: 'images/img8.png', // Use appropriate image URL
+                    text: subject[
+                        'name'], // Adjust according to your API response structure
+                    id: subject[
+                        'id'], // Adjust according to your API response structure
+                  ))
+              .toList();
+          isLoading = false;
+        });
+      } else {
+        print('Failed to load subjects');
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('An error occurred: $e');
       setState(() {
         isLoading = false;
       });

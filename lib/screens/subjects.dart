@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:testt/screens/Editsubject.dart';
+
 class Subjects extends StatelessWidget {
   const Subjects({super.key});
 
@@ -46,6 +48,35 @@ class Subjects extends StatelessWidget {
                   },
                   child: Text(
                     'إضافة',
+                    style: TextStyle(fontSize: 15.sp),
+                  ),
+                ),
+              ],
+            ),
+            const Divider(),
+            const SizedBox(height: 16.0), // Spacing between elements
+            // Third Text and Button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    'تعديل مادة',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontSize: 20.sp),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Get.to(() => const EditSubject());
+                  },
+                  child: Text(
+                    'تعديل',
                     style: TextStyle(fontSize: 15.sp),
                   ),
                 ),
@@ -141,13 +172,13 @@ class _DeleteSubjectState extends State<DeleteSubject> {
 
       if (response.statusCode == 204) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Subject deleted successfully')),
+          SnackBar(content: Text('تم حذف المادة بنجاح')),
         );
         // Refresh the list after deletion
         fetchSubjects();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete subject')),
+          SnackBar(content: Text('فشل')),
         );
       }
     } catch (e) {
