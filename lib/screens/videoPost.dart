@@ -161,46 +161,24 @@ class _VideoPostState extends State<VideoPost> {
       );
 
       if (response.statusCode == 201) {
-        // Simulate a delay to give Dropbox time to process the file
-
-        // Optionally, make a request to Dropbox to confirm the file has been processed
-        // final statusResponse = await dio.get('https://api.dropbox.com/...'); // Replace with Dropbox status endpoint
-        // if (statusResponse.data['status'] == 'complete') {
-
+        // Success
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('تم رفع الفيديو بنجاح')),
         );
-
-        // } else {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(content: Text('فشل في رفع')),
-        //   );
-        // }
-      }
-      if (response.statusCode == 201) {
-        // Simulate a delay to give Dropbox time to process the file
-
-        // Optionally, make a request to Dropbox to confirm the file has been processed
-        // final statusResponse = await dio.get('https://api.dropbox.com/...'); // Replace with Dropbox status endpoint
-        // if (statusResponse.data['status'] == 'complete') {
-
+      } else if (response.statusCode == 207) {
+        // Duplicate file name or another specific case
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم رفع الفيديو بنجاح')),
+          const SnackBar(content: Text('هناك فيديو بنفس الاسم')),
         );
-
-        // } else {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(content: Text('فشل في رفع')),
-        //   );
-        // }
       } else {
+        // Other errors
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('فشل في رفع')),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('هناك فيديو بنفس الاسم ')),
+        SnackBar(content: Text('هناك خطأ ما: $e')),
       );
     } finally {
       setState(() {

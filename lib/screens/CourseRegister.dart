@@ -55,6 +55,7 @@ class _CourseRegisterState extends State<CourseRegister> {
       }
 
       // Determine grade based on section
+      // ignore: unused_local_variable
       int? grade;
       if (widget.section == 9) grade = 1;
       if (widget.section == 12) grade = 2;
