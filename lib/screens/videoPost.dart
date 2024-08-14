@@ -1,13 +1,10 @@
-// ignore_for_file: file_names, depend_on_referenced_packages, library_private_types_in_public_api, avoid_print
-
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class VideoPost extends StatefulWidget {
   const VideoPost({super.key});
@@ -37,6 +34,7 @@ class _VideoPostState extends State<VideoPost> {
   List<Map<String, String>> _teachers = [];
 
   bool _isUploading = false;
+  double _uploadProgress = 0.0; // Upload progress percentage
 
   @override
   void initState() {
@@ -49,9 +47,9 @@ class _VideoPostState extends State<VideoPost> {
   Future<void> fetchTeachers() async {
     final url = Uri.parse('https://obai.aunakit-hosting.com/api/teachers/');
     try {
-      final response = await http.get(url);
+      final response = await Dio().getUri(url);
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+        final List<dynamic> data = response.data;
         setState(() {
           _teachers = data.map((teacher) {
             return {
@@ -75,9 +73,9 @@ class _VideoPostState extends State<VideoPost> {
   Future<void> fetchSubjects() async {
     final url = Uri.parse('https://obai.aunakit-hosting.com/api/Subject/');
     try {
-      final response = await http.get(url);
+      final response = await Dio().getUri(url);
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+        final List<dynamic> data = response.data;
         setState(() {
           _subjects = {
             for (var subject in data) subject['name']: subject['id'].toString(),
@@ -98,9 +96,9 @@ class _VideoPostState extends State<VideoPost> {
   Future<void> fetchSubjectTypes() async {
     final url = Uri.parse('https://obai.aunakit-hosting.com/api/Subject_type/');
     try {
-      final response = await http.get(url);
+      final response = await Dio().getUri(url);
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+        final List<dynamic> data = response.data;
         setState(() {
           _subjectTypes = {
             for (var subjectType in data)
@@ -132,27 +130,52 @@ class _VideoPostState extends State<VideoPost> {
   Future<void> uploadVideo(File videoFile) async {
     setState(() {
       _isUploading = true;
+      _uploadProgress = 0.0;
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    final url = Uri.parse('https://obai.aunakit-hosting.com/upload-video/');
-    final request = http.MultipartRequest('POST', url);
-    request.headers[HttpHeaders.authorizationHeader] = 'Token $token';
-    request.files
-        .add(await http.MultipartFile.fromPath('video_file', videoFile.path));
-    request.fields['title'] = _titleController.text;
-    request.fields['grade'] = _grades[_selectedGrade]!;
-    request.fields['subject'] = _subjects[_selectedSubject]!;
-    request.fields['subject_type'] = _subjectTypes[_selectedSubjectType]!;
-    request.fields['teacher'] = _selectedTeacherId!;
+    final url = 'https://obai.aunakit-hosting.com/upload-video/';
+
+    Dio dio = Dio();
+    dio.options.headers[HttpHeaders.authorizationHeader] = 'Token $token';
+
+    FormData formData = FormData.fromMap({
+      'video_file': await MultipartFile.fromFile(videoFile.path),
+      'title': _titleController.text,
+      'grade': _grades[_selectedGrade]!,
+      'subject': _subjects[_selectedSubject]!,
+      'subject_type': _subjectTypes[_selectedSubjectType]!,
+      'teacher': _selectedTeacherId!,
+    });
 
     try {
-      final response = await request.send();
+      final response = await dio.post(
+        url,
+        data: formData,
+        onSendProgress: (int sent, int total) {
+          setState(() {
+            _uploadProgress = sent / total;
+          });
+        },
+      );
+
       if (response.statusCode == 201) {
+        // Simulate a delay to give Dropbox time to process the file
+
+        // Optionally, make a request to Dropbox to confirm the file has been processed
+        // final statusResponse = await dio.get('https://api.dropbox.com/...'); // Replace with Dropbox status endpoint
+        // if (statusResponse.data['status'] == 'complete') {
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('تم رفع الفيديو بنجاح')),
         );
+
+        // } else {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     const SnackBar(content: Text('فشل في رفع')),
+        //   );
+        // }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('فشل في رفع')),
@@ -165,6 +188,7 @@ class _VideoPostState extends State<VideoPost> {
     } finally {
       setState(() {
         _isUploading = false;
+        _uploadProgress = 0.0;
       });
     }
   }
@@ -186,6 +210,13 @@ class _VideoPostState extends State<VideoPost> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                const Text(
+                  "يرجى عدم رفع فيديو بنفس الاسم لفيديو آخر",
+                  style: TextStyle(
+                    color: Colors.red, // Set the text color to red
+                    fontSize: 20.0, // Set the font size to 20
+                  ),
+                ),
                 TextFormField(
                   controller: _titleController,
                   decoration: const InputDecoration(
@@ -320,7 +351,16 @@ class _VideoPostState extends State<VideoPost> {
                   ),
                 const SizedBox(height: 20),
                 _isUploading
-                    ? const Center(child: CircularProgressIndicator())
+                    ? Column(
+                        children: [
+                          const Center(child: CircularProgressIndicator()),
+                          const SizedBox(height: 10),
+                          Text(
+                            '${(_uploadProgress * 100).toStringAsFixed(0)}%',
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                        ],
+                      )
                     : ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate() &&

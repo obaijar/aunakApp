@@ -78,10 +78,11 @@ class _DeleteVideoState extends State<DeleteVideo> {
       print('No authentication token found');
       return;
     }
-
+    print(id);
     final url = 'https://obai.aunakit-hosting.com/videos/delete/$id/';
     final dio = Dio();
     try {
+      print("hi");
       final response = await dio.delete(
         url,
         options: Options(
