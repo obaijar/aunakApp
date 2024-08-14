@@ -176,6 +176,23 @@ class _VideoPostState extends State<VideoPost> {
         //     const SnackBar(content: Text('فشل في رفع')),
         //   );
         // }
+      }
+      if (response.statusCode == 201) {
+        // Simulate a delay to give Dropbox time to process the file
+
+        // Optionally, make a request to Dropbox to confirm the file has been processed
+        // final statusResponse = await dio.get('https://api.dropbox.com/...'); // Replace with Dropbox status endpoint
+        // if (statusResponse.data['status'] == 'complete') {
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تم رفع الفيديو بنجاح')),
+        );
+
+        // } else {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     const SnackBar(content: Text('فشل في رفع')),
+        //   );
+        // }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('فشل في رفع')),
@@ -183,7 +200,7 @@ class _VideoPostState extends State<VideoPost> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error during upload: $e')),
+        SnackBar(content: Text('هناك فيديو بنفس الاسم ')),
       );
     } finally {
       setState(() {
