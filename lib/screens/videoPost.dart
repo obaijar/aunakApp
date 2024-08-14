@@ -210,11 +210,11 @@ class _VideoPostState extends State<VideoPost> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text(
+                Text(
                   "يرجى عدم رفع فيديو بنفس الاسم لفيديو آخر",
                   style: TextStyle(
                     color: Colors.red, // Set the text color to red
-                    fontSize: 20.0, // Set the font size to 20
+                    fontSize: 15.sp, // Set the font size to 20
                   ),
                 ),
                 TextFormField(
